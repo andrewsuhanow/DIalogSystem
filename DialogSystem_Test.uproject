@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{A3AA19DD-4E9F-739B-0C25-85A855C05862}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "DialogSystem_Test",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

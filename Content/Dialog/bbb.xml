@@ -1,0 +1,135 @@
+<name name="bbb" redy="ok">
+	<dialog dialog_name="DEFAULT">
+		<speech speech_name="DEFAULT">
+			<replic repeat="once">
+				 start
+ 				<rep speker="TTTTTTTTT1" sound="NewSoundNamesssss1111" time="1.0" delay="0.5">
+					 wa11111w
+    ha222222h 3a3333333333    
+                               11111111111 222222222222 3333333333333333 444444444444 55555555666666666666666666666 77777777777777777 888888888888888888888 999999999999999999 000000000000000000
+wwwwwwwwwww
+
+
+fffffffff ffffffffffffffffffffffffffff-rrrrrrrrrrrr wwwwwwwwwwww \n ddddddd
+ 				</rep>
+			</replic>
+			<replic repeat="once">
+				 none
+ 				<rep speker="TTTTTTTTTTTTTT22222222" sound="NewSoundName_sssss222" time="1.0" delay="0">
+					 11111111111111111 aasssssssssssssssssssssssssssssssssss 1111111111111111111111111111111 222222222222222222222222222222 22222222223333333333333 333333333333
+44444444444
+444444444444444455 5555555555555555 5555555555566666 66666666666666666666666 67777777777777777777777 7777777777788888888888 8888888888888899999 
+99999999999999999999 9999999000000000 00000000000000000
+ 				</rep>
+			</replic>
+			<replic repeat="always">
+				 none
+ 				<rep speker="TTTTTTTTT1" sound="NewSoundNamesssss1111" time="1.0" delay="0.5">
+					 11111111 11111111111 111111111111 11111111111111 11111111111111 11111111111111
+ 				</rep>
+			</replic>
+			<replic repeat="always">
+				 none
+ 				<rep speker="TTTTTTTTT1" sound="NewSoundName_sssss22222" time="1.0" delay="0.5">
+					 22222222222 22222222222 22222222222 2222222222222 22222222222222 2222222222222 222222222222 22222222222
+ 				</rep>
+			</replic>
+			<replic repeat="always">
+				 none
+ 				<rep speker="TTTTTTTTTTTTTT22222222" sound="NewSoundName_Ssssss111" time="1.0" delay="0.5">
+					 33333333 33333333333 33333333333 333333333333 3333333333
+ 				</rep>
+			</replic>
+			<response repeat="once" dialog_link="NNNMMM_111" speech_link="sss" return_type="CLO (click_link_once)">
+				 none
+ 			</response>
+		</speech>
+		<speech speech_name="rrrrrreeeeeeeeeee">
+			<speech_condition type="and" var_type="global" var_name="none">none</speech_condition>
+			<replic repeat="always">
+				 start222   no default
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 none
+ 				</rep>
+			</replic>
+			<response repeat="once" dialog_link="NNNMMM_111" speech_link="sss" return_type="click_link_once">
+				 none
+ 			</response>
+		</speech>
+		<speech speech_name="DEFAULT">
+			<speech_condition type="and" var_type="global" var_name="none">none</speech_condition>
+			<replic repeat="always">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 start222
+ 				</rep>
+			</replic>
+			<response repeat="once" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="CLO (click_link_once)">
+				 none
+ 			</response>
+		</speech>
+	</dialog>
+	<dialog dialog_name="NNNMMM_111">
+		<speech speech_name="DEFAULT">
+			<speech_condition type="and" var_type="global" var_name="none">none</speech_condition>
+			<replic repeat="always">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 rrr111111111111
+ 				</rep>
+			</replic>
+			<replic repeat="always">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 rrrrrrrr2222222
+ 				</rep>
+			</replic>
+			<response repeat="once" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="CLO (click_link_once)">
+				 none
+ 			</response>
+		</speech>
+		<speech speech_name="sss">
+			<replic repeat="once">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 rrrrrrrrr33333333
+ 					<rep_condition type="and" var_type="global" var_name="none">none</rep_condition>
+				</rep>
+			</replic>
+			<replic repeat="once">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 rrrrrrrr44444444
+ 					<rep_condition type="and" var_type="global" var_name="none">none</rep_condition>
+				</rep>
+			</replic>
+			<response repeat="once" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="CLO (click_link_once)">
+				 none
+ 			</response>
+		</speech>
+		<speech speech_name="DEFAULT">
+			<replic repeat="back">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 back   rrrrrr5555555555
+ 				</rep>
+			</replic>
+			<response repeat="once" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="CLO (click_link_once)">
+				 none
+ 			</response>
+		</speech>
+	</dialog>
+	<dialog dialog_name="NewDialogName_2790">
+		<speech speech_name="DEFAULT">
+			<replic repeat="once">
+				 none
+ 				<rep speker="none" sound="none" time="0" delay="0">
+					 none
+ 				</rep>
+			</replic>
+			<response repeat="once" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="CLO (click_link_once)">
+				 none
+ 			</response>
+		</speech>
+	</dialog>
+</name>

@@ -1,0 +1,5 @@
+<local_variables>
+	<variable name="main_Menu" value="1"/>
+	<variable name="changin_response" value="1"/>
+	<variable name="go_through_default" value="0"/>
+</local_variables>
