@@ -19,7 +19,7 @@ Content/Mannequin/Character
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#+++++++++++*.dll
 
 # Fortran module files
 *.mod
@@ -28,7 +28,7 @@ Content/Mannequin/Character
 *.lai
 *.la
 *.a
-*.lib
+#+++++++++++++*.lib
 
 # Executables
 *.exe
