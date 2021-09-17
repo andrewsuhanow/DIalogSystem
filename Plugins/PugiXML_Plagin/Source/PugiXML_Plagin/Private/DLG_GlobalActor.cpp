@@ -450,7 +450,7 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX     SPEKER     777777777777777777777777777
 			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -556,15 +556,6 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 
 
 
-
-
-
-
-
-
-
-
-
 			//  ============================  If  PROPERTY "NO-REPLIC" =>> PASS "Replik" zone  =========================
 			if (_ResponseReturn != EResponseReturn::click_link_noreplic &&
 				//_ResponseReturn != EResponseReturn::click_default_noreplic &&
@@ -656,6 +647,14 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 				//  -------   mark this "Replic" as using "after_once" next time   -------
 				(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].IsRepeatOnce_Done = true;
 			}
+
+
+
+
+
+
+
+
 
 
 
