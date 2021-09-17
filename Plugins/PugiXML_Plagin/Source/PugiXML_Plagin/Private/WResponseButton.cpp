@@ -60,8 +60,8 @@ void UWResponseButton::OnClick()
 		(*CurrentResponse).ResponseNodeRef->IsRepeatOnce_Done = true;
 	}
 
-	if ((*CurrentResponse).ResponseReturn == EResponseReturn::click_link_noreplic &&
-		(*CurrentResponse).ResponseReturn == EResponseReturn::pass_link_noreplic)
+	if ((*CurrentResponse).ResponseReturn != EResponseReturn::click_link_noreplic &&
+		(*CurrentResponse).ResponseReturn != EResponseReturn::pass_link_noreplic)
 	{
 		WDisplayDialog->DrawResponseAsReplic((*CurrentResponse).str);
 	}
