@@ -2,7 +2,7 @@
 
 
 #include "DLGObjectCustomizationDetails.h"
-
+ 
 #if WITH_EDITOR
 
 #include "DetailCategoryBuilder.h"
@@ -128,8 +128,15 @@ FReply FDLGObjectCustomizationDetails::ClickBtnPopulate()
 				FString IsDialogBuild_Ok_Str(RootNodeStr.c_str());
 				if (IsDialogBuild_Ok_Str == FString("ok"))
 				{
+
+					FString RelativePath = OutFileNames[0].Mid(FPaths::ProjectContentDir().Len(), OutFileNames[0].Len());
+
+					//UE_LOG(LogTemp, Warning, TEXT("---------1----------------'%s'------------"), *FPaths::ProjectContentDir());
+					//UE_LOG(LogTemp, Warning, TEXT("---------2----------------'%s'------------"), *OutFileNames[0]);
+					//UE_LOG(LogTemp, Warning, TEXT("---------2----------------'%s'------------"), *RelativePath);
+
 					SelectedActor = Cast<UDLG_DialogItem>(SelectedObjectList[0].Get());
-					Cast<UDLG_DialogItem>(SelectedActor)->PathToFile = OutFileNames[0];   // FString(" Path_to_DialogFile.xml ");
+					Cast<UDLG_DialogItem>(SelectedActor)->PathToFile = RelativePath;   // FString(" Path_to_DialogFile.xml ");
 				}
 				else
 				{
@@ -144,29 +151,6 @@ FReply FDLGObjectCustomizationDetails::ClickBtnPopulate()
 	
 	
 	
-	///FPropertyValueIterator
-	//for (TFieldIterator<FProperty> PropertyIterator(UDLG_UnitDialog::StaticClass()); PropertyIterator; ++PropertyIterator)
-/*	for (TFieldIterator<FProperty> PropertyIterator(SelectedActor->GetClass()); PropertyIterator; ++PropertyIterator)
-	{
-		FProperty* Property = *PropertyIterator;
-		FName const PropertyName = Property->GetFName();
-		
-		//FString value = Property->GetPropertyValue_InContainer(SelectedActor) ? "true" : "false";
-		
-		if (PropertyName == TEXT("AAAAAA_123456"))
-		{
-			FStrProperty* strProperty = Cast<FStrProperty>(Property);
-			if (strProperty)
-			{
-				strProperty->SetPropertyValue((void*)SelectedActor, FString("rrrrrrrrrrrr"));
-				//strProperty->SetPropertyValue_InContainer(SelectedActor, FString("rrrrrrrrrrrr"), 0);
-				break;
-			}
-		}
-		
-	}
-*/
-
 
 
 

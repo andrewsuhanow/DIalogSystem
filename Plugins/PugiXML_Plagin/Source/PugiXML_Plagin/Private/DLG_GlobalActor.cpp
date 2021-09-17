@@ -158,7 +158,9 @@ void ADLG_GlobalActor::DLG_PlayDialog(AActor* _ActorSpeker,
 	if (_AudioComponent) DisplayDialog->AudioComponentRef = _AudioComponent;
 		else DisplayDialog->AudioComponentRef = ReserveAudioComponent;
 
-	DisplayDialog->ShowDialogPanel();
+	if (DisplayDialog)
+		DisplayDialog->ShowDialogPanel();
+
 
 	GenerateDialog();
 

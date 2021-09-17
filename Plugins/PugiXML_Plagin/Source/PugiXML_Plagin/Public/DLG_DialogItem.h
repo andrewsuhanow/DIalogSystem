@@ -18,7 +18,7 @@
 
 
 
-
+ 
 
 
 
@@ -63,7 +63,9 @@ public:
 
 	
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
-		FString PathToFile = FString("Your dialog file.xml");                    //   PATH TO DIALOG.XML,   should de set in "DLGObjectCustomizationDetails.cpp"
+		FString PathToFile = FString("Your dialog file.xml");      //   PATH TO DIALOG.XML (only end),   should be set in "DLGObjectCustomizationDetails.cpp"
+	//UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
+	//	FString FullPathToFile = FString("none"); //   FULL PATH TO DIALOG.XML ( ...Conntent/ + ...DIALOG.XML),
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
 		FDialogParameter DialogParameter;
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")

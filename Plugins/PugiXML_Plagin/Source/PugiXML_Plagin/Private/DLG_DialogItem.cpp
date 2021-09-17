@@ -17,9 +17,9 @@
 
 
 
-
+ 
 // Sets default values for this component's properties
-UDLG_DialogItem::UDLG_DialogItem()
+UDLG_DialogItem::UDLG_DialogItem()  // const FObjectInitializer& ObjectInitializer):Super(ObjectInitializer)
 {
 
 	PrimaryComponentTick.bCanEverTick = false;
@@ -59,11 +59,11 @@ void UDLG_DialogItem::BeginPlay()
 	Super::BeginPlay();
 
 
+	
 
 
 
-
-		InitDialog();
+	InitDialog();
 
 
 
@@ -290,26 +290,77 @@ void UDLG_DialogItem::SetAudioComponent(UAudioComponent* _AudioComponentRef)
 void UDLG_DialogItem::InitDialog()
 {
 
-	if (PathToFile == FString("Your dialog file.xml")) return;
+	UE_LOG(LogTemp, Warning, TEXT("1111111111111111111111111111111   DLG"));
 
-	if (DialogParameter.isAlredyLoad) return;  //  77777777777777777777777777777777777777777
+	if (PathToFile == FString("Your dialog file.xml"))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Unit '%s' rty to Init don't assign dialog"), *GetOwner()->GetName());
+		return;
+	}
 
+
+	//if (DialogParameter.isAlredyLoad) return;  //  77777777777777777777777777777777777777777
+	UE_LOG(LogTemp, Warning, TEXT("2222222222222222222222222222222222   DLG"));
 
 	//   ============   Get LocalVariables from .xml   ====================
 	pugi::xml_document xmlVariables;
 
 	FString LVariableXmlPath = FPaths::ProjectContentDir() + FString("Dialog/") + FString("LVariables.xml");
+
+	UE_LOG(LogTemp, Warning, TEXT("strstrstrstr VAR   DLG  %s") , *LVariableXmlPath);
+
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	if (!PlatformFile.FileExists(*LVariableXmlPath)) return;
 
+
+	UE_LOG(LogTemp, Warning, TEXT("333333333333333333333333333   DLG"));
+
+
+
+
+	//    ===============  Get Path thrue DielogWindow  ====================
+	
+	//FString Path = FPaths::ProjectContentDir();  //FString("C:\\Program Files\\7-Zip");//
+	//FString FileName = FString("LVariables.xml");  //FString("C:\\Program Files\\7-Zip");//
+/*	TArray<FString> str;
+	if (Path.Find(FString("/"), ESearchCase::Type::CaseSensitive, ESearchDir::Type::FromStart, 0) != -1)
+	{
+		Path.ParseIntoArray(str, TEXT("/"), true);
+	}
+	//else if (Path.Find(FString("\\"), ESearchCase::Type::CaseSensitive, ESearchDir::Type::FromStart, 0) != -1)
+	//{
+	//	Path.ParseIntoArray(str, TEXT("\\"), true);
+	//}
+	Path = FString("");
+	for (int32 i_str = 0; i_str < str.Num(); i_str++)
+	{
+		Path += str[i_str] + FString("\\\\");       //  
+	}
+	Path += "Dialog\\\\";
+	Path += FileName;
+
+
+	UE_LOG(LogTemp, Warning, TEXT("char VAR   DLG   %s"), *Path);
+*/	
+
+	//+++const char* sss = "G:\\ARCHIV\\Archive\\UE_Proj\\DialogSystem_Test\\Content\\Dialog\\LVariables.xml";
+	//----const char* sss = std::string(TCHAR_TO_UTF8(*LVariableXmlPath));
+	//++const char* sss = TCHAR_TO_ANSI(*Path);
+	//+++FString aaa = FString(ANSI_TO_TCHAR(sss));
+	//UE_LOG(LogTemp, Warning, TEXT("char toFSTR   DLG   %s"), *aaa);
+	//TCHAR_TO_ANSI(*LVariableXmlPath)
 	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
+	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(std::string(TCHAR_TO_UTF8(*LVariableXmlPath)));
+	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file("DialogSystem_Test\\Content\\Dialog\\LVariables.xml");
+	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file("G:\\ARCHIV\\Archive\\UE_Proj\\DialogSystem_Test\\Content\\Dialog\\LVariables.xml");
+	//++++pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(sss);
 	if (!parse_VariablesRes) return;
 
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
 
 
-
+	UE_LOG(LogTemp, Warning, TEXT("4444444444444444444444444444444444   DLG"));
 
 
 
@@ -318,18 +369,22 @@ void UDLG_DialogItem::InitDialog()
 	//   ============   Get DialogParam from .xml   ====================
 	pugi::xml_document xmlDoc;
 
-	if (PathToFile == FString("Your dialog file.xml"))
-	{
-		UE_LOG(LogTemp, Error, TEXT("Unit '%s' rty to Init don't assign dialog"), *GetOwner()->GetName());
-		return;
-	}
+	
 
 	// !!!!!!!!!!!!	//Encoding Macros need be used carefully because the result is a pointer to a temporary object. 
 					//These Macro-calls only should be used when they are used as a function parameter.
 	//pugi::xml_parse_result parse_Res = xmlDoc.load_file(TCHAR_TO_ANSI(*PathToFile));   //++++++
+
+
+	UE_LOG(LogTemp, Error, TEXT("PathToFile 1  %s"), *(PathToFile));
+	PathToFile = FPaths::ProjectContentDir() + PathToFile;
+	UE_LOG(LogTemp, Error, TEXT("PathToFile 2  %s"), *(PathToFile));
+
 	pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(*PathToFile).Get());  //+++++
 
 
+
+	UE_LOG(LogTemp, Error, TEXT("PathToFile 1  %s"), *(PathToFile));
 
 
 	//  Get Root Node
@@ -587,9 +642,19 @@ void UDLG_DialogItem::InitDialog()
 
 void UDLG_DialogItem::PlayDialog(FName _PlayerName)
 {
+	
+	UE_LOG(LogTemp, Error, TEXT("_PlayerName   %s"), *(_PlayerName.ToString()));
+	if(AudioComponentRef)
+		UE_LOG(LogTemp, Error, TEXT("AudioComponentRef   ++++++++++"));
+	if (!AudioComponentRef)
+		UE_LOG(LogTemp, Error, TEXT("AudioComponentRef   -----------"));
 
+	UE_LOG(LogTemp, Error, TEXT("PathToFile   %s"), *(PathToFile));
 	//   ================== Get  "DLG_Global  --  Actor  (Sub_BP) on Scene"   -- DoOnce --   ==================
-		
+	
+
+
+
 	if (!DLG_GlobalActor)
 	{
 		//for (TObjectIterator<ADLG_GlobalActor> Itr; Itr; ++Itr)

@@ -139,8 +139,8 @@ struct FDialogParameter
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
-		bool isAlredyLoad = false;
+	//UPROPERTY()
+	//	bool isAlredyLoad = false;
 	UPROPERTY()
 		TArray<FString> MissingVariablesStr;
 	UPROPERTY()

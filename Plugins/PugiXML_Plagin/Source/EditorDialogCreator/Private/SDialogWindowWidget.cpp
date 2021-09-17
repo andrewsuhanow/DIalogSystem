@@ -111,20 +111,6 @@ void SDialogWindowWidget::Construct(const FArguments& InArgs)
 
 
 
-	/*
-		//7777777777777777777777777777777
-
-		pugi::xml_document xmlDoc;
-		pugi::xml_parse_result parse_Res = xmlDoc.load_file("G:\\ARCHIV\\Archive\\UE_Proj\\XML\\Dialod_Name_01.xml");
-
-		//  Get Root Node
-
-		pugi::xml_node RootNode = xmlDoc.child(("name"));
-		std::string RootNodeStr(RootNode.attribute("name").as_string());
-		//std::wstring RootNodeStr(RootNode.attribute("name").as_string());
-		FString RootNodeFStr(RootNodeStr.c_str());
-		UE_LOG(LogTemp, Warning, TEXT("RootNode = '%s'"), *RootNodeFStr);
-	*/
 
 
 
@@ -135,1445 +121,488 @@ void SDialogWindowWidget::Construct(const FArguments& InArgs)
 
 
 
-
-
-	//SNew(STextBlock).Text(FText::FromString("----------------  TOP gorisontal Panel  BLOCK  ---------"))
-	////GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString::SanitizeFloat(ViewportSize.X));
-
-	ChildSlot
-		//.VAlign(VAlign_Fill)  // Center, Left, Top
-		//.HAlign(HAlign_Fill)
+	ChildSlot		
 		[
 			SNew(SBorder)
 			[			
 				SNew(SOverlay)
-				//--.Padding(5)
-				//--.HAlign(HAlign_Fill)
-				//--.VAlign(VAlign_Fill)
 				.Visibility(EVisibility::Visible)//.Visibility(EVisibility::HitTestInvisible)
 
-
-
-
-		+SOverlay::Slot()   //   ==============  All
-		//--.Padding(5)
-		//.HAlign(HAlign_Center)
-		//.VAlign(VAlign_Center)
-		//++.Position(FVector2D(0, 0))
-		//.Position(FVector2D(.....))
-		//--.Size(FVector2D(ChildSlot.GetSize(), 60))
-		//.Size(FVector2D(300, 60))
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
-		[
-
-			//  ==================================================
-			//  =============  TOP gorisontal Panel   ============
-			//  ==================================================
-
-			SNew(SVerticalBox)
-
-			//  77777777  .Padding(5)
-		+ SVerticalBox::Slot()
-		.HAlign(HAlign_Fill)
-		//.VAlign(VAlign_Fill)
-		.AutoHeight()
-		//.MaxHeight(30.f)
-
-		[
-			SNew(SHorizontalBox)
-
-
-			////////////+ SHorizontalBox::Slot()
-			////////////.Padding(4,6,2,5)
-			////////////.HAlign(HAlign_Left)
-			////////////.VAlign(VAlign_Fill)
-			////////////.AutoWidth()
-			//////////////.FillWidth(1)
-			////////////[
-			////////////	SNew(SOverlay)
-			////////////	+ SOverlay::Slot()
-			////////////	[
-			////////////		SNew(SImage)
-			////////////		.Image(this, &SDialogWindowWidget::GetImageBrush)
-			////////////	]
-			////////////	+ SOverlay::Slot()
-			////////////	[
-			////////////		SNew(SBorder)
-			////////////		// Don't allow active tab overlay to absorb mouse clicks
-			////////////		.Visibility(EVisibility::HitTestInvisible)
-			////////////		//.Padding(this, &SDockTab::GetTabPadding)
-			////////////		.Padding(4.f)
-			////////////		.BorderImage(this, &SDockTab::GetActiveTabOverlayImageBrush)
-			////////////	]
-			////////////]
-
-
-			+SHorizontalBox::Slot()
-			.Padding(4, 6, 2, 5)
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SAssignNew(ContentPanelShowButton, SButton)                        //    BUTTON  1
-				//.ButtonStyle(&BallHUD->MenuButtonStyle)
-			.Text(FText::FromString("Content"))
-			// 777 .ButtonStyle(&InvStorage->EmptySlotButtonStyle)
-			.ContentPadding(FMargin(4.f))
-			.OnClicked(this, &SDialogWindowWidget::OnButtonSelectLayer, FName("content"))
-			]
-			+ SHorizontalBox::Slot()
-			.Padding(2, 6, 2, 5)
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SAssignNew(VariablesPanelShowButton, SButton)                        //    BUTTON  2
-				//.ButtonStyle(&BallHUD->MenuButtonStyle)
-				.Text(FText::FromString("Variables"))
-				.ContentPadding(FMargin(4.f))
-				.OnClicked(this, &SDialogWindowWidget::OnButtonSelectLayer, FName("variables"))
-			]
-			+ SHorizontalBox::Slot()
-			.Padding(2, 6, 2, 5)
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SAssignNew(SpekerPanelShowButton, SButton)							 //    BUTTON  3
-				//.ButtonStyle(&BallHUD->MenuButtonStyle)
-				.Text(FText::FromString("Spikers"))
-				.ContentPadding(FMargin(4.f))
-				.OnClicked(this, &SDialogWindowWidget::OnButtonSelectLayer, FName("spikers"))
-			]
-
-
-
-
-
-			// --------------   add Spekers  ------------------------
-			+ SHorizontalBox::Slot()
-			.Padding(2, 6, 2, 5)
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-
-				SNew(SBox)
-				.WidthOverride(32.f)
-				.HeightOverride(32.f)
-				[
-					SNew(SButton)
-					.ContentPadding(0)
-					.OnClicked(this, &SDialogWindowWidget::AddNewElement)
-					[
-						SNew(SImage)
-						.Image(ImageAddElement)
-					//.ColorAndOpacity(FLinearColor(0.5f,0.5f,0.5f))
-					]
-				]
-			]
-
-
-
-
-
-
-			//    =====================   Fast finding (in Dialog content block)   ===================
-			+SHorizontalBox::Slot()
-			.Padding(1, 6, 1, 5)    // L, Up, R, Dn
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			//.AutoWidth()
-			.FillWidth(1)
-			[
-				SNew(STextBlock)
-				.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
-				//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
-				.ColorAndOpacity(ColorUsualText)
-				.Text(FText::FromString("Dialog:"))
-			]
-			+SHorizontalBox::Slot()
-			.Padding(1, 6, 1, 5)    // L, Up, R, Dn
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SNew(SBox)
-				.Padding(GetPadding(0, 0, 0, 0))
-				//MaxDesiredWidth(FOptionalSize())
-				.HAlign(HAlign_Fill)
-				.VAlign(VAlign_Fill)
-				.WidthOverride_Lambda([this]() -> float { return (200.f * SizeKoef); })
-				//.HeightOverride(40.f * SizeKoef)
-				[
-					SAssignNew(FindDialodBlock_EditableText, SEditableTextBox)
-					.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
-					.Text(FText::FromString(FString("DEFAULT")))
-					.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange_ContentFinding, FName("dialog")) // "dialog" , "speech"  // void OnButtonT(const FText& Text);
-				]
-			]
-			+ SHorizontalBox::Slot()
-			.Padding(3, 6, 1, 5)    // L, Up, R, Dn
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SNew(STextBlock)
-				.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
-				//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
-				.ColorAndOpacity(ColorUsualText)
-				.Text(FText::FromString("Speech:"))
-			]
-			+SHorizontalBox::Slot()
-			.Padding(1, 6, 1, 5)    // L, Up, R, Dn
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SNew(SBox)
-				.Padding(GetPadding(0, 0, 0, 0))
-				//MaxDesiredWidth(FOptionalSize())
-				.HAlign(HAlign_Fill)
-				.VAlign(VAlign_Fill)
-				.WidthOverride_Lambda([this]() -> float { return (200.f * SizeKoef); })
-				//.HeightOverride(40.f * SizeKoef)
-				[
-					SAssignNew(FindSpeechBlock_EditableText, SEditableTextBox)
-					//.SetMinimumDesiredWidth(60.f * SizeKoef)
-					.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
-					.Text(FText::FromString(FString("DEFAULT")))
-					.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange_ContentFinding, FName("speech")) // "dialog" , "speech"  // void OnButtonT(const FText& Text);
-				]
-				
-			]
-
-			//***********************************************************************
-			//***********************************************************************
-			//***********************************************************************
-			//******************             FAST   FINDIND              ************
-			//***********************************************************************
-			//***********************************************************************
-			+SHorizontalBox::Slot()
-			.Padding(GetPadding(1, 6, 30, 5))    // L, Up, R, Dn
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SNew(SButton)							 //    BUTTON  Fast-Find 
-				//.ButtonStyle(&BallHUD->MenuButtonStyle)
-				.Text(FText::FromString("zzz"))
-				.ContentPadding(FMargin(0.f))
-				.OnClicked(this, &SDialogWindowWidget::FindNextContentBlock) 
-			]
-			
-			//***********************************************************************
-			//***********************************************************************
-			//***********************************************************************
-			//***********************************************************************
-
-
-
-			+ SHorizontalBox::Slot()
-			.Padding(2, 6, 2, 5)
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SAssignNew(SpekerPanelShowButton, SButton)							 //    BUTTON  Right
-				//.ButtonStyle(&BallHUD->MenuButtonStyle)
-				.Text(FText::FromString("Save dialog"))
-				.ContentPadding(FMargin(4.f))
-				.OnClicked(this, &SDialogWindowWidget::SaveAll) //  FName("Save")
-			]
-			+ SHorizontalBox::Slot()
-			.Padding(2, 6, 2, 5)
-			.HAlign(HAlign_Right)
-			.VAlign(VAlign_Fill)
-			.AutoWidth()
-			//.FillWidth(1)
-			[
-				SAssignNew(SpekerPanelShowButton, SButton)							 //    BUTTON  Right
-				//.ButtonStyle(&BallHUD->MenuButtonStyle)
-				.Text(FText::FromString("Load dialog"))
-				.ContentPadding(FMargin(4.f))
-				.OnClicked(this, &SDialogWindowWidget::LoadAll) // FName("Load")
-			]
-		]
-
-
-
-		
-	//  ============================================================
-	//  ======================     CONTENT     =====================
-	//  ============================================================
-		+SVerticalBox::Slot()
-		.VAlign(VAlign_Fill)
-		.HAlign(HAlign_Fill)
-		.FillHeight(1)
-		[
-
-			SNew(SHorizontalBox)             //  LeftMarker + SCROLL_Content + Right_Marker
-			.Visibility_Lambda([this]() -> EVisibility { return DialogContentVisibility; })  // Collapsed  Visible
-
-
-/*
-			+SHorizontalBox::Slot()            // --------------   Left indicators 1  ------------------------
-			.Padding(4.f)
-			.AutoWidth()
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.MaxWidth(10.f)
-			[
-				//SAssignNew(LeftIndicator_1,SVerticalBox)
-
-				//+SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				//+ SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////.AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-
-				SNew(STextBlock)
-				.Text(FText::FromString("R"))
-			]
-
-			+ SHorizontalBox::Slot()            // --------------   Left indicators 2  ------------------------
-			.Padding(4.f)
-			.AutoWidth()
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.MaxWidth(10.f)
-			[
-				//SAssignNew(RightIndicator,SVerticalBox)
-
-				//+SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////AutoHeight()   //  not scrolling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				//+ SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////.AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-
-				SNew(STextBlock)
-				.Text(FText::FromString("S"))
-			]
-*/
-
-			+ SHorizontalBox::Slot()             //  CONTENT  SCROLL
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			//.MaxHeight(30.f)
-
-			[
-				//=======================================================================================
-				// ===============================  SCROLL in Content  ==================================
-				//=======================================================================================
-
-				SAssignNew(MainContentPanelBlock, SScrollBox)                      
-				//.Style(&NewsStyle.ScrollBorderStyle)
-				//.ScrollBarStyle(&NewsStyle.ScrollBarStyle)
-
-			]
-
-			+ SHorizontalBox::Slot()            // --------------   Right indicators  Content ------------------------
-			//.Padding(4.f)
-			.AutoWidth()
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.MaxWidth(DialogButtonSmallSize * SizeKoef)
-			[
-			
-				//SNew(SVerticalBox)
-
-				//+SVerticalBox::Slot()
-				//.VAlign(VAlign_Top)
-				//.HAlign(HAlign_Fill)
-				//.AutoHeight()   //  not scrplling
-				////.FillHeight(1)
-				//[
-
-				//	SNew(SBox)
-				//	.Padding(0)
-				//	.HAlign(HAlign_Fill)
-				//	.VAlign(VAlign_Fill)
-				//	.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, DialogButtonSmallSize)
-				//	.HeightOverride(this, &SDialogWindowWidget::GetButtonSize, DialogButtonSmallSize)
-				//	//.HeightOverride(20.f)
-				//	[
-				//		SNew(SButton)
-				//		.ContentPadding(0)
-				//		.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))
-				//		//.OnClicked(this, &SDialogWindowWidget::CLEAR_ALL_Marker, EProppertyToChange::RemoveDialog, CurrentPropertyIndex)
-				//		[
-				//			SNew(SImage)
-				//			.Image(ImageDeleteElement)  ////  ReMove element___XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
-				//		]
-				//	]
-				//]
-				//+ SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////.AutoHeight()   //  not scrolling
-				//.FillHeight(1)
-				//[
-					SAssignNew(RightIndicator, SVerticalBox)
-				//]
-
-			
-			]
-		]
-
-
-		 
-
-		//  ============================================================
-		//  ===================   VARIABLES  ===================
-		//  ============================================================
-		+SVerticalBox::Slot()
-		.VAlign(VAlign_Fill)
-		.HAlign(HAlign_Fill)
-		//.AutoHeight()   //  not scrplling
-		.FillHeight(1)
-		[
-
-			SNew(SHorizontalBox)             //  LeftMarker + SCROLL_Content + Right_Marker
-			.Visibility_Lambda([this]() -> EVisibility { return DialogVariablesVisibility; })  // Collapsed  Visible
-/*
-			+ SHorizontalBox::Slot()            // --------------   Left indicators 1  VARIABLES ------------------------
-			.Padding(4.f)
-			.AutoWidth()
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.MaxWidth(10.f)
-			[
-				//SAssignNew(LeftIndicator_1_7777777777777,SVerticalBox)
-
-				//+SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				//+ SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////.AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				SNew(STextBlock)
-				.Text(FText::FromString("I"))
-			]
-
-			+ SHorizontalBox::Slot()            // --------------   Left indicators 1 VARIABLES ------------------------
-			.Padding(4.f)
-			.AutoWidth()
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.MaxWidth(10.f)
-			[
-
-				SAssignNew(LeftIndicator_2, SVerticalBox)
-				//SAssignNew(LeftIndicator_2_77777,SVerticalBox)
-
-				//+SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				//+ SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////.AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				//SNew(STextBlock)
-				//.Text(FText::FromString("S"))
-			]
-*/
-
-			+ SHorizontalBox::Slot()             //  CONTENT  SCROLL
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			//.MaxHeight(30.f)
-
-			[
-				SAssignNew(MainVariablesPanelBlock, SScrollBox)                       // SCROLL in Content 
-				//.Style(&NewsStyle.ScrollBorderStyle)
-				//.ScrollBarStyle(&NewsStyle.ScrollBarStyle)
-			]
-
-
-/*
-			+ SHorizontalBox::Slot()            // --------------   Right indicators 1 VARIABLES  ------------------------
-			.Padding(4.f)
-			.AutoWidth()
-			.HAlign(HAlign_Left)
-			.VAlign(VAlign_Fill)
-			.MaxWidth(10.f)
-			[
-				//SAssignNew(RightIndicator77777,SVerticalBox)
-
-				//+SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				//+ SVerticalBox::Slot()
-				//.VAlign(VAlign_Fill)
-				//.HAlign(HAlign_Fill)
-				////.AutoHeight()   //  not scrplling
-				//.FillHeight(1)
-				//[
-				//	SNew(SButton)
-				//]
-				SNew(STextBlock)
-				.Text(FText::FromString("E"))
-			]
-*/		]
-
-
-
-		//  ============================================================
-		//  ===================   SPIKERS  ===================
-		//  ============================================================
-		+SVerticalBox::Slot()
-		.VAlign(VAlign_Fill)
-		.HAlign(HAlign_Fill)
-		//.AutoHeight()   //  not scrplling
-		.FillHeight(1)
-		[
-
-			SNew(SHorizontalBox)             //  LeftMarker + SCROLL_Content + Right_Marker
-			//--.Padding(10)
-			.Visibility_Lambda([this]() -> EVisibility { return DialogSpikersVisibility; })  // Collapsed  Visible
-
-			//+ SHorizontalBox::Slot()            // --------------   Left indicators 1  ------------------------
-			//.Padding(4.f)
-			//.AutoWidth()
-			//.HAlign(HAlign_Left)
-			//.VAlign(VAlign_Fill)
-			//.MaxWidth(10.f)
-			//[
-			//	//SAssignNew(LeftIndicator_1_7777777777777,SVerticalBox)
-
-			//	//+SVerticalBox::Slot()
-			//	//.VAlign(VAlign_Fill)
-			//	//.HAlign(HAlign_Fill)
-			//	////AutoHeight()   //  not scrplling
-			//	//.FillHeight(1)
-			//	//[
-			//	//	SNew(SButton)
-			//	//]
-			//	//+ SVerticalBox::Slot()
-			//	//.VAlign(VAlign_Fill)
-			//	//.HAlign(HAlign_Fill)
-			//	////.AutoHeight()   //  not scrplling
-			//	//.FillHeight(1)
-			//	//[
-			//	//	SNew(SButton)
-			//	//]
-			//	SNew(STextBlock)
-			//	.Text(FText::FromString("I"))
-			//]
-
-			//+ SHorizontalBox::Slot()            // --------------   Left indicators 1  ------------------------
-			//.Padding(4.f)
-			//.AutoWidth()
-			//.HAlign(HAlign_Left)
-			//.VAlign(VAlign_Fill)
-			//.MaxWidth(10.f)
-			//[
-			//	//SAssignNew(LeftIndicator_2_77777,SVerticalBox)
-
-			//	//+SVerticalBox::Slot()
-			//	//.VAlign(VAlign_Fill)
-			//	//.HAlign(HAlign_Fill)
-			//	////AutoHeight()   //  not scrplling
-			//	//.FillHeight(1)
-			//	//[
-			//	//	SNew(SButton)
-			//	//]
-			//	//+ SVerticalBox::Slot()
-			//	//.VAlign(VAlign_Fill)
-			//	//.HAlign(HAlign_Fill)
-			//	////.AutoHeight()   //  not scrplling
-			//	//.FillHeight(1)
-			//	//[
-			//	//	SNew(SButton)
-			//	//]
-			//	SNew(STextBlock)
-			//	.Text(FText::FromString("S"))
-			//]
-
-
-			+ SHorizontalBox::Slot()             //  CONTENT  SCROLL
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			//.AutoWidth()
-			.FillWidth(1)
-			//.MaxHeight(30.f)
-
-			[
-				//SNew(SVerticalBox)            
-				//
-
-				//+ SVerticalBox::Slot()           // SCROLL in SpikersPanelBlock 
-				//.Padding(4.f)
-				////--.AutoWidth()
-				//.HAlign(HAlign_Fill)
-				//.VAlign(VAlign_Fill)
-				////.MaxWidth(10.f)
-				//[
-
-					SNew(SHorizontalBox)
-
-					+ SHorizontalBox::Slot()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					//.HillWidth(1)
-					[
-						SAssignNew(MainSpikersPanelBlock, SScrollBox)               // SCROLL in SpikersPanelBlock 
-
-					]
-
-					+ SHorizontalBox::Slot()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					//.HillWidth(1)
-					[
-
-						SNew(SVerticalBox)
-
-						+ SVerticalBox::Slot()
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Top)
-						.AutoHeight()
-						[
-							SNew(SBox)
-							.HeightOverride(30.f * SizeKoef)
-							[
-								SNew(SEditableTextBox)
-								.Visibility_Lambda([this]() -> EVisibility { return vMainSpikersEditablePanel_FindSound; })
-								.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-								.OnTextChanged_Raw(this, &SDialogWindowWidget::MainSpikersEditablePanel_FindExtBlock, 1) // 1=Sound  // void OnButtonconst FText& Text);
-								.Text_Lambda([this]() -> FText { return FText::FromString(FindedText_InMainSpikerEditablePanel); })
-								//	.VariableSection[i_ResponseVariable].VariableName.ToString()))			
-								//.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::Response_variable_varName, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
-
-							]
-						]
-						
-					+ SVerticalBox::Slot()
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Top)
-						.AutoHeight()
-						[
-							SNew(SBox)
-							.HeightOverride(30.f * SizeKoef)
-							[
-								SNew(SEditableTextBox)
-								.Visibility_Lambda([this]() -> EVisibility { return vMainSpikersEditablePanel_FindImage; })
-								.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-								.OnTextChanged_Raw(this, &SDialogWindowWidget::MainSpikersEditablePanel_FindExtBlock, 2) // 1=Image  // void OnButtonconst FText& Text);
-								.Text_Lambda([this]() -> FText { return FText::FromString(FindedText_InMainSpikerEditablePanel); })
-								//	.VariableSection[i_ResponseVariable].VariableName.ToString()))			
-								//.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::Response_variable_varName, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
-
-							]
-						]
-
-						+ SVerticalBox::Slot()
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Top)
-						[
-							SAssignNew(MainSpikersEditablePanelBlock, SScrollBox)        // SCROLL - Editable in SpikersPanelBlock 
-						]
-					]
-			
-
-					/*+ SScrollBox::Slot().HAlign(HAlign_Fill).VAlign(VAlign_Fill)[SNew(STextBlock).Text(FText::FromString("eeeeeeeeeeeeeeeeeeee"))]
-					+ SScrollBox::Slot().HAlign(HAlign_Fill).VAlign(VAlign_Fill)[SNew(STextBlock).Text(FText::FromString("dddddddddddddddddddddd"))]
-					+ SScrollBox::Slot().HAlign(HAlign_Fill).VAlign(VAlign_Fill)[SNew(STextBlock).Text(FText::FromString("11111111111111111111"))]
-					+ SScrollBox::Slot().HAlign(HAlign_Fill).VAlign(VAlign_Fill)[SNew(STextBlock).Text(FText::FromString("ee"))]*/
-				//]
-			]
-		]
-	]
-
-
-	//  ==================  HelperMenu   ====================
-	+ SOverlay::Slot()
-	[
-		SNew(SButton)
-		.ButtonColorAndOpacity(FLinearColor(0.05f, 0.05f, 0.06f, 0.0f))
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
-		.Visibility(this, &SDialogWindowWidget::GetHelperPanelVisibility)
-		.OnClicked(this, &SDialogWindowWidget::CancelHelperPanel)
-	]
-
-	+ SOverlay::Slot()
-	//.Padding(20.f, 100, 0, 0)    
-	.Padding(TAttribute<FMargin>(this, &SDialogWindowWidget::GetHelperPanelPosition))   //  related menu Position
-	.HAlign(HAlign_Left)
-	.VAlign(VAlign_Top)
-	[
-		SNew(SBox)
-		.Visibility(this, &SDialogWindowWidget::GetHelperPanelVisibility)
-		//.Padding(FMargin(20.f, 100))
-		//.WidthOverride(100.f)
-		//.HeightOverride(700.f)													
-		.HeightOverride(this, &SDialogWindowWidget::GetHelperMenu_Height)             
-		.MinDesiredHeight(60.f)
-		[
-			SNew(SBorder)
-			.Padding(0)
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			.BorderImage(TitleDialog)
-			[
-
-					SNew(SBox)
-					.Padding(FMargin(0))
-					//.MaxDesiredWidth(300.f)
-					.MinDesiredHeight(60.f)
-					//.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Top)
-					//.WidthOverride(20.f)
-					//.HeightOverride(25.f)
-					[
-						SNew(SVerticalBox)
-
-						+SVerticalBox::Slot()
-						.Padding(0.f)
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Top)
-						.AutoHeight()
-						[
-							SNew(SBox)
-							.Padding(GetPadding(5.f, 5.f, 5.f, 5.f))
-							//.MinDesiredWidth(70.f)
-							.HeightOverride(36.f * SizeKoef)  // HelperMenu_Height = 30
-							.HAlign(HAlign_Fill)
-							.VAlign(VAlign_Fill)
-							[
-								//  ===========================  DIALOG-Name EditableText  ================================
-								SAssignNew(OnHelperPanel_FindingEditableText, SEditableTextBox)
-								.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-								//.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, EProppertyToChange::Variable_varName, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
-								.Text_Lambda([this]() -> FText { return FText::FromString(FastFindingHelperString); })
-								//.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::DialogName, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
-								.OnTextChanged_Raw(this, &SDialogWindowWidget::OnHelperPanel_FindingTextChange)  // void OnButtonT(const FText& Text);
-							]
-						]
-
-						+SVerticalBox::Slot()
-						.Padding(0.f)
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Top)
-						[
-							SAssignNew(HelperMenulList, SScrollBox)                       // SCROLL in HelperMenulList 
-						]
-					]
-				//]
-			]
-		]
-	]
-
-
-	
-
-	/*
-				+ SOverlay::Slot() //  All
-				//--.Padding(5)
-				//.HAlign(HAlign_Center)
-				//.VAlign(VAlign_Center)
-				//++.Position(FVector2D(0, 0))
-				//.Position(FVector2D(.....))
-				//--.Size(FVector2D(ChildSlot.GetSize(), 60))
-				//.Size(FVector2D(300, 60))
+				+SOverlay::Slot()   //   ==============  All
 				.HAlign(HAlign_Fill)
 				.VAlign(VAlign_Fill)
 				[
-				jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj---------------------------------------------------------------
 
 					//  ==================================================
 					//  =============  TOP gorisontal Panel   ============
 					//  ==================================================
-					//  ===================  CONTENT   ===================
-					//  ==================================================
+
 					SNew(SVerticalBox)
+
 					+ SVerticalBox::Slot()
 					.HAlign(HAlign_Fill)
 					//.VAlign(VAlign_Fill)
-					.MaxHeight(30.f)
-					fffff--------------------------------------------------------------------------------------
+					.AutoHeight()
+					//.MaxHeight(30.f)
+
 					[
 						SNew(SHorizontalBox)
-						//--.HAlign(HAlign_Fill)
-						//--.VAlign(VAlign_Fill)
-						.Visibility(EVisibility::Visible)
 
-						//  ----------------  Button  'dlg_content' ----------------
-						+ SHorizontalBox::Slot()
-						//--.AutoHeight()
-						//.MaxWidth(90.0f)
-						//.Padding(0, 60, 40, 10)
+
+						+SHorizontalBox::Slot()
+						.Padding(4, 6, 2, 5)
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
 						.AutoWidth()
+						//.FillWidth(1)
 						[
+							SAssignNew(ContentPanelShowButton, SButton)                        //    BUTTON  1
+							//.ButtonStyle(&BallHUD->MenuButtonStyle)
+							.Text(FText::FromString("Content"))
+							// 777 .ButtonStyle(&InvStorage->EmptySlotButtonStyle)
+							.ContentPadding(FMargin(4.f))
+							.OnClicked(this, &SDialogWindowWidget::OnButtonSelectLayer, FName("content"))
+						]
+						+ SHorizontalBox::Slot()
+						.Padding(2, 6, 2, 5)
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SAssignNew(VariablesPanelShowButton, SButton)                        //    BUTTON  2
+							//.ButtonStyle(&BallHUD->MenuButtonStyle)
+							.Text(FText::FromString("Variables"))
+							.ContentPadding(FMargin(4.f))
+							.OnClicked(this, &SDialogWindowWidget::OnButtonSelectLayer, FName("variables"))
+						]
+						+ SHorizontalBox::Slot()
+						.Padding(2, 6, 2, 5)
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SAssignNew(SpekerPanelShowButton, SButton)							 //    BUTTON  3
+							//.ButtonStyle(&BallHUD->MenuButtonStyle)
+							.Text(FText::FromString("Spikers"))
+							.ContentPadding(FMargin(4.f))
+							.OnClicked(this, &SDialogWindowWidget::OnButtonSelectLayer, FName("spikers"))
+						]
+
+
+
+
+
+						// --------------   add New  ------------------------
+						+ SHorizontalBox::Slot()
+						.Padding(2, 6, 2, 5)
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+
 							SNew(SBox)
-							//.HeightOverride( 555 )
-							.WidthOverride(100)
-							.HeightOverride(30.f)
+							.WidthOverride(32.f)
+							.HeightOverride(32.f)
 							[
 								SNew(SButton)
-								//-SWidgetGallery.cpp-.Text(LOCTEXT("AddBreadCrumbLabel", "Add"))
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								//.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle< FButtonStyle >("NormalText"))      // ?????
-								//.ContentPadding(FMargin(0.f, 0.f))
-								//.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 0.f, 0.f))
-								.OnClicked(this, &SDialogWindowWidget::OnButtonContentDialog, FName("dlg_content"))
+								.ContentPadding(0)
+								.OnClicked(this, &SDialogWindowWidget::AddNewElement)
 								[
-									SNew(STextBlock)
-									.Justification(ETextJustify::Center)
-									//.Margin(0)
-
-									.ShadowColorAndOpacity(FLinearColor::Black)
-									//.Font(FSlateFontInfo("EmbossedText", 16))
-									.Text(FText::FromString(TEXT("Dialog content ")))
+									SNew(SImage)
+									.Image(ImageAddElement)
 								]
 							]
 						]
-						//  ----------------  Button  'variables' ----------------
-						+ SHorizontalBox::Slot()
-						//--.AutoHeight()
-						.AutoWidth()
-						//++.HAlign(HAlign_Left)
-						[
-							SNew(SBox)
-							.WidthOverride(100)
-							.HeightOverride(30.f)
-							[
-								SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.OnClicked(this, &SDialogWindowWidget::OnButtonContentDialog, FName("var"))
-								[
-									SNew(STextBlock)
-									.Text(FText::FromString(TEXT("Variables")))
-								]
-							]
-						]
 
-						+ SHorizontalBox::Slot()
-						//++.AutoWidth()
-						.HAlign(HAlign_Fill)
-						[
-							SNew(SSpacer)
-							//++.Size(CloseButtonStyle->Normal.ImageSize)
-						]
 
-						//    ----------------  Button  'Export' ----------------
-						+ SHorizontalBox::Slot()
-						.AutoWidth()
+
+
+
+
+						//    =====================   Fast finding (in Dialog content block)   ===================
+						+SHorizontalBox::Slot()
+						.Padding(1, 6, 1, 5)    // L, Up, R, Dn
 						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						//.AutoWidth()
+						.FillWidth(1)
 						[
-							SNew(SBox)
-							.WidthOverride(100)
-							.HeightOverride(30.f)
-							[
-								SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.OnClicked(this, &SDialogWindowWidget::OnButtonImportDialog)
-								[
-									SNew(STextBlock)
-									.Text(FText::FromString(TEXT("Import")))
-								]
-							]
+							SNew(STextBlock)
+							.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
+							//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
+							.ColorAndOpacity(ColorUsualText)
+							.Text(FText::FromString("Dialog:"))
 						]
-						//    ----------------  Button  'Immport' ----------------
-						+ SHorizontalBox::Slot()
-						.AutoWidth()
+						+SHorizontalBox::Slot()
+						.Padding(1, 6, 1, 5)    // L, Up, R, Dn
 						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
 						[
 							SNew(SBox)
-							.WidthOverride(100)
-							.HeightOverride(30.f)
-							[
-								SNew(SButton)
-								.HAlign(HAlign_Center)
-								.VAlign(VAlign_Center)
-								.OnClicked(this, &SDialogWindowWidget::OnButtonExportDialog)
-								[
-									SNew(STextBlock)
-									.Text(FText::FromString(TEXT("Export")))
-								]
-							]
-						]
-
-
-					]
-
-
-
-
-					//  ===================================================================
-					//  =======================   CONTENT Panel  ===========================
-					//  ===================================================================
-					+ SVerticalBox::Slot()
-					.AutoHeight()
-					//.FillHeight(1)
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					[
-						SNew(SScrollBox)                            // SCROLL in Content
-						//.Style(&NewsStyle.ScrollBorderStyle)
-						//.ScrollBarStyle(&NewsStyle.ScrollBarStyle)
-
-
-
-
-
-						+ SScrollBox::Slot()
-						[
-							// tab content area
-							//SAssignNew(ContentArea, SVerticalBox)
-							SNew(SVerticalBox)                    //                          /-content-/...../-variables_invis-/
-							.Visibility(this, &SDialogWindowWidget::GetContentPanelState)
-
-							+ SVerticalBox::Slot()
+							.Padding(GetPadding(0, 0, 0, 0))
+							//MaxDesiredWidth(FOptionalSize())
 							.HAlign(HAlign_Fill)
 							.VAlign(VAlign_Fill)
+							.WidthOverride_Lambda([this]() -> float { return (200.f * SizeKoef); })
+							//.HeightOverride(40.f * SizeKoef)
 							[
-								//// content goes here
-								//SAssignNew(ContentSlot, SBorder)
-								//-777-.BorderImage(FCoreStyle::Get().GetBrush("WhiteBrush"))
-								//-777-.BorderBackgroundColor(FLinearColor(1, 1, 1, 1))
-								//.BorderImage(this, &SDockingTabStack::GetContentAreaBrush)
-								//.Padding(this, &SDockingTabStack::GetContentPadding)
-								//.Clipping(EWidgetClipping::ClipToBounds)
+								SAssignNew(FindDialodBlock_EditableText, SEditableTextBox)
+								.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
+								.Text(FText::FromString(FString("DEFAULT")))
+								.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange_ContentFinding, FName("dialog")) // "dialog" , "speech"  // void OnButtonT(const FText& Text);
+							]
+						]
+						+ SHorizontalBox::Slot()
+						.Padding(3, 6, 1, 5)    // L, Up, R, Dn
+						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SNew(STextBlock)
+							.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
+							//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
+							.ColorAndOpacity(ColorUsualText)
+							.Text(FText::FromString("Speech:"))
+						]
+						+SHorizontalBox::Slot()
+						.Padding(1, 6, 1, 5)    // L, Up, R, Dn
+						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SNew(SBox)
+							.Padding(GetPadding(0, 0, 0, 0))
+							//MaxDesiredWidth(FOptionalSize())
+							.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Fill)
+							.WidthOverride_Lambda([this]() -> float { return (200.f * SizeKoef); })
+							//.HeightOverride(40.f * SizeKoef)
+							[
+								SAssignNew(FindSpeechBlock_EditableText, SEditableTextBox)
+								//.SetMinimumDesiredWidth(60.f * SizeKoef)
+								.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
+								.Text(FText::FromString(FString("DEFAULT")))
+								.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange_ContentFinding, FName("speech")) // "dialog" , "speech"  // void OnButtonT(const FText& Text);
+							]
+				
+						]
 
-								//[
+						//***********************************************************************
+						//***********************************************************************
+						//******************             FAST   FINDING   BUTTON     ************     ///   NOT WORK
+						//***********************************************************************
+						//***********************************************************************
+						+SHorizontalBox::Slot()
+						.Padding(GetPadding(1, 6, 30, 5))    // L, Up, R, Dn
+						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SNew(SButton)							 //    BUTTON  Fast-Find 
+							//.ButtonStyle(&BallHUD->MenuButtonStyle)
+							.Text(FText::FromString("zzz"))
+							.ContentPadding(FMargin(0.f))
+							.OnClicked(this, &SDialogWindowWidget::FindNextContentBlock) 
+						]
+			
+						//***********************************************************************
+						//***********************************************************************
+						//***********************************************************************
+						//***********************************************************************
 
-								SNew(SHorizontalBox)
-								//--.Padding(10)
 
-								//   -------------- Left indicators -----------------
-								+SHorizontalBox::Slot()
-								.Padding(4.f)
-								.AutoWidth()
-								.HAlign(HAlign_Left)
-								.VAlign(VAlign_Fill)
-								.MaxWidth(10.f)
+
+						+ SHorizontalBox::Slot()
+						.Padding(2, 6, 2, 5)
+						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SAssignNew(SpekerPanelShowButton, SButton)							 //    BUTTON  Right
+							//.ButtonStyle(&BallHUD->MenuButtonStyle)
+							.Text(FText::FromString("Save dialog"))
+							.ContentPadding(FMargin(4.f))
+							.OnClicked(this, &SDialogWindowWidget::SaveAll) //  FName("Save")
+						]
+						+ SHorizontalBox::Slot()
+						.Padding(2, 6, 2, 5)
+						.HAlign(HAlign_Right)
+						.VAlign(VAlign_Fill)
+						.AutoWidth()
+						//.FillWidth(1)
+						[
+							SAssignNew(SpekerPanelShowButton, SButton)							 //    BUTTON  Right
+							//.ButtonStyle(&BallHUD->MenuButtonStyle)
+							.Text(FText::FromString("Load dialog"))
+							.ContentPadding(FMargin(4.f))
+							.OnClicked(this, &SDialogWindowWidget::LoadAll) // FName("Load")
+						]
+					]
+
+
+
+		
+					//  ============================================================
+					//  ======================     CONTENT     =====================
+					//  ============================================================
+					+SVerticalBox::Slot()
+					.VAlign(VAlign_Fill)
+					.HAlign(HAlign_Fill)
+					.FillHeight(1)
+					[
+
+						SNew(SHorizontalBox)             //  LeftMarker + SCROLL_Content + Right_Marker
+						.Visibility_Lambda([this]() -> EVisibility { return DialogContentVisibility; })  // Collapsed  Visible
+
+
+
+
+						+ SHorizontalBox::Slot()             //  CONTENT  SCROLL
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						//.MaxHeight(30.f)
+
+						[
+							//=======================================================================================
+							// ===============================  SCROLL in Content  ==================================
+							//=======================================================================================
+
+							SAssignNew(MainContentPanelBlock, SScrollBox)                      
+						]
+
+						+ SHorizontalBox::Slot()            // --------------   Right indicators  Content ------------------------
+						//.Padding(4.f)
+						.AutoWidth()
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
+						.MaxWidth(DialogButtonSmallSize * SizeKoef)
+						[
+								SAssignNew(RightIndicator, SVerticalBox)
+						]
+					]
+
+
+		 
+
+					//  ============================================================
+					//  ===================   VARIABLES Block    ===================
+					//  ============================================================
+					+SVerticalBox::Slot()
+					.VAlign(VAlign_Fill)
+					.HAlign(HAlign_Fill)
+					//.AutoHeight()   //  not scrplling
+					.FillHeight(1)
+					[
+
+						SNew(SHorizontalBox)             //  LeftMarker + SCROLL_Content + Right_Marker
+						.Visibility_Lambda([this]() -> EVisibility { return DialogVariablesVisibility; })  // Collapsed  Visible
+
+						+ SHorizontalBox::Slot()             //  CONTENT  SCROLL
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						//.MaxHeight(30.f)
+
+						[
+							SAssignNew(MainVariablesPanelBlock, SScrollBox)                       // SCROLL in Content 
+						]
+					]
+
+
+
+					//  ============================================================
+					//  ===================   SPEKERS  ===================
+					//  ============================================================
+					+SVerticalBox::Slot()
+					.VAlign(VAlign_Fill)
+					.HAlign(HAlign_Fill)
+					//.AutoHeight()   //  not scrolling
+					.FillHeight(1)
+					[
+
+						SNew(SHorizontalBox)             //  LeftMarker + SCROLL_Content + Right_Marker
+						//--.Padding(10)
+						.Visibility_Lambda([this]() -> EVisibility { return DialogSpikersVisibility; })  // Collapsed  Visible
+
+						+ SHorizontalBox::Slot()             //  CONTENT  SCROLL
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						//.AutoWidth()
+						.FillWidth(1)
+						//.MaxHeight(30.f)
+
+						[
+							SNew(SHorizontalBox)
+
+							+ SHorizontalBox::Slot()
+							.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Fill)
+							//.HillWidth(1)
+							[
+								SAssignNew(MainSpikersPanelBlock, SScrollBox)               // SCROLL in SpikersPanelBlock 
+
+							]
+
+							+ SHorizontalBox::Slot()
+							.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Fill)
+							//.HillWidth(1)
+							[
+
+								SNew(SVerticalBox)
+
+								+ SVerticalBox::Slot()
+								.HAlign(HAlign_Fill)
+								.VAlign(VAlign_Top)
+								.AutoHeight()
 								[
-									SNew(STextBlock)
-									.Text(FText::FromString("M"))
+									SNew(SBox)
+									.HeightOverride(30.f * SizeKoef)
+									[
+										SNew(SEditableTextBox)
+										.Visibility_Lambda([this]() -> EVisibility { return vMainSpikersEditablePanel_FindSound; })
+										.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
+										.OnTextChanged_Raw(this, &SDialogWindowWidget::MainSpikersEditablePanel_FindExtBlock, 1) // 1=Sound  // void OnButtonconst FText& Text);
+										.Text_Lambda([this]() -> FText { return FText::FromString(FindedText_InMainSpikerEditablePanel); })
+
+									]
+								]
+						
+								+ SVerticalBox::Slot()
+								.HAlign(HAlign_Fill)
+								.VAlign(VAlign_Top)
+								.AutoHeight()
+								[
+									SNew(SBox)
+									.HeightOverride(30.f * SizeKoef)
+									[
+										SNew(SEditableTextBox)
+										.Visibility_Lambda([this]() -> EVisibility { return vMainSpikersEditablePanel_FindImage; })
+										.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
+										.OnTextChanged_Raw(this, &SDialogWindowWidget::MainSpikersEditablePanel_FindExtBlock, 2) // 1=Image  // void OnButtonconst FText& Text);
+										.Text_Lambda([this]() -> FText { return FText::FromString(FindedText_InMainSpikerEditablePanel); })
+									]
 								]
 
-
-
-
-								//   ==============================    Dialog Block    =================================
-								+ SHorizontalBox::Slot()
-								.FillWidth(1)
-								.Padding(4.f)
-								//.AutoWidth()
-								//--.AutoHeight()
+								+ SVerticalBox::Slot()
 								.HAlign(HAlign_Fill)
-								.VAlign(VAlign_Fill)
-								//++.MaxWidth(30.f)
+								.VAlign(VAlign_Top)
 								[
-
-									SAssignNew(ContentArea, SVerticalBox)
-
-									+SVerticalBox::Slot()
-									.Padding(3.f)
-									.HAlign(HAlign_Fill)
-									.VAlign(VAlign_Fill)
-									//.AutoWidth()
-									.AutoHeight()
-									//--.MaxHeigth(30.f)
-									.HAlign(HAlign_Fill)
-									[
-										SNew(SBox)
-										.HeightOverride( 30.f )
-										//.WidthOverride(100)
-										[
-											//   -----------------   One row in DialogBlock  (EditableBox)   --------------------
-											SNew(SHorizontalBox)
-
-											// ----------------  First Button in (EditableBox) row    --------------------
-											+SHorizontalBox::Slot()
-											.Padding(3.f)
-											.AutoWidth()
-											//--.MaxHeigth(30.f)
-											.MaxWidth(30.f)
-											.HAlign(HAlign_Left)
-											.VAlign(VAlign_Fill)
-											[
-												SNew(SButton)
-												.HAlign(HAlign_Fill)
-												.VAlign(VAlign_Fill)
-												//.OnClicked(this, &SDialogWindowWidget::OnButtonT)
-												[
-													SNew(STextBlock)
-													.Text(FText::FromString(TEXT("Tt")))
-												]
-
-											]
-											// ----------------  (EditableBox) Box    --------------------
-											+ SHorizontalBox::Slot()
-											.Padding(3.f)
-											.FillWidth(1)
-											//.AutoWidth()
-											//--.MaxHeigth(30.f)
-											.HAlign(HAlign_Fill)
-											.VAlign(VAlign_Fill)
-											[
-												SAssignNew(EditableText1,SEditableTextBox)
-												.Text(FText::FromString(str1))
-												//+++.OnTextChanged_Raw(this, &SDialogWindowWidget::OnButtonT)  // void OnButtonT(const FText& Text);
-												.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
-											]
-										]
-									]
-
-									// ----------------  (EditableBox Multi) Box    --------------------
-									+ SVerticalBox::Slot()
-									.Padding(3.f)
-									.HAlign(HAlign_Fill)
-									.VAlign(VAlign_Fill)
-									//.AutoWidth()
-									.AutoHeight()
-									//--.MaxHeigth(30.f)
-									[
-										SNew(SBox)
-										.HeightOverride(80.f)
-										//.WidthOverride(100)
-										[
-											SAssignNew(MlEditableText2, SMultiLineEditableTextBox)
-											.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox)
-											//[
-
-											//SNew(STextBlock)
-											//.Text(FText::FromString("bbbbbbbbbbb"))
-											//]
-										]
-									]
-
-									+ SVerticalBox::Slot()
-									.Padding(3.f)
-									//.AutoWidth()
-									.AutoHeight()
-									//--.MaxHeigth(30.f)
-									.HAlign(HAlign_Fill)
-									.VAlign(VAlign_Fill)
-									[
-										SNew(SBox)
-										.HeightOverride(30.f)
-										//.WidthOverride(100)
-										[
-											SAssignNew(EditableText3, SEditableTextBox)
-											//++.OnTextChanged_Raw(this, &SDialogWindowWidget::OnButtonT)
-											//[
-
-											//SNew(STextBlock)
-											//.Text(FText::FromString("bbbbbbbbbbb"))
-											//]
-										]
-									]
+									SAssignNew(MainSpikersEditablePanelBlock, SScrollBox)        // SCROLL - Editable in SpikersPanelBlock 
 								]
 							]
-						]   //  Scloll
-					]
-					//  =======================   Variable   ===========================
-					+ SVerticalBox::Slot()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					[
-						SAssignNew(VariablesArea, SVerticalBox)
-						.Visibility(this, &SDialogWindowWidget::GetVariablesPanelState)
-						+ SVerticalBox::Slot()
-						[
-
-							//// content goes here
-							//SAssignNew(ContentSlot, SBorder)
-							//.BorderImage(this, &SDockingTabStack::GetContentAreaBrush)
-							//.Padding(this, &SDockingTabStack::GetContentPadding)
-							//.Clipping(EWidgetClipping::ClipToBounds)
-							//[
-							SNew(STextBlock)
-							.Text(FText::FromString("BBBBBB"))
+		
 						]
 					]
 				]
 
+				//  =====================================================
+				//  =====================================================
+				//  ==================  HelperMenu   ====================
+				//  =====================================================
+				//  =====================================================
+				+ SOverlay::Slot()
+				[
+					SNew(SButton)
+					.ButtonColorAndOpacity(FLinearColor(0.05f, 0.05f, 0.06f, 0.0f))
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Visibility(this, &SDialogWindowWidget::GetHelperPanelVisibility)
+					.OnClicked(this, &SDialogWindowWidget::CancelHelperPanel)
+				]
 
+				+ SOverlay::Slot()
+				//.Padding(20.f, 100, 0, 0)    
+				.Padding(TAttribute<FMargin>(this, &SDialogWindowWidget::GetHelperPanelPosition))   //  related menu Position
+				.HAlign(HAlign_Left)
+				.VAlign(VAlign_Top)
+				[
+					SNew(SBox)
+					.Visibility(this, &SDialogWindowWidget::GetHelperPanelVisibility)
+					//.Padding(FMargin(20.f, 100))
+					//.WidthOverride(100.f)
+					//.HeightOverride(700.f)													
+					.HeightOverride(this, &SDialogWindowWidget::GetHelperMenu_Height)             
+					.MinDesiredHeight(60.f)
+					[
+						SNew(SBorder)
+						.Padding(0)
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						.BorderImage(TitleDialog)
+						[
 
-				////  =====================    Dop eniwear Draw   ====================
-				//+ SOverlay::Slot() //  All
-				////--.Padding(5)
-				////.HAlign(HAlign_Center)
-				////.VAlign(VAlign_Center)
-				////--.Position(FVector2D(0, 0))
-				////--.Position(FVector2D(200,200))
-				////--.Size(FVector2D(ChildSlot.GetSize(), 60))
-				////--.Size(FVector2D(300, 300))
-				//.HAlign(HAlign_Fill)
-				//.VAlign(VAlign_Fill)
-				//[
-				//	SNew(SCanvas)
+							SNew(SBox)
+							.Padding(FMargin(0))
+							//.MaxDesiredWidth(300.f)
+							.MinDesiredHeight(60.f)
+							//.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Top)
+							//.WidthOverride(20.f)
+							//.HeightOverride(25.f)
+							[
+								SNew(SVerticalBox)
 
-				//	+ SCanvas::Slot()
-				//	.Position(FVector2D(200, 100))
-				//	.Size(FVector2D(300, 100))
-				//	//[
-				//	//	SNew(SBox)
-				//	//	.HeightOverride(30.f)
-				//	//	//.WidthOverride(100)
-				//	//	[
-				//	//		SNew(SEditableTextBox)
-				//	//		//++.OnTextChanged_Raw(this, &SDialogWindowWidget::OnButtonT)
-				//	//		//[
+								+SVerticalBox::Slot()
+								.Padding(0.f)
+								.HAlign(HAlign_Fill)
+								.VAlign(VAlign_Top)
+								.AutoHeight()
+								[
+									SNew(SBox)
+									.Padding(GetPadding(5.f, 5.f, 5.f, 5.f))
+									//.MinDesiredWidth(70.f)
+									.HeightOverride(36.f * SizeKoef)  // HelperMenu_Height = 30
+									.HAlign(HAlign_Fill)
+									.VAlign(VAlign_Fill)
+									[
+										//  ===========================  DIALOG-Name EditableText  ================================
+										SAssignNew(OnHelperPanel_FindingEditableText, SEditableTextBox)
+										.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
+										.Text_Lambda([this]() -> FText { return FText::FromString(FastFindingHelperString); })
+										.OnTextChanged_Raw(this, &SDialogWindowWidget::OnHelperPanel_FindingTextChange)  // void OnButtonT(const FText& Text);
+									]
+								]
 
-				//	//		//SNew(STextBlock)
-				//	//		//.Text(FText::FromString("bbbbbbbbbbb"))
-				//	//		//]
-				//	//	]
-				//	//]
+								+SVerticalBox::Slot()
+								.Padding(0.f)
+								.HAlign(HAlign_Fill)
+								.VAlign(VAlign_Top)
+								[
+									SAssignNew(HelperMenulList, SScrollBox)                       // SCROLL in HelperMenulList 
+								]
+							]
+						]
+					]
+				]
 
-				//	[
-				//		SAssignNew(SecondComboBox, SComboBox<TSharedPtr<FString>>)
-				//		.OptionsSource(&SecondComboBoxOptions)
-				//		.OnSelectionChanged(this, &SDialogWindowWidget::HandleSelectorComboBoxSelectionChanged1)
-				//		.OnGenerateWidget(this, &SDialogWindowWidget::HandleComboBoxGenerateWidget)
-				//		//.InitiallySelectedItem(CurrentItem)
-				//		[
-				//			SNew(STextBlock)
-				//			.Text(this, &SDialogWindowWidget::GetCurrentItemLabel)
-				//		]
-				//	]
-				//]
-
-	*/
 			]
 		];
 
-
-	//7777777777777777777777777777777777     COMBO BOX
-	////////////////SecondComboBoxOptions.Empty();
-	////////////////SecondComboBoxOptions.Add(MakeShareable(new FString(FString::Printf(TEXT("Item A %3d"), 0))));
-	////////////////SecondComboBoxOptions.Add(MakeShareable(new FString(TEXT("1"))));
-	////////////////SecondComboBox->RefreshOptions();
-	//////////////////SecondComboBox->SetSelectedItem(SecondComboBoxOptions[0]);
-	////////////////CurrentItem = SecondComboBoxOptions[0];
-
-
-
-
+	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END  
 	//     END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
 	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
-	//     END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
-	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END
-	//     END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
-	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END
-	//     END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
-	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END
-	//     END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
-	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END
-	//     END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   
-	//        END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END   END
+	 
 
 
-
-
-
-
-
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	InitComboBox_StaticList();
 
-/*
-	FVariables DefaultVariables;
-	DefaultVariables.VariableName = FName("default");
-	DefaultVariables.VariableValue = FName("DEFAULT");
-	DefaultVariables.isVariableGlobal = false;
-	Variables.Add(DefaultVariables);
-*/
 	LoadDialogFromXML();
 	LoadSpekersfromXML();
 	LoadVariablesFromXML();
 
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
-
-
-
-
-
-
-	
-	
-
-	//  -----------------------     Rep Spikers COMBO BOX  -------------------------------
-	/*
-	SpikersList.Empty();
-	SpikersList.Add(MakeShareable(new FString(FString::Printf(TEXT("Item A %3d"), 0))));
-	SpikersList.Add(MakeShareable(new FString(TEXT("1"))));
-	SpikersList.Add(MakeShareable(new FString(TEXT("2"))));
-	SoundList.Empty();
-	SoundList.Add(MakeShareable(new FString(FString::Printf(TEXT("Item A %3d"), 0))));
-	SoundList.Add(MakeShareable(new FString(TEXT("1"))));
-	SoundList.Add(MakeShareable(new FString(TEXT("2"))));
-	*/
-	//if (i_Dlg != -1 &&
-	//	i_Speech != -1 &&
-	//	i_Replic != -1 &&
-	//	i_Rep != -1 &&
-	//	DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CB_Spiker)
-	//{
-		//DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CB_Spiker->RefreshOptions();
-		//aaaComboBox->RefreshOptions();
-		//aaaComboBox->SetSelectedItem(SpikersList[0]);
-		//DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CB_Spiker->SetSelectedItem(SpikersList[0]);
-		//////////////CurrentItem = SpikersList[0];  
-	//}
-
-	
-
-	//FObjectOrAssetData Value;
-	//GetValue(Value);
-
-
-	     
-
-
-/*
-	// Add the Dialog block
-	ContentArea->AddSlot()
-	[
-		SAssignNew(TextBlock111, STextBlock)
-		.Text(FText::FromString("ccccccccccccccccc11111111111111111111"))
-	];
-	ContentArea->AddSlot()
-	[
-		SAssignNew(TextBlock222, STextBlock)
-		.Text(FText::FromString("cccccccccccccccc222222222222222222222"))
-	];
-*/
-
-
-
-
-			// =================      MiniMup    ====================
-/*			+ SCanvas::Slot()
-				//+++.Position(CurrentPanelPosition)
-				//.Position(FVector2D(ViewportSize.X - GameInstance->MiniMapSize.X, 0.f))
-				//+++.Size(FVector2D(GameInstance->MiniMapSize.X, GameInstance->MiniMapSize.Y))
-				.HAlign(HAlign_Fill)
-				.VAlign(VAlign_Fill)
-
-				[
-					//SAssignNew(MiniMapSlot, SBorder)
-					//[
-					//	SNew(SButton)                      //  just background for Click ----  MiniMAP
-					//	.HAlign(HAlign_Fill)
-					//	.VAlign(VAlign_Fill)
-					//	.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle< FButtonStyle >("NormalText"))      // ?????
-						///.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle< FButtonStyle >("Button"))      
-						///.ContentPadding(FMargin(0.f, 0.f))
-						///.ButtonColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 0.f))
-						//.OnClicked(this, &SSlBaseWidget::ClickOnMiniMap)                //  Klick On MiniMap
-						///.OnPressed(this, &SSlBaseWidget::LeftMousePresed)
-						///.OnReleased(this, &SSlBaseWidget::LeftMouseRelase)
-						//[
-							SNew(SBorder)
-							.Clipping(EWidgetClipping::ClipToBounds)
-							[
-
-							]
-						]
-					]
-				]
-					//  Button for MiniMap move
-					+ SCanvas::Slot()
-						.Position(FVector2D(CurrentPanelPosition.X - 15.f, CurrentPanelPosition.Y + GameInstance->MiniMapSize.Y - 35.f))
-						.Size(FVector2D(50.f, 50.f))
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Fill)
-						[
-							SAssignNew(MapMoveButton, SButton)
-							//SNew(SButton)
-							.HAlign(HAlign_Fill)
-							.VAlign(VAlign_Fill)
-							.OnClicked(this, &SSlBaseWidget::ButtonMapPanelMove)
-						]
-			////////+ SCanvas::Slot()
-			////////	.HAlign(HAlign_Fill)
-			////////	.VAlign(VAlign_Fill)
-			////////	.Position(FVector2D(ViewportSize.X - GameInstance->MiniMapSize.X.X, 0.f))    //  ++++++++++
-			////////	.Size(FVector2D(GameInstance->MiniMapSize.X.X, GameInstance->MiniMapSize.X.Y))            //++++++++++
-			////////	[
-			////////		SNew(SButton)                      //  just background and PositionClick
-			////////		.HAlign(HAlign_Fill)
-			////////		.VAlign(VAlign_Fill)
-			////////		.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle< FButtonStyle >("NormalText"))      // ?????
-			////////		.ContentPadding(FMargin(0.f, 0.f))
-			////////		.ButtonColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 0.f))
-			////////		.OnClicked(this, &SSlBaseWidget::LeftMouseClick)
-			////////		[
-			////////			SNew(SImage)
-			////////			.ColorAndOpacity(FLinearColor(0.5f,0.5f,0.5f))
-			////////		]
-			////////	]
-
-				//.Position(FVector2D(ViewportSize.X/2, ViewportSize.Y/2))    //.Position(FVector2D(328, 328))
-				//.Size(FVector2D(128, 128))
-				////.HAlign(HAlign_Center)
-				////.VAlign(VAlign_Center)			
-				//[
-				//	
-				//	SNew(SImage)
-				//	
-				//	//.ColorAndOpacity(FColor::Black)
-				//	//.ColorAndOpacity(InArgs._myLinearImageColor_TEST)       //  Get arguments from actor  "MyHUD.cpp"
-				//	//.ColorAndOpacity(FLinearColor(0.f, 1.f, 0.f))
-				//	.ColorAndOpacity(this, &SSlBaseWidget::RuntimeChangeImage_Color)      //      Dynamick
-				//	//.ColorAndOpacity(RuntimeChangeImage_Color())                        //  Not Dynamick
-				//	//.ColorAndOpacity_Lambda([this](){  return FSlateColor(FLinearColor(0.5f, 0.5f, 0.5f)); })
-				//	.ColorAndOpacity(MakeAttributeRaw<FSlateColor>(this, &SSlBaseWidget::RuntimeChangeImage_Color_Param, 0.1f, 0.f))
-				//	.IsEnabled(true)
-				//	
-				//	
-				//]
-
-
-			//   =================     RED-BLUE panel    TEST   ====================
-			
-
-			 + SCanvas::Slot()
-				//.Position(FVector2D(ViewportSize.X - GameInstance->MiniMapSize.X.X, 0.f))    //  ++++++++++
-				.Position(FVector2D(0.f, 00.f))
-				//.Size(FVector2D(GameInstance->MiniMapSize.X.X, GameInstance->MiniMapSize.X.Y))            //++++++++++
-				.Size(FVector2D(400.f, 400.f))
-				//.HAlign(HAlign_Right)
-				//.VAlign(VAlign_Top)
-				[
-					SNew(SButton)                      //  just background for Click
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					.ButtonStyle(&FCoreStyle::Get().GetWidgetStyle< FButtonStyle >("NormalText"))      // ?????
-					.ContentPadding(FMargin(0.f, 0.f))
-					.ButtonColorAndOpacity(FLinearColor(0.f, 0.f, 0.f, 0.f))
-					//.OnClicked(this, &SSlBaseWidget::LeftMouseClick)
-					[
-						SNew(SVerticalBox)
-						+ SVerticalBox::Slot()
-							.HAlign(HAlign_Fill)
-							.VAlign(VAlign_Fill)
-							[
-								SNew(SMyWidget222)
-								//.BaseImageColor(FSlateColor(ColorTemp))
-								.BaseImageColor_Lambda([this]() -> FSlateColor { return FSlateColor(ColorTemp); })
-								.OnGetCurrentImagePosition(this, &SSlBaseWidget::ChangeImagePositionTemp)           //   move image as mousePosChange
-							]
-
-						//     =================      Buttons on Bottom   ====================
- 						+ SVerticalBox::Slot()
-							//.HAlign(HAlign_Fill)
-							//.VAlign(VAlign_Bottom)
-							.AutoHeight()
-							[
-								SNew(SHorizontalBox)
-								+ SHorizontalBox::Slot()
-									.HAlign(HAlign_Fill)
-									.VAlign(VAlign_Fill)
-									.Padding(FMargin(2.f, 2.f, 0.f, 2.f))
-									[
-										SNew(SButton)
-										.OnClicked(this, &SSlBaseWidget::Button_AAAAA_Presed, 1)
-									]
-								+ SHorizontalBox::Slot()
-									.HAlign(HAlign_Fill)
-									.VAlign(VAlign_Fill)
-									.Padding(FMargin(2, 2, 2, 2))
-									[
-										SNew(SButton)
-											//.Text(FText::FromString("AAAAA"))
-											.OnClicked(this, &SSlBaseWidget::Button_AAAAA_Presed, 2)											
-											[
-												SNew(STextBlock)
-												.Font(ButtonStyle)
-												//.Font(FSlateFontInfo("Veranda", 20))
-												.Text(FText::FromString("RGB A"))
-												//.ColorAndOpacity_Lambda([this]() -> FLinearColor { return ColorTemp; })
-												.Justification(ETextJustify::Center)
-												.Margin(10)
-												.ShadowColorAndOpacity(FLinearColor::Black)
-												//.ShadowOffset(FIntPoint(-1, 1))
-												//.WrapTextAt( 1000.f)
-												//.OnDoubleClicked(MakeAttributeRaw<FReply>(this, &SSlBaseWidget::Button_AAAAA_Presed, 3))
-												//.OnDoubleClicked(this, &SSlBaseWidget::Button_AAAAA_Presed, 3)
-											
-											]
-									]
-							]
-					]
-				]
-
-		];
-	*/
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
  
@@ -1619,69 +648,11 @@ void SDialogWindowWidget::Tick(const FGeometry& AllottedGeometry, const double I
 				int32 delta_Y = (_ClickPos.Y + HelperMenu_Height) - _ViewportSize.Y;  //700
 				HelperPanelPosition = FMargin(_ClickPos.X, _ClickPos.Y - delta_Y, 0, 0);
 			}
-
-
-
-			//
-
-
-
-
-		/*if (_ClickPos.X > _ViewportSize.X - 700)
-		{
-			int32 delta_X = (_ClickPos.X + 700) - _ViewportSize.X;
-			HelperPanelPosition = FMargin(_ClickPos.X, _ClickPos.X - delta_Y, 0, 0);
-		}
-		else HelperPanelPosition = FMargin(_ClickPos.X, _ClickPos.Y, 0, 0);*/
-
 		//UE_LOG(LogTemp, Warning, TEXT("ddddddddd  x= %f,      x= %f"), ClickPos.X, ClickPos.Y);
 		}
 		CalculateHelperMenuPosition = false;
 	}
-
-
-
-	//FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//.SpeechCondition[PropertyIndex.iSpeechCondition].Condition_Type_Editable.ToSharedRef());
-
-	//if (ContentArea.ToSharedRef())
-	//	FVector2D vec2D = ContentArea.ToSharedRef()->GetDesiredSize();
-		//-------------FSlateApplication::Get().GetGameViewport()->ComputeDesiredSize(10.f);
-	//++FVector2D vec2D = FSlateApplication::Get().GetCursorPos();
-	//UE_LOG(LogTemp, Warning, TEXT("iiiiiiiiiiiiiiiiii = '%f', '%f'"), vec2D.X, vec2D.Y);
-
-
-	//FSceneViewport::GetMousePos
-
-	//APlayerController* PC;
-	//PC = UGameplayStatics::GetPlayerController(BoundWorldActor, 0);
-	//if (PC)	UWidgetLayoutLibrary::GetMousePositionScaledByDPI(PC, mousePos.X, mousePos.Y); // PC->GetMousePosition(mousePos.X, mousePos.Y); // UWidgetLayoutLibrary::GetMousePositionOnViewport(GEngine->GetWorld());
-
-	//  Move MiniMapPanel
-/*	if (bMiniMapOffset)
-	{
-		PC = UGameplayStatics::GetPlayerController(BoundWorldActor, 0);
-		if (PC)	UWidgetLayoutLibrary::GetMousePositionScaledByDPI(PC, mousePos.X, mousePos.Y); // PC->GetMousePosition(mousePos.X, mousePos.Y); // UWidgetLayoutLibrary::GetMousePositionOnViewport(GEngine->GetWorld());
-
-		FVector2D Vec2D_Temp;
-		TOptional<FSlateRenderTransform> WidgetPos;
-
-		Vec2D_Temp = mousePos;
-		Vec2D_Temp -= mousePosDeltaForMapPanel;
-
-		// move map
-		CurrentPanelPosition = Vec2D_Temp;
-		WidgetPos = CurrentPanelPosition; 
-		MiniMapSlot->SetRenderTransform(WidgetPos);
-
-		// move MapMoveButton
-		Vec2D_Temp = mousePos;
-		Vec2D_Temp -= mousePosDeltaForMoveButton;
-		MapMoveButtonPosition = Vec2D_Temp;
-		WidgetPos = MapMoveButtonPosition; 
-		MapMoveButton->SetRenderTransform(WidgetPos);
-	}
-	*/
+	 
 }
 
 
@@ -1698,67 +669,6 @@ int32 SDialogWindowWidget::OnPaint(const FPaintArgs& Args,
 {
 
 	LayerId = SCompoundWidget::OnPaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
-
-
-	//FVector2D pos = FVector2D(0, 0);
-	//if (Args.GetPaintParent() == LeftIndicator_1)
-	//{
-	//	LeftIndicator_1
-	//	pos = AllottedGeometry.Position();
-	//}
-
-/*
-	
-
-	//LayerId++;
-
-	FVector2D LineStart(10, 10);
-	TArray<FVector2D> LinePoints;
-	TArray<FLinearColor> LineColors;
-	//LinePoints.Add(LineStart);
-	//LineColors.Add(FLinearColor::Red);
-	//LinePoints.Add(LineStart + FVector2D(100.0f, 150.0f));
-	//LinePoints.Add(LineStart + FVector2D(200.0f, 110.0f));
-	//LinePoints.Add(LineStart + FVector2D(300.0f, 250.0f));
-	//LinePoints.Add(LineStart + FVector2D(400.0f, 110.0f));
-
-
-	LinePoints.Add(FVector2D(mousePos.X, mousePos.Y));
-	LinePoints.Add(FVector2D(mousePos.X+1, mousePos.Y+1));
-
-
-	FSlateDrawElement::MakeLines(
-		OutDrawElements,
-		LayerId,
-		AllottedGeometry.ToPaintGeometry(),
-		LinePoints,
-		ESlateDrawEffect::None,
-		FColor::Cyan,
-		true,
-		5.0f
-	);
-
-
-
-
-
-	TArray<FVector2D> LinePoints;
-	LinePoints.Empty();
-	LinePoints.Add(FVector2D(50, 50));
-	LinePoints.Add(FVector2D(100, 10));
-
-	FSlateDrawElement::MakeLines(
-		OutDrawElements,
-		LayerId,
-		AllottedGeometry.ToPaintGeometry(), //ToOffsetPaintGeometry(FVector2D(0, 10)),
-		LinePoints,
-		ESlateDrawEffect::None,
-		FColor::Red,
-		true,
-		5.0f
-	);
-	
-*/
 
 return LayerId;
 }
@@ -1805,7 +715,7 @@ FReply SDialogWindowWidget::LoadAll()
 }
 
   
-
+/*
 FReply SDialogWindowWidget::OnButtonContentDialog(FName str)
 {
 	if (str == FName("dlg_content"))
@@ -1821,109 +731,7 @@ FReply SDialogWindowWidget::OnButtonContentDialog(FName str)
 
 	return FReply::Handled();
 }
-
-
-EVisibility SDialogWindowWidget::GetContentPanelState() const
-{
-	return ContentPanelState;
-}
-
-EVisibility SDialogWindowWidget::GetVariablesPanelState() const
-{
-	return VariablesPanelState;
-}
-
-       
-
-
-
-
-
-
-
-
-
-
-
-
-
-//7777777777777777777777777777777777     COMBO BOX
-/*
-TSharedRef<SWidget> SDialogWindowWidget::HandleComboBoxGenerateWidget(TSharedPtr<FString> InItem)
-{
-	return SNew(STextBlock)
-		.Text(FText::FromString(*InItem));
-}
-*/
-
-
-void SDialogWindowWidget::HandleSelectorComboBoxSelectionChanged1(TSharedPtr<FString> NewSelection, ESelectInfo::Type SelectInfo)
-{
-	
-
-//	SecondComboBoxOptions.Empty();
-	//SecondComboBoxOptions.Add(MakeShareable(new FString(FString::Printf(TEXT("Item A %3d"), 0))));
-	//SecondComboBoxOptions.Add(MakeShareable(new FString(TEXT("1"))));
-//	SecondComboBoxOptions.Add(FString(TEXT("2")));
-//	SecondComboBoxOptions.Add(FString(TEXT("3")));
-//	SecondComboBoxOptions.Add(FString(TEXT("4")));
-//	SecondComboBoxOptions.Add(FString(TEXT("5")));
-//	SecondComboBox->RefreshOptions();
-	//SecondComboBox->SetSelectedItem(NewSelection);
-
-	CurrentItem = NewSelection;
-
-}
-
-/*
-FText SDialogWindowWidget::GetCurrentItemLabel() const
-{
-	return CurrentItem.IsValid() ? FText::FromString(*CurrentItem) : FText::GetEmpty();
-}
-*/
-
-//7777777777777777777777777777777777     COMBO BOX  ----------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//////////////++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
+ */
 
 
 void SDialogWindowWidget::UpdateDialogBlock()
@@ -1942,9 +750,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 		CurrentPropertyIndex.iRep = -1;
 		CurrentPropertyIndex.iDialog = i_Dlg;
 
-		//GetChildren()->GetChildAt()
-		//RemoveSlot()
-		//ClearChildren()
 		MainContentPanelBlock->AddSlot()
 		.Padding(GetPadding(7, 0, 0, 0))
 		.HAlign(HAlign_Fill)
@@ -1956,10 +761,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 			//  --------------   All  DIALIG-Title  --------------
 			+ SVerticalBox::Slot()             
 			.Padding(0.f)
-			//.AutoWidth()
-			//.FillWidth(1)
 			.AutoHeight()
-			//--.MaxHeigth(30.f)
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
@@ -1968,9 +770,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 			  
 				+ SHorizontalBox::Slot()  			
 				.Padding(GetPadding(0, 0, 3, 0))
-				//.Padding(0, 0, 3.f, 0)       
-				//.FillWidth(1)
-				//++++++++.MaxWidth(30.f)
 				.HAlign(HAlign_Left)
 				.VAlign(VAlign_Top)
 				.AutoWidth()
@@ -1998,7 +797,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							.OnClicked(this, &SDialogWindowWidget::OnButtonRemoveClick, EProppertyToChange::RemoveDialog, CurrentPropertyIndex)
 							[
 								SNew(SImage)
-								.Image(ImageDeleteElement)  ////  ReMove element___XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
+								.Image(ImageDeleteElement)  ////  ReMove 
 							]	
 						]
 					]
@@ -2034,14 +833,11 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					+ SVerticalBox::Slot()
 					.Padding(0.f, 0.f, 0.f, 0.f)
 					.AutoHeight()
-					//.FillHeight(1)
-					//.MaxWidth(30.f)
 					.HAlign(HAlign_Left)
 					.VAlign(VAlign_Bottom)
 					[
 						SNew(SBox)
 						.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, DialogButtonSmallSize)
-						//.MaxDesiredHeight(40.f)
 						.HeightOverride(this, &SDialogWindowWidget::GetButtonSize, DialogButtonSmallSize)
 						[
 
@@ -2067,16 +863,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn            2, 4
 				.HAlign(HAlign_Fill)
 				.VAlign(VAlign_Fill)
-				//+++++++++.VAlign(VAlign_Center)
 				.AutoWidth()
 				[
 					SNew(SBox)
-					//MaxDesiredWidth(FOptionalSize())
 					.Padding(0)
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.WidthOverride(5.f * SizeKoef)
-					//.HeightOverride(20.f)
 					[
 						SNew(SBorder)
 						.Padding(0)
@@ -2086,12 +879,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					]
 				]
 
-
-
-				
-
-
-					//------------  DIALOG-title----------
+				//------------  DIALOG-title----------
 				+ SHorizontalBox::Slot()
 				.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn            0, 4
 				.HAlign(HAlign_Fill)
@@ -2099,8 +887,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				//+++++++++.VAlign(VAlign_Center)
 				.FillWidth(1)
 				[ 
-					//SNew(SButton)
-								
 					SNew(SBorder)
 					.Padding(FMargin(0.f, 0.f, 0.f, 0.f))
 					.HAlign(HAlign_Fill)
@@ -2122,7 +908,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
  
 						//   ====================      DIALOG       Colapsed  Section   ============================
 							SNew(SBox)
-							//MaxDesiredWidth(FOptionalSize())
 							.Padding(0)
 							.HAlign(HAlign_Fill)
 							.VAlign(VAlign_Fill)
@@ -2137,24 +922,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								[
 									SNew(SImage)
 									.Image(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EProppertyToChange::CollapsedDialogSection, CurrentPropertyIndex) 
-									//.BorderImage(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EButtonDialogType::CollapsedDialogSection, i_Dlg, -1, -1)
 								]
-
-								//SNew(SBorder)
-								//.BorderImage(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EButtonDialogType::CollapsedDialogSection, i_Dlg, -1, -1)
-								//[
-									//    DIALOG-Section title----COLLAPSED-----Content Button
-									//SAssignNew(DialogSection[i_Dlg].DialogTitleCollapsedContent_Button, SDLGButtonDialog) 
-									//.OnDLGButtonDialogClicked(this, &SDialogWindowWidget::OnDLGButtonClick)
-									//.ButtonDialogType(EButtonDialogType::CollapsedDialogSection)
-									//.DialodIndex(i_Dlg)
-									//.SpeechIndex(-1)
-									//.ReplicOrResponseIndex(-1)
-									//.RepOrConditionIndex(-1)
-									//.ConditionIndex(-1)
-									//.SetVisibility(false)
-									//.Visibility(EVisibility::SelfHitTestInvisible)
-								//]
 							]
 						]
 
@@ -2174,10 +942,8 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							SNew(SBox)
 							//.Padding(FMargin(0, 3, 4, 3))
 							.Padding(GetPadding(0, 3, 4, 3))
-							//MaxDesiredWidth(FOptionalSize())
 							.HAlign(HAlign_Left)
 							.VAlign(VAlign_Center)
-							//.WidthOverride(20.f)
 							.HeightOverride(DialogSectionSize* SizeKoef)			//---------- - Heigh TITLE - Zone------------
 							[
 								 
@@ -2201,7 +967,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									[
 										SNew(SBorder)
 										.Padding(0)
-										//.HAlign(HAlign_Left)
 										.HAlign(HAlign_Fill)
 										.VAlign(VAlign_Fill)
 										.BorderImage(PropertyDialogStart)       //   -------   ImagePropertyZone     Start  -------------
@@ -2217,14 +982,11 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								[
 									SNew(SBorder)
 									.Padding(0)
-									//.HAlign(HAlign_Left)
 									.HAlign(HAlign_Fill)
 									.VAlign(VAlign_Fill)
 									.BorderImage(PropertyDialog)
 									[
 										SNew(SHorizontalBox)
-
-
 
 										+ SHorizontalBox::Slot()
 										.Padding(GetPadding(5, 1, 2, 1))
@@ -2288,7 +1050,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 														.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, EProppertyToChange::DialogName, CurrentPropertyIndex)
 														.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 18 * SizeKoef))
 														.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::DialogName, CurrentPropertyIndex)
-														//.Text(FText::FromString("AAAAAAAAAAAAAA11111111111222222222222333333333333334444444444444555555555555 "))
 														.Text(this, &SDialogWindowWidget::GetProppertyText, EProppertyToChange::DialogName, CurrentPropertyIndex)
 													]
 													    
@@ -2372,9 +1133,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					]
 				]	
 				
-
-				
-
 				//  ---------- Title-Dialog    End  ----------------
 				+ SHorizontalBox::Slot()
 				.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn               0, 4
@@ -2398,31 +1156,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.BorderImage(TitleDialogEnd)                  //   Title-Dialog    End
 					]
 				]
-				/*//  ---------- Marker (usual)  ----------------
-				+ SHorizontalBox::Slot()
-				.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn              
-				.HAlign(HAlign_Fill)
-				.VAlign(VAlign_Fill)
-				.AutoWidth()
-				[
-					SNew(SBox)
-					//MaxDesiredWidth(FOptionalSize())
-					.Padding(0)
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					.WidthOverride(10.f)
-					//.HeightOverride(20.f)
-					[
-						SNew(SButton)
-						.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.3f))
-						.OnClicked(this, &SDialogWindowWidget::OnButtonMarkerUsual, EProppertyToChange::MarkerDialog, CurrentPropertyIndex)
-
-					]
-				]*/
-//  ####################################################################################
-//  ####################################################################################
-//  ####################################################################################
-
 			]
 			//  ===============================   SpeechBlock  (Dynamick Add)   =============================
 			+ SVerticalBox::Slot()           //
@@ -2437,7 +1170,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				//.Visibility(this, &SDialogWindowWidget::GetIsSectionCollapsed, EButtonDialogType::CollapsedDialogSection, i_Dlg, -1, -1)
 				.Visibility(this, &SDialogWindowWidget::IsSectionCollapsed, EProppertyToChange::CollapsedDialogSection, CurrentPropertyIndex)
 			]
-			//SNew(STextBlock).Text(FText::FromString("aaaaaaaaaa"))
 		];  
 
 
@@ -2477,25 +1209,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					SNew(SHorizontalBox)
 
 					//  --------------   Buttons new SPEECH-Section (Add_Down)  -----------------
-	/*
-					+ SHorizontalBox::Slot()      //   SPEECH-Section ------ SPACER ------
-					.Padding(2.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn
-					.HAlign(HAlign_Left)
-					.VAlign(VAlign_Center)
-					.AutoWidth()
-					[
-						//SNew(SSpacer)
-						//.Size(25.f)
-						SNew(SBox)
-						.WidthOverride(25.f)
-						//.MaxDesiredHeight(20.f)
-						.HeightOverride(20.f)
-					]
-	*/
-					
-			//######################################################
-			//######################################################
-			//######################################################
 					+ SHorizontalBox::Slot()
 					.Padding(GetPadding(2.f, 2.f, 2.f, 0.f))        // L, Up, R, Dn
 					.HAlign(HAlign_Left)
@@ -2504,50 +1217,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					[
 
 						SNew(SVerticalBox)
-
-					/*	+SVerticalBox::Slot()
-						.Padding(0.f, 0.f, 0.f, 0.f)
-
-						.AutoHeight()
-						//.MaxWidth(30.f)
-						.HAlign(HAlign_Center)
-						.VAlign(VAlign_Center)
-						[
-							SNew(SBox)
-							.WidthOverride(20.f)
-							.MaxDesiredHeight(20.f)
-							//.HeightOverride(20.f)
-							[
-								SNew(SButton)                     //  Button new-SPEECH-Section  (Remov )
-								.ContentPadding(0)
-								.OnClicked(this, &SDialogWindowWidget::OnButtonClick, EProppertyToChange::AddSpeech, CurrentPropertyIndex)
-								[
-									SNew(SImage)
-									.Image(ImageAddElement)
-								]
-								//SNew(SVerticalBox)
-
-								//+ SVerticalBox::Slot()           //  Button new-SPEECH-Section  (Add_Down)
-								////.AutoWidth()
-								//.FillHeight(1)
-								////--.MaxHeigth(30.f)
-								//.HAlign(HAlign_Fill)
-								//.VAlign(VAlign_Fill)
-								//[
-						
-								//	SNew(SDLGButtonDialog) 
-								//	.OnDLGButtonDialogClicked(this, &SDialogWindowWidget::OnDLGButtonClick)
-								//	.ButtonDialogType(EButtonDialogType::AddNewSpeech)
-								//	.DialodIndex(i_Dlg)   
-								//	.SpeechIndex(i_Speech)
-								//	.ReplicOrResponseIndex(-1)
-								//	.RepOrConditionIndex(-1)
-								//	.ConditionIndex(-1)
-								//	.SetVisibility(true)
-								//
-								//]	
-							]
-						]*/
 
 						//   ====================      SPEECH       Remove Section   ============================
 						+ SVerticalBox::Slot()
@@ -2570,7 +1239,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								.OnClicked(this, &SDialogWindowWidget::OnButtonRemoveClick, EProppertyToChange::RemoveSpeech, CurrentPropertyIndex)
 								[
 									SNew(SImage)
-									.Image(ImageDeleteElement)  ////  ReMove element___XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
+									.Image(ImageDeleteElement)  ////  ReMove element
 								]	
 							]
 						]
@@ -2603,26 +1272,19 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						]
 						
 					]
-			//######################################################
-			//######################################################
-			//######################################################
 
-
-				//  ---------- Title-SPEECH    START  ----------------
+					//  ---------- Title-SPEECH    START  ----------------
 					+SHorizontalBox::Slot()
 					.Padding(GetPadding(2.f, 0.f, 0.f, 0.f))        // L, Up, R, Dn
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
-					//+++++++++.VAlign(VAlign_Center)
 					.AutoWidth()
 					[
 						SNew(SBox)
-						//MaxDesiredWidth(FOptionalSize())
 						.Padding(0)
 						.HAlign(HAlign_Fill)
 						.VAlign(VAlign_Fill)
 						.WidthOverride(5.f * SizeKoef)
-						//.HeightOverride(20.f)
 						[
 							SNew(SBorder)
 							.Padding(0)
@@ -2632,7 +1294,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						]
 					]
 
-					//-----------------------------------------------------------------------------
 					//------------  SPEECH-title----------
 					+ SHorizontalBox::Slot()
 					.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn
@@ -2647,15 +1308,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						.VAlign(VAlign_Fill)
 						.BorderImage(TitleDialog)
 						.OnMouseButtonDown(this, &SDialogWindowWidget::OnButtonMarkerUsual, EProppertyToChange::MarkerSpeech, CurrentPropertyIndex)
-						//.OnMouseDoubleClick(this, &SDialogWindowWidget::OnButtonMarkerLink, EProppertyToChange::MarkerSpeech, CurrentPropertyIndex)
 						[
 							SNew(SHorizontalBox)
 
 
 							+ SHorizontalBox::Slot()    
 							.Padding(GetPadding(0, 3.f, 0, 3.f))
-							//.FillWidth(1)
-							//.MaxWidth(30.f)    777777777777777777777777777777777777777777777777777777777777777777777777777
+
 							.HAlign(HAlign_Left)
 							.VAlign(VAlign_Fill)
 							.AutoWidth()
@@ -2679,7 +1338,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									.VAlign(VAlign_Center)
 									.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, SpeechButtonSmallSize)
 									.HeightOverride(this, &SDialogWindowWidget::GetButtonSize, SpeechButtonSmallSize)
-									//.HeightOverride(20.f)
 									[
 
 										SNew(SButton)                     //  Button new-SPEECH-Section  (Add_Down)
@@ -2690,28 +1348,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											SNew(SImage)
 											.Image(ImageAddElement)
 										]
-										//SNew(SVerticalBox)
-
-										//+ SVerticalBox::Slot()           //  Button new-SPEECH-Section  (Add_Down)
-										////.AutoWidth()
-										//.FillHeight(1)
-										////--.MaxHeigth(30.f)
-										//.HAlign(HAlign_Fill)
-										//.VAlign(VAlign_Fill)
-										//[
-						
-										//	SNew(SDLGButtonDialog) 
-										//	.OnDLGButtonDialogClicked(this, &SDialogWindowWidget::OnDLGButtonClick)
-										//	.ButtonDialogType(EButtonDialogType::AddNewSpeech)
-										//	.DialodIndex(i_Dlg)   
-										//	.SpeechIndex(i_Speech)
-										//	.ReplicOrResponseIndex(-1)
-										//	.RepOrConditionIndex(-1)
-										//	.ConditionIndex(-1)
-										//	.SetVisibility(true)
-										//
-										//]
-		
 									]
 								]
 
@@ -2747,16 +1383,14 @@ void SDialogWindowWidget::UpdateDialogBlock()
 
 							+ SHorizontalBox::Slot()
 							.Padding(GetPadding(1.f, 0.f, 0, 0.f))
-							//.FillWidth(1)
-							//.MaxWidth(30.f)      777777777777777777777777777777777777777777777777777777777777777
 							.HAlign(HAlign_Left)
 							.VAlign(VAlign_Center)
 							.AutoWidth()
 							[
 
-							//    --------------------------   SPEECH-Section 	 COLLAPSED   Button   ---------------------
+								//    --------------------------   SPEECH-Section 	 COLLAPSED   Button   ---------------------
 								SNew(SBox)
-								//MaxDesiredWidth(FOptionalSize())
+
 								.HAlign(HAlign_Fill)
 								.VAlign(VAlign_Fill)
 								.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, SpeechButtonBigSize)
@@ -2771,21 +1405,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										SNew(SImage)
 										.Image(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EProppertyToChange::CollapsedSpeechSection, CurrentPropertyIndex)
 									]
-									//SNew(SBorder)
-									//.BorderImage(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EButtonDialogType::CollapsedSpeechSection, i_Dlg, i_Speech, -1)
-									//[
-									//	    SPEECH-Section title----COLLAPSED-----Content Button
-									//	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechTitleCollapsedContent_Button, SDLGButtonDialog)
-									//	.OnDLGButtonDialogClicked(this, &SDialogWindowWidget::OnDLGButtonClick)
-									//	.ButtonDialogType(EButtonDialogType::CollapsedSpeechSection)
-									//	.DialodIndex(i_Dlg)
-									//	.SpeechIndex(i_Speech)
-									//	.ReplicOrResponseIndex(-1)
-									//	.RepOrConditionIndex(-1)
-									//	.ConditionIndex(-1)
-									//	.SetVisibility(false)
-									//	.Visibility(EVisibility::SelfHitTestInvisible)
-									//]
 								]
 							]
 
@@ -2794,7 +1413,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 
 
 
-						//     =======================    SPEECH   PROPERTY    "Name"    =======================
+							//     =======================    SPEECH   PROPERTY    "Name"    =======================
 							+ SHorizontalBox::Slot()
 							.Padding(GetPadding(4, 1, 4, 1))
 							.AutoWidth()
@@ -2802,8 +1421,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							.VAlign(VAlign_Center)
 							[
 								//     ------------------    Property Editable-Name Zone  --------------------
-
-								  
 								SNew(SBox)
 								.Padding(GetPadding(4, 3, 4, 3))
 								//MaxDesiredWidth(FOptionalSize())
@@ -2812,8 +1429,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								//.WidthOverride(20.f)
 								.HeightOverride(SpeechSectionSize * SizeKoef)//    -----------   Heigh TITLE-Zone  ------------
 								[
-
-
 									SNew(SHorizontalBox)
 
 									//   -------   SPEECH   ImagePropertyZone     Start  -------------
@@ -2875,8 +1490,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											.VAlign(VAlign_Center)
 											.AutoWidth()
 											[
-
-
 												SNew(SButton)
 												.ContentPadding(0)
 												.HAlign(HAlign_Left)
@@ -2889,7 +1502,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													+ SOverlay::Slot()           
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Center)
-													//--.AutoWidth()
 													[
 														SNew(SBox)
 														.Padding(GetPadding(0, 4, 0, 6))
@@ -2929,8 +1541,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 														]
 
 														+ SHorizontalBox::Slot()
-														//.Padding(FMargin(6, 1, 6, 1))
-														//.AutoWidth()
 														.HAlign(HAlign_Center)
 														.VAlign(VAlign_Center)
 														[
@@ -2943,8 +1553,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 																SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechSectionName_Editable, SEditableTextBox)
 																.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
 																.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, EProppertyToChange::SpeechName, CurrentPropertyIndex)
-																//.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable,
-																//									EProppertyToChange::SpeechName, i_Dlg, i_Speech, -1)
 																.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech].Name.ToString()))
 																.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::SpeechName, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 																.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
@@ -2953,25 +1561,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													]
 												]
 											]
-								//// Hidden button,    SPEECH title name 
-								//+ SOverlay::Slot()
-								//.HAlign(HAlign_Fill)
-								//.VAlign(VAlign_Fill)
-								//[
-								//	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ChangeSpeechSectionName_Button, SDLGButtonDialog) 
-								//	.OnDLGButtonDialogClicked(this, &SDialogWindowWidget::OnDLGButtonClick)
-								//	.ButtonDialogType(EButtonDialogType::SpeechName)
-								//	.DialodIndex(i_Dlg)
-								//	.SpeechIndex(i_Speech)
-								//	.ReplicOrResponseIndex(-1)
-								//	.RepOrConditionIndex(-1)
-								//	.ConditionIndex(-1)
-								//	.SetVisibility(false)
-								//	.Visibility(EVisibility::SelfHitTestInvisible)
-								//	//.ContentPadding(0)
-								//	//.ButtonColorAndOpacity(FLinearColor(1, 1, 1, 0))
-								//	///////.OnClicked(this, &SDialogWindowWidget::OnButtonClicked_DialogName, FName("aaa"))
-								//]
 										]		
 									]
 
@@ -3037,16 +1626,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.Padding(GetPadding(0.f, 0.f, 2.f, 0.f))        // L, Up, R, Dn
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
-					//+++++++++.VAlign(VAlign_Center)
 					.AutoWidth()
 					[
 						SNew(SBox)
-						//MaxDesiredWidth(FOptionalSize())
 						.Padding(0)
 						.HAlign(HAlign_Fill)
 						.VAlign(VAlign_Fill)
 						.WidthOverride(5.f * SizeKoef)
-						//.HeightOverride(20.f)
 						[
 							SNew(SBorder)
 							.Padding(0)
@@ -3055,30 +1641,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							.BorderImage(TitleDialogEnd)                  //   Title-SPEECH    End
 						]
 					]
-
-
-					//  ---------- Marker (usual)  ----------------
-					/*+SHorizontalBox::Slot()
-					.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn              
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					.AutoWidth()
-					[
-
-						SNew(SBox)
-						//MaxDesiredWidth(FOptionalSize())
-						.Padding(0)
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Fill)
-						.WidthOverride(20.f)
-						//.HeightOverride(20.f)
-						[
-							SNew(SButton)
-							.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.3f))
-							.OnClicked(this, &SDialogWindowWidget::OnButtonMarkerUsual, EProppertyToChange::MarkerSpeech, CurrentPropertyIndex)
-						]
-					]*/
-
 				]
 
 
@@ -3090,11 +1652,9 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				.VAlign(VAlign_Top)
 				[
 					SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechConditionBlock, SVerticalBox)
-					//.Visibility(this, &SDialogWindowWidget::GetIsSectionCollapsed, EButtonDialogType::CollapsedReplicSection, i_Dlg, i_Speech, i_Replic, i_Rep)
 					.Visibility(this, &SDialogWindowWidget::IsSectionCollapsed, EProppertyToChange::CollapsedSpeech_Condition, CurrentPropertyIndex)
 
 				]
-
 
 				// ---------- SPEECH  REPLICK and RESPONSE  CONTENT  -----------
 				+ SVerticalBox::Slot()
@@ -3105,16 +1665,11 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				.VAlign(VAlign_Top)
 				[
 					SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicAndResponseBlock, SVerticalBox)
-					//.Visibility(this, &SDialogWindowWidget::GetIsSectionCollapsed, EButtonDialogType::CollapsedSpeechSection, i_Dlg, i_Speech, -1)
 					.Visibility(this, &SDialogWindowWidget::IsSectionCollapsed, EProppertyToChange::CollapsedSpeechSection, CurrentPropertyIndex)						
 				]
-				//SNew(STextBlock).Text(FText::FromString("aaaaaaaaaa"))
 			];
 				
-		
-
-
-			
+					
 			//***************************************************************************************************************************************
 			//*************************************************                               *******************************************************
 			//***********************************************         SPEECH--Condition         *****************************************************
@@ -3123,9 +1678,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 			
 			for (int32 i_SpeechCondition = 0; i_SpeechCondition < DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechCondition.Num(); i_SpeechCondition++)
 			{
-
-
-				//int32 a4 = DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechCondition.Num();
 				CurrentPropertyIndex.iReplic = -1;
 				CurrentPropertyIndex.iReplicCondition = -1;
 				CurrentPropertyIndex.iResponse = -1;
@@ -3134,7 +1686,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				CurrentPropertyIndex.iRepCondition = -1;
 				CurrentPropertyIndex.iSpeechCondition = i_SpeechCondition;
 
-				//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].RepConditionBlock;
 				TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechConditionBlock;
 				TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
 						.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].Condition_Type_Editable;
@@ -3150,7 +1701,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].VariableValue;
 
 				EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddSpeech_Condition;    
-				//EProppertyToChange MoveButtonPropperty = EProppertyToChange::MoveSpeech_Condition;
 				EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveSpeech_Condition;
 				EProppertyToChange ConditionTypePropperty = EProppertyToChange::Speech_condition_type;
 				EProppertyToChange VarTypePropperty = EProppertyToChange::Speech_condition_varType;
@@ -3161,7 +1711,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				DrawConditionElement(*RepConditionBlock,
 					CurrentPropertyIndex,
 					AddButtonPropperty,
-					//MoveButtonPropperty,
 					RemoveButtonPropperty,
 
 					*TextBoxCondition_Type,
@@ -3177,14 +1726,11 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					VarTypePropperty);
 			}
 			
-
-
 			//***************************************************************************************************************************************
 			//****************************************************          REPLIC          *********************************************************
 			//*******************************************                                           *************************************************
 			//***************************************************************************************************************************************
 			   
-
 			for (int32 i_Replic = 0; i_Replic < DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection.Num(); i_Replic++)
 			{
 
@@ -3201,7 +1747,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				[
 					SNew(SVerticalBox)
 
-					//  All REPLICK-Title
+					//  -------------  All REPLICK-Title  --------------
 					+ SVerticalBox::Slot()            
 					.Padding(0.f)
 					.AutoHeight()
@@ -3233,7 +1779,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								.VAlign(VAlign_Top)
 								.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, ReplicButtonRemoveSize)
 								.HeightOverride(this, &SDialogWindowWidget::GetButtonSize, ReplicButtonRemoveSize)
-								//.HeightOverride(20.f)
 								[
 									SNew(SButton)
 									.ContentPadding(0)
@@ -3250,8 +1795,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							+ SVerticalBox::Slot()
 							.Padding(0.f, 0.f, 0.f, 0.f)
 							.AutoHeight()
-							//.FillHeight(1)
-							//.MaxWidth(30.f)
 							.HAlign(HAlign_Left)
 							.VAlign(VAlign_Center)
 							[
@@ -3280,16 +1823,15 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						.Padding(0.f, 0.f, 0.f, 0.f)        // L, Up, R, Dn
 						.HAlign(HAlign_Fill)
 						.VAlign(VAlign_Fill)
-						//+++++++++.VAlign(VAlign_Center)
+
 						.AutoWidth()
 						[
 							SNew(SBox)
-							//MaxDesiredWidth(FOptionalSize())
+
 							.Padding(0)
 							.HAlign(HAlign_Fill)
 							.VAlign(VAlign_Fill)
 							.WidthOverride(5.f * SizeKoef)  
-							//.HeightOverride(20.f)
 							[
 								SNew(SBorder)
 								.Padding(0)
@@ -3320,7 +1862,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								.Padding(0, 0.f, 0, 0.f)
 								//.FillWidth(1)
 								.AutoWidth()
-								//.MaxWidth(30.f)
 								.HAlign(HAlign_Left)
 								.VAlign(VAlign_Fill)
 								[
@@ -3331,8 +1872,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									+ SVerticalBox::Slot()
 									.Padding(GetPadding(0.f, 2.f, 0.f, 0.f))
 									.AutoHeight()
-									//.FillHeight(1)
-									//.MaxWidth(30.f)
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									[
@@ -3341,7 +1880,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										.HeightOverride(this, &SDialogWindowWidget::GetButtonSize, ReplicButtonAddSize)
 										.HAlign(HAlign_Fill)
 										.VAlign(VAlign_Fill)
-										//.HeightOverride(20.f)
 										[
 
 											SNew(SButton)    // -------------   REPLICK      (Add_Down)    ---------------
@@ -3360,9 +1898,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									//   =====================  REPLICK   "Condition COLLAPSED button"  ===================
 									+ SVerticalBox::Slot()
 									.Padding(0.f, 0.f, 0.f, 0.f)
-									//.AutoHeight()
 									.FillHeight(1)
-									//.MaxWidth(30.f)
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									[
@@ -3390,13 +1926,11 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								.Padding(GetPadding(2, 0.f, 0, 0.f))
 								//.FillWidth(1)
 								.AutoWidth()
-								//.MaxWidth(30.f)
 								.HAlign(HAlign_Left)
 								.VAlign(VAlign_Center)
 								[
 									//  ===============   REPLICK      "COLLAPSED  Content Button"    =======================
 									SNew(SBox)
-									//MaxDesiredWidth(FOptionalSize())
 									.HAlign(HAlign_Fill)
 									.VAlign(VAlign_Fill)
 									.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, ReplicButtonBigSize)
@@ -3410,7 +1944,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										[
 											SNew(SImage)
 											.Image(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EProppertyToChange::CollapsedReplicSection, CurrentPropertyIndex)
-											//.BorderImage(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EButtonDialogType::CollapsedDialogSection, i_Dlg, -1, -1)
 										]
 									]
 								]
@@ -3427,14 +1960,10 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								[
 									//     ------------------    Property Editable-Repeat Zone  --------------------
 
-
-
 									SNew(SBox)
 									.Padding(GetPadding(0, 3, 4, 3))
-									//MaxDesiredWidth(FOptionalSize())
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
-									//.WidthOverride(20.f)
 									.HeightOverride(ReplicSectionSize * SizeKoef)         // -----------   Heigh TITLE-Zone  ------------
 									[
 										
@@ -3456,7 +1985,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyReplicStart)       //   -------   REPLICK    ImagePropertyZone     Start  -------------
@@ -3471,15 +1999,12 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										[
 											SNew(SBorder)
 											.Padding(0)
-											//.HAlign(HAlign_Left)
 											.HAlign(HAlign_Fill)
 											.VAlign(VAlign_Center)
 											.BorderImage(PropertyReplic)
 											[
 													SNew(STextBlock)
-													//.Padding(GetPadding(4, 1, 2, 1))
 													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
-													//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 													.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::repeatReplic, CurrentPropertyIndex)
 													.Text(FText::FromString("REPLIC:"))
 											]
@@ -3500,7 +2025,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyReplicEnd)       //   -------  REPLICK  ImagePropertyZone     End  -------------
@@ -3525,7 +2049,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyReplicStart)       //   -------   REPLICK    ImagePropertyZone     Start  -------------
@@ -3541,7 +2064,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										[
 											SNew(SBorder)
 											.Padding(0)
-											//.HAlign(HAlign_Left)
 											.HAlign(HAlign_Fill)
 											.VAlign(VAlign_Fill)
 											.BorderImage(PropertyReplic)
@@ -3557,13 +2079,9 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(STextBlock)
 													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-													//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 													.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::repeatReplic, CurrentPropertyIndex)
 													.Text(FText::FromString("repeat:"))
 												]
-
-
-										//------------------------
 
 												+ SHorizontalBox::Slot() 
 												.Padding(GetPadding(7, 4, 4, 3))
@@ -3576,12 +2094,9 @@ void SDialogWindowWidget::UpdateDialogBlock()
 																																SComboBox<TSharedPtr<FString>>)
 													.ContentPadding(GetPadding(4.0f, 0, 4.0f, 5.0f))
 													.OptionsSource(&ReplicRepeatComboList)
-													//.OnComboBoxOpening( this, &SDialogWindowWidget::OnSpekerComboBoxOpening, CurrentPropertyIndex)
 													.OnGenerateWidget(this, &SDialogWindowWidget::HandleComboBoxGenerateWidget)
 													.OnSelectionChanged(this, &SDialogWindowWidget::GetReplicRepeatComboList, CurrentPropertyIndex)
-													//.InitiallySelectedItem(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CurrentSpiker)
 													[ 
-														 
 														SNew(STextBlock)
 														.Margin(0)
 														.Text(this, &SDialogWindowWidget::GetCurrentReplicRepeatLabel, CurrentPropertyIndex)
@@ -3608,7 +2123,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyReplicEnd)       //   -------  REPLICK  ImagePropertyZone     End  -------------
@@ -3623,16 +2137,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						.Padding(GetPadding(0.f, 0.f, 2.f, 0.f))       // L, Up, R, Dn
 						.HAlign(HAlign_Fill)
 						.VAlign(VAlign_Fill)
-						//+++++++++.VAlign(VAlign_Center)
 						.AutoWidth()
 						[
 							SNew(SBox)
-							//MaxDesiredWidth(FOptionalSize())
 							.Padding(0)
 							.HAlign(HAlign_Fill)
 							.VAlign(VAlign_Fill)
 							.WidthOverride(5.f * SizeKoef)  
-							//.HeightOverride(20.f)
 							[
 								SNew(SBorder)
 								.Padding(0)
@@ -3651,11 +2162,9 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.VAlign(VAlign_Top) 
 					[
 						SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].ReplicConditionBlock, SVerticalBox)
-						//.Visibility(this, &SDialogWindowWidget::GetIsSectionCollapsed, EButtonDialogType::CollapsedReplicSection, i_Dlg, i_Speech, i_Replic, i_Rep)
 						.Visibility(this, &SDialogWindowWidget::IsSectionCollapsed, EProppertyToChange::CollapsedReplic_Condition, CurrentPropertyIndex)
 						  
 					]
-
 
 					//       ======================     REPLICK  Editable Multiline zone     ========================
 					+ SVerticalBox::Slot()
@@ -3665,14 +2174,8 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.VAlign(VAlign_Fill)
 					[
 						SNew(SBox)
-						//.Padding(FMargin(4, 3, 4, 3))
-						//.HeightOverride(80.f)
-						//.WidthOverride(100)
-						//.MaxDesiredWidth(FOptionalSize())
-						//.MinDesiredWidth(FOptionalSize())
 						.MaxDesiredHeight(ReplicMultiplyTextSize * SizeKoef)
 						[
-						//	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].ReplicComent_EditableMultiline, SMultiLineEditableTextBox) 	SMultiLineEditableTextBox)
 							SNew(SMultiLineEditableTextBox)
 							.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 							.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].ComentText))
@@ -3690,10 +2193,8 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.VAlign(VAlign_Top)
 					[
 						SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepBlock, SVerticalBox)
-						//.Visibility(this, &SDialogWindowWidget::GetIsSectionCollapsed, EButtonDialogType::CollapsedReplicSection, i_Dlg, i_Speech, i_Replic)
 						.Visibility(this, &SDialogWindowWidget::IsSectionCollapsed, EProppertyToChange::CollapsedReplicSection, CurrentPropertyIndex)						
 					]
-					//SNew(STextBlock).Text(FText::FromString("aaaaaaaaaa"))
 				]; 
 
 
@@ -3713,7 +2214,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						CurrentPropertyIndex.iRepCondition = -1;
 						CurrentPropertyIndex.iReplicCondition = i_ReplicCondition;
 
-						//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].RepConditionBlock;
 						TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic].ReplicConditionBlock;       
 						TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
@@ -3736,7 +2236,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].VariableValue;
 
 						EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddReplic_Condition;// ButtonAddRep_Condition;
-						//EProppertyToChange MoveButtonPropperty = EProppertyToChange::MoveReplic_Condition;
 						EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveReplic_Condition;
 						EProppertyToChange ConditionTypePropperty = EProppertyToChange::Replic_condition_type;// rep_condition_type;
 						EProppertyToChange VarTypePropperty = EProppertyToChange::Replic_condition_varType;// rep_condition_varType;
@@ -3749,7 +2248,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						DrawConditionElement(*RepConditionBlock,
 							CurrentPropertyIndex,
 							AddButtonPropperty,
-							//MoveButtonPropperty,
+							
 							RemoveButtonPropperty,
 
 							*TextBoxCondition_Type,
@@ -3774,7 +2273,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				for (int32 i_Rep = 0; i_Rep < DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection.Num(); i_Rep++)
 				{
 
-					//int32 a3 = DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection.Num();
+				
 					CurrentPropertyIndex.iResponse = -1;
 					CurrentPropertyIndex.iRep = i_Rep;
 
@@ -3804,13 +2303,10 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							[
 								SNew(SVerticalBox)
 
-
-
 								//   ====================      REP       (Remove Section)   ============================
 								+ SVerticalBox::Slot()
 								.HAlign(HAlign_Left)
 								.VAlign(VAlign_Center)
-								//.AutoHeight()
 								.FillHeight(1)
 								[
 									SNew(SBox)
@@ -3819,7 +2315,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									.VAlign(VAlign_Top)
 									.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, RepButtonSmallSize)
 									.HeightOverride(this, &SDialogWindowWidget::GetButtonSize, RepButtonSmallSize)
-									//.HeightOverride(20.f)
+									
 									[
 										SNew(SButton)
 										.ContentPadding(0)
@@ -3836,8 +2332,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 								+ SVerticalBox::Slot()
 								.Padding(0.f, 0.f, 0.f, 0.f)
 								.AutoHeight()
-								//.FillHeight(1)
-								//.MaxWidth(30.f)
 								.HAlign(HAlign_Left)
 								.VAlign(VAlign_Center)
 								[
@@ -3863,16 +2357,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 							.Padding(GetPadding(2.f, 0.f, 0.f, 0.f))        // L, Up, R, Dn
 							.HAlign(HAlign_Fill)
 							.VAlign(VAlign_Fill)
-							//+++++++++.VAlign(VAlign_Center)
 							.AutoWidth()
 							[
 								SNew(SBox)
-								//MaxDesiredWidth(FOptionalSize())
 								.Padding(0)
 								.HAlign(HAlign_Fill)
 								.VAlign(VAlign_Fill)
 								.WidthOverride(5.f * SizeKoef)   
-								//.HeightOverride(20.f)
 								[
 									SNew(SBorder)
 									.Padding(0)
@@ -3905,7 +2396,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									.AutoWidth()
-									//.FillWidth(1)
 									[
 										SNew(SVerticalBox)
 
@@ -3913,15 +2403,12 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										+ SVerticalBox::Slot()
 										.Padding(0.f, 0.f, 0.f, 0.f)
 										.AutoHeight()
-										//.FillHeight(1)
-										//.MaxWidth(30.f)
 										.HAlign(HAlign_Left)
 										.VAlign(VAlign_Center)
 										[
 											SNew(SBox)
 											.WidthOverride(this, &SDialogWindowWidget::GetButtonSize, RepButtonSmallInsileSSize)
 											.MaxDesiredHeight(this, &SDialogWindowWidget::GetButtonSize, RepButtonSmallInsileSSize)
-											//.HeightOverride(20.f)
 											[
 												// ---------------- Button      (Add_Down)  --------------------------
 												SNew(SButton)
@@ -3940,8 +2427,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										+ SVerticalBox::Slot()
 										.Padding(0.f, 0.f, 0.f, 0.f)
 										.AutoHeight()
-										//.FillHeight(1)
-										//.MaxWidth(30.f)
 										.HAlign(HAlign_Left)
 										.VAlign(VAlign_Center)
 										[
@@ -3968,16 +2453,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									+ SHorizontalBox::Slot()
 									.Padding(GetPadding(2, 1, 4, 1))
 									.AutoWidth()
-									//.FillWidth(1)
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									[
 										SNew(SBox)
 										.Padding(GetPadding(2, 3, 4, 3))   
-										//MaxDesiredWidth(FOptionalSize())
 										.HAlign(HAlign_Left)
 										.VAlign(VAlign_Center)
-										//.WidthOverride(20.f)
 										.HeightOverride(RepSectionSize * SizeKoef)  // -----------   Heigh TITLE-Zone  ------------
 										[
 										
@@ -3999,7 +2481,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(SBorder)
 													.Padding(0)
-													//.HAlign(HAlign_Left)
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Fill)
 													.BorderImage(PropertyResponseStart)       //   -------       ImagePropertyZone     Start  -------------
@@ -4015,7 +2496,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyResponse)
@@ -4031,7 +2511,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													[
 														SNew(STextBlock)
 														.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-														//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 														.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::speker, CurrentPropertyIndex)
 														.Text(FText::FromString("speker:"))
 													]
@@ -4057,7 +2536,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															+ SOverlay::Slot()           
 															.HAlign(HAlign_Fill)
 															.VAlign(VAlign_Center)
-															//--.AutoWidth()
 															[
 																SNew(SBox)
 																.Padding(GetPadding(0, 4, 0, 6))
@@ -4075,15 +2553,8 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															[
 																//  ===========================  REP-Spiker StaticText  ================================
 
-																//SAssignNew(StacklessAnchorPanel, SMenuAnchor)
-																//.Placement(MenuPlacement_BelowAnchor)
-																//.Method(EPopupMethod::UseCurrentWindow)
-																//.UseApplicationMenuStack(false)
-																//.OnGetMenuContent(this, &SDialogWindowWidget::MakeAnchorMenuContent, EProppertyToChange::speker, CurrentPropertyIndex)
-																//[
 																SNew(STextBlock)
 																.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-																//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 																.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::speker, CurrentPropertyIndex)
 																.Text(this, &SDialogWindowWidget::GetProppertyText, EProppertyToChange::speker, CurrentPropertyIndex)
 															]
@@ -4107,7 +2578,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(SBorder)
 													.Padding(0)
-													//.HAlign(HAlign_Left)
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Fill)
 													.BorderImage(PropertyResponseEnd)       //   -------  REP  ImagePropertyZone     End  -------------
@@ -4125,16 +2595,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									+ SHorizontalBox::Slot()
 									.Padding(GetPadding(2, 1, 4, 1))
 									.AutoWidth()
-									//.FillWidth(1)
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									[
 										SNew(SBox)
 										.Padding(GetPadding(2, 3, 4, 3))
-										//MaxDesiredWidth(FOptionalSize())
 										.HAlign(HAlign_Left)
 										.VAlign(VAlign_Center)
-										//.WidthOverride(20.f)
 										.HeightOverride(40.f * SizeKoef)         // -----------   Heigh TITLE-Zone  ------------
 										[
 										
@@ -4156,7 +2623,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(SBorder)
 													.Padding(0)
-													//.HAlign(HAlign_Left)
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Fill)
 													.BorderImage(PropertyResponseStart)       //   -------   REP    ImagePropertyZone     Start  -------------
@@ -4172,7 +2638,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyResponse)
@@ -4188,7 +2653,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													[
 														SNew(STextBlock)
 														.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-														//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 														.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::sound, CurrentPropertyIndex)
 														.Text(FText::FromString("sound:"))
 													]
@@ -4213,7 +2677,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															+ SOverlay::Slot()           
 															.HAlign(HAlign_Fill)
 															.VAlign(VAlign_Center)
-															//--.AutoWidth()
 															[
 																SNew(SBox)
 																.Padding(GetPadding(0, 4, 0, 6))
@@ -4231,12 +2694,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															[
 																//  ===========================  REP-Spiker StaticText  ================================
 
-																//SAssignNew(StacklessAnchorPanel, SMenuAnchor)
-																//.Placement(MenuPlacement_BelowAnchor)
-																//.Method(EPopupMethod::UseCurrentWindow)
-																//.UseApplicationMenuStack(false)
-																//.OnGetMenuContent(this, &SDialogWindowWidget::MakeAnchorMenuContent, EProppertyToChange::speker, CurrentPropertyIndex)
-																//[
 																SNew(STextBlock)
 																.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 																//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
@@ -4263,7 +2720,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(SBorder)
 													.Padding(0)
-													//.HAlign(HAlign_Left)
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Fill)
 													.BorderImage(PropertyResponseEnd)       //   -------  REP  ImagePropertyZone     End  -------------
@@ -4280,17 +2736,14 @@ void SDialogWindowWidget::UpdateDialogBlock()
 									//  =================    REP   ==========   "EVENT"  propperty zone     ================================
 									+SHorizontalBox::Slot()
 									.Padding(GetPadding(2, 1, 4, 1))
-									//.AutoWidth()
 									.FillWidth(1)
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									[
 										SNew(SBox)
 										.Padding(GetPadding(2, 3, 4, 3))
-										//MaxDesiredWidth(FOptionalSize())
 										.HAlign(HAlign_Left)
 										.VAlign(VAlign_Center)
-										//.WidthOverride(20.f)
 										.HeightOverride(RepSectionSize * SizeKoef)  // -----------   Heigh TITLE-Zone  ------------
 										[
 			
@@ -4312,7 +2765,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(SBorder)
 													.Padding(0)
-													//.HAlign(HAlign_Left)
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Fill)
 													.BorderImage(PropertyResponseStart)       //   -------   REP    ImagePropertyZone     Start  -------------
@@ -4328,7 +2780,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											[
 												SNew(SBorder)
 												.Padding(0)
-												//.HAlign(HAlign_Left)
 												.HAlign(HAlign_Fill)
 												.VAlign(VAlign_Fill)
 												.BorderImage(PropertyResponse)
@@ -4344,7 +2795,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													[
 														SNew(STextBlock)
 														.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-													//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 													.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::sound, CurrentPropertyIndex)
 													.Text(FText::FromString("Event:"))
 													]
@@ -4354,9 +2804,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													.HAlign(HAlign_Right)
 													.VAlign(VAlign_Center)
 													.AutoWidth()
-													//.FillWidth(1)
 													[
-
 
 														SNew(SButton)
 														.ContentPadding(0)
@@ -4370,7 +2818,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															+ SOverlay::Slot()           
 															.HAlign(HAlign_Right)
 															.VAlign(VAlign_Center)
-															//--.AutoWidth()
 															[
 																SNew(SBox)
 																.Padding(GetPadding(0, 0, 0, 0))
@@ -4391,10 +2838,8 @@ void SDialogWindowWidget::UpdateDialogBlock()
 														
 																+ SHorizontalBox::Slot()
 																.Padding(GetPadding(5, 0, 4, 0))
-																//+++++.HAlign(HAlign_Fill)
 																.HAlign(HAlign_Center)
 																.VAlign(VAlign_Center)
-																//.FillWidth(1)
 																.AutoWidth()
 																[
 																	//  ===========================  REP-EVENT StaticText  ================================
@@ -4404,14 +2849,11 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															
 
 																	.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, EProppertyToChange::RepEvent, CurrentPropertyIndex)
-																	//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))	
 																	.ColorAndOpacity(this, &SDialogWindowWidget::GetSectionTextColor, EProppertyToChange::RepEvent, CurrentPropertyIndex)
 																	.Text(this, &SDialogWindowWidget::GetProppertyText, EProppertyToChange::RepEvent, CurrentPropertyIndex)
 																]
 
 																+ SHorizontalBox::Slot()
-																//.Padding(FMargin(6, 1, 6, 1))
-																//.AutoWidth()
 																.HAlign(HAlign_Center)
 																.VAlign(VAlign_Center)
 																[
@@ -4425,8 +2867,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 																											.RepSection[i_Rep].RepEvent_EditableText, SEditableTextBox)
 																		.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14 * SizeKoef))
 																		.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, EProppertyToChange::RepEvent, CurrentPropertyIndex)
-																		//.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable,
-																		//									EProppertyToChange::SpeechName, i_Dlg, i_Speech, -1)
 																		.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic]
 																																	.RepSection[i_Rep].RepEvent))
 																		.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::RepEvent, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
@@ -4459,7 +2899,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												[
 													SNew(SBorder)
 													.Padding(0)
-													//.HAlign(HAlign_Left)
 													.HAlign(HAlign_Fill)
 													.VAlign(VAlign_Fill)
 													.BorderImage(PropertyResponseEnd)       //   -------  REP  ImagePropertyZone     End  -------------
@@ -4470,29 +2909,18 @@ void SDialogWindowWidget::UpdateDialogBlock()
 										
 										
 									]
-									//****************************************
-									//****************************************
-									//****************************************
-									//****************************************
-									//****************************************
-
-
-
 
 									//  =================    REP   ==========   "Time"  propperty zone     ================================
 									+ SHorizontalBox::Slot()
 									.Padding(GetPadding(2, 1, 4, 1))
 									.AutoWidth()
-									//.FillWidth(1)
 									.HAlign(HAlign_Right)
 									.VAlign(VAlign_Center)
 									[
 										SNew(SBox)
 										.Padding(GetPadding(2, 3, 4, 3))
-										//MaxDesiredWidth(FOptionalSize())
 										.HAlign(HAlign_Right)
 										.VAlign(VAlign_Center)
-										//.WidthOverride(20.f)
 										.HeightOverride(RepSectionSize * SizeKoef)  // -----------   Heigh TITLE-Zone  ------------
 										[
 										
@@ -4709,32 +3137,23 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													.VAlign(VAlign_Center)
 													.AutoWidth()
 													[										
-														/*SNew(SButton)
-														.ContentPadding(0)
-														.HAlign(HAlign_Left)
-														.VAlign(VAlign_Center)
-														.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))    
-														.OnClicked(this, &SDialogWindowWidget::OnHelperPanelClick, EProppertyToChange::delay, CurrentPropertyIndex)
-														[ */
-															//  ===========================  REP-Delay SpinBox  ================================
-															SNew(SBox)
-															.MinDesiredHeight(20.f * SizeKoef)
-															//.MinDesiredWidth(70.f)
-															.HAlign(HAlign_Fill)
-															.VAlign(VAlign_Fill)
-															[
-																SNew(SSpinBox<float>)
-																.MinValue(0.f)
-																.MaxValue(100.f)
-																//.Value(SDialogWindowWidget::GetDelayValue())  //, EProppertyToChange::Delay, CurrentPropertyIndex
-																.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-																.Value(FCString::Atof(*DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-																							.ReplicSection[CurrentPropertyIndex.iReplic]
-																							.RepSection[CurrentPropertyIndex.iRep].Delay.ToString()))
-																.OnValueCommitted(this, &SDialogWindowWidget::SetTimeValue, EProppertyToChange::delay, CurrentPropertyIndex)
-															]
-
-														//]
+														//  ===========================  REP-Delay SpinBox  ================================
+														SNew(SBox)
+														.MinDesiredHeight(20.f * SizeKoef)
+														//.MinDesiredWidth(70.f)
+														.HAlign(HAlign_Fill)
+														.VAlign(VAlign_Fill)
+														[
+															SNew(SSpinBox<float>)
+															.MinValue(0.f)
+															.MaxValue(100.f)
+															//.Value(SDialogWindowWidget::GetDelayValue())  //, EProppertyToChange::Delay, CurrentPropertyIndex
+															.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
+															.Value(FCString::Atof(*DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+																						.ReplicSection[CurrentPropertyIndex.iReplic]
+																						.RepSection[CurrentPropertyIndex.iRep].Delay.ToString()))
+															.OnValueCommitted(this, &SDialogWindowWidget::SetTimeValue, EProppertyToChange::delay, CurrentPropertyIndex)
+														]
 													]
 												]		
 											]
@@ -4788,11 +3207,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						.VAlign(VAlign_Fill)
 						[
 							SNew(SBox)
-							//.Padding(FMargin(4, 3, 4, 3))
-							//.HeightOverride(80.f)
-							//.WidthOverride(100)
-							//.MaxDesiredWidth(FOptionalSize())
-							//.MinDesiredWidth(FOptionalSize())
 							.MaxDesiredHeight(RepMultiplyTextSize * SizeKoef)
 							[
 							//	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].ReplicComent_EditableMultiline, SMultiLineEditableTextBox) 	SMultiLineEditableTextBox)
@@ -5128,21 +3542,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												//.Image(ImageVariableButtonOn)    
 												//.BorderImage(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EButtonDialogType::CollapsedDialogSection, i_Dlg, -1, -1)
 											]
-											//SNew(SBorder)
-											//.BorderImage(this, &SDialogWindowWidget::GetImageButtonSectionCollapsed, EButtonDialogType::CollapsedResponseSection, i_Dlg, i_Speech, i_Response)
-											//[
-											//	//    RESPONSE-Section title----COLLAPSED-----Content Button
-											//	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response].ResponseTitleCollapsedContent_Button, SDLGButtonDialog)
-											//	.OnDLGButtonDialogClicked(this, &SDialogWindowWidget::OnDLGButtonClick)
-											//	.ButtonDialogType(EButtonDialogType::CollapsedResponseSection)
-											//	.DialodIndex(i_Dlg)
-											//	.SpeechIndex(i_Speech)
-											//	.ReplicOrResponseIndex(i_Response)
-											//	.RepOrConditionIndex(-1)
-											//	.ConditionIndex(-1)
-											//	.SetVisibility(false)
-											//	.Visibility(EVisibility::SelfHitTestInvisible)
-											//]
+
 										]
 								]	
 									
@@ -5429,24 +3829,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													.HAlign(HAlign_Left)
 													.VAlign(VAlign_Center)
 													.AutoWidth()
-													[
-														//SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response].CB_ResponseReturnType,
-														//																			SComboBox<TSharedPtr<FString>>)
-														//.ContentPadding(FMargin(4.0f, 0, 4.0f, 5.0f))
-														//.OptionsSource(&ResponseReturnTypeComboList)
-														////.OnComboBoxOpening( this, &SDialogWindowWidget::OnSpekerComboBoxOpening, CurrentPropertyIndex)
-														//.OnGenerateWidget(this, &SDialogWindowWidget::HandleComboBoxGenerateWidget)
-														//.OnSelectionChanged(this, &SDialogWindowWidget::GetResponseReturnTypeComboList, CurrentPropertyIndex)
-														////.InitiallySelectedItem(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CurrentSpiker)
-														//[ 
-														//	 
-														//	SNew(STextBlock)
-														//	.Margin(0)
-														//	.Text(this, &SDialogWindowWidget::GetCurrentResponseReturnTypeLabel, CurrentPropertyIndex)
-														//	.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14))
-														//	.ColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.08f, 1))
-
-										
+													[										
 														//]//  ComboBox
 														SNew(SButton)
 														.ContentPadding(0)
@@ -5478,12 +3861,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 															[
 																//  ===========================  RESPONSE        Link-Dialog      ================================
 															
-																	//SAssignNew(StacklessAnchorPanel, SMenuAnchor)
-																	//.Placement(MenuPlacement_BelowAnchor)
-																	//.Method(EPopupMethod::UseCurrentWindow)
-																	//.UseApplicationMenuStack(false)
-																	//.OnGetMenuContent(this, &SDialogWindowWidget::MakeAnchorMenuContent, EProppertyToChange::speker, CurrentPropertyIndex)
-																	//[
 																SNew(STextBlock)
 																.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 																//.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
@@ -5603,22 +3980,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 													.VAlign(VAlign_Center)
 													.AutoWidth()
 													[
-														//SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response].CB_ResponseReturnType,
-														//																			SComboBox<TSharedPtr<FString>>)
-														//.ContentPadding(FMargin(4.0f, 0, 4.0f, 5.0f))
-														//.OptionsSource(&ResponseReturnTypeComboList)
-														////.OnComboBoxOpening( this, &SDialogWindowWidget::OnSpekerComboBoxOpening, CurrentPropertyIndex)
-														//.OnGenerateWidget(this, &SDialogWindowWidget::HandleComboBoxGenerateWidget)
-														//.OnSelectionChanged(this, &SDialogWindowWidget::GetResponseReturnTypeComboList, CurrentPropertyIndex)
-														////.InitiallySelectedItem(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CurrentSpiker)
-														//[ 
-														//	 
-														//	SNew(STextBlock)
-														//	.Margin(0)
-														//	.Text(this, &SDialogWindowWidget::GetCurrentResponseReturnTypeLabel, CurrentPropertyIndex)
-														//	.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 14))
-														//	.ColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.08f, 1))
-
 										
 														//]//  ComboBox
 														SNew(SButton)
@@ -5686,11 +4047,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 											]
 										]
 									] //   SPEECH-LINK        (END)
-
-
-
-
-
 
 									//  ==============================     PESPONSE--RETURN-PARAMETER--PROPERTY   =======================
 									+ SHorizontalBox::Slot()
@@ -5913,11 +4269,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.VAlign(VAlign_Fill)
 					[
 						SNew(SBox)
-						//.Padding(FMargin(4, 3, 4, 3))
-						//.HeightOverride(80.f)
-						//.WidthOverride(100)
-						//.MaxDesiredWidth(FOptionalSize())
-						//.MinDesiredWidth(FOptionalSize())
+
 						.MaxDesiredHeight(ResponseMultiplyTextSize * SizeKoef)
 						[
 						//	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].ReplicComent_EditableMultiline, SMultiLineEditableTextBox) 	SMultiLineEditableTextBox)
@@ -5942,8 +4294,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					.ResponseSection[i_Response].ResponseCondition.Num(); i_ResponseCondition++)
 				{
 
-					//int32 a5 = DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response].ResponseCondition.Num();
-					//CurrentPropertyIndex.iResponseCondition = i_ResponseCondition; 
 					CurrentPropertyIndex.iSpeechCondition = -1;
 					CurrentPropertyIndex.iReplic = -1;
 					CurrentPropertyIndex.iReplicCondition = -1;
@@ -6014,8 +4364,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 														.ResponseSection[i_Response].VariableSection.Num(); i_ResponseVariable++)
 				{
 
-					//int32 a5 = DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response].ResponseCondition.Num();
-					//CurrentPropertyIndex.iResponseCondition = i_ResponseCondition; 
 					CurrentPropertyIndex.iSpeechCondition = -1;
 					CurrentPropertyIndex.iReplic = -1;
 					CurrentPropertyIndex.iReplicCondition = -1;
@@ -6216,11 +4564,6 @@ void SDialogWindowWidget::UpdateDialogBlock()
 												.AutoWidth()
 												[		
 														//  ------------------------RESPONSE-VARIABLES    VARIABLE- "Local/Global"    ---------------------------------
-													//SNew(SBox)
-													//.MinDesiredWidth(60.f)
-													//.HAlign(HAlign_Fill)
-													//.VAlign(VAlign_Fill)
-													//[
 														SNew(SButton)
 														.ContentPadding(0)
 														.HAlign(HAlign_Fill)
@@ -6343,14 +4686,10 @@ void SDialogWindowWidget::UpdateDialogBlock()
 																	//  ===========================   REsponse  Vatiable-Name EditableText  ================================
 																	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response]
 																							.VariableSection[i_ResponseVariable].ChangeVariable_Name_Editable, SEditableTextBox)
-																	//SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic]
-																	//		.RepSection[i_Rep].RepCondition[i_RepCondition].ConditionVariable_Name_Editable, SEditableTextBox)
 																	.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 																	.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, EProppertyToChange::Response_variable_varName, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
 																	.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response]
 																								.VariableSection[i_ResponseVariable].VariableName.ToString()))
-																	//.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech]
-																	//	.ReplicSection[i_Replic].RepSection[i_Rep].RepCondition[i_RepCondition].VariableName.ToString()))
 																	.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::Response_variable_varName, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 																	.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 																]
@@ -6521,14 +4860,10 @@ void SDialogWindowWidget::UpdateDialogBlock()
 																	//  ===========================    Variable-Value EditableText  ================================
 																	SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response]
 																			.VariableSection[i_ResponseVariable].ChangeVariable_Value_Editable, SEditableTextBox)
-																	//SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic]
-																	//		.RepSection[i_Rep].RepCondition[i_RepCondition].ConditionVariable_Value_Editable, SEditableTextBox)
 																	.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 																	.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, EProppertyToChange::Response_variable_varValue, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
 																	.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_Response]
 																									.VariableSection[i_ResponseVariable].VariableValue.ToString()))
-																	//.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech]
-																	//	.ReplicSection[i_Replic].RepSection[i_Rep].RepCondition[i_RepCondition].VariableValue.ToString()))
 																	.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, EProppertyToChange::Response_variable_varValue, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 																	.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 																]
@@ -7105,13 +5440,9 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 												[ 
 													//  ===========================   CONDITION  Vatiable-Name EditableText  ================================
 													SAssignNew(TextBoxVariable_Name, SEditableTextBox)
-													//SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic]
-													//		.RepSection[i_Rep].RepCondition[i_RepCondition].ConditionVariable_Name_Editable, SEditableTextBox)
 													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
 													.Text(FText::FromString(VariableName_Text.ToString()))
-													//.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech]
-													//	.ReplicSection[i_Replic].RepSection[i_Rep].RepCondition[i_RepCondition].VariableName.ToString()))
 													.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarNamePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 													.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 												]
@@ -7281,13 +5612,9 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 												[ 
 													//  ===========================CONDITION   Vatiable-Value EditableText  ================================
 													SAssignNew(TextBoxVariable_Value, SEditableTextBox)
-													//SAssignNew(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic]
-													//		.RepSection[i_Rep].RepCondition[i_RepCondition].ConditionVariable_Value_Editable, SEditableTextBox)
 													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
 													.Text(FText::FromString(VariableValue_Text.ToString()))
-													//.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech]
-													//	.ReplicSection[i_Replic].RepSection[i_Rep].RepCondition[i_RepCondition].VariableValue.ToString()))
 													.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarValuePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 													.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 												]
@@ -7374,9 +5701,8 @@ FReply SDialogWindowWidget::OnButtonSelectLayer(FName MainPanelType)
 	if (MainPanelType == FName("content"))
 	{
 		CurrentMainPanel = ECurrentMainPanel::Content;
-		//++++++++++++XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX++++++++++++++++++++++++  CHANGE UP-BUTTON STYLE
-		//ContentPanelShowButton;
-		//VariablesPanelShowButton;
+
+
 		DialogContentVisibility = EVisibility::Visible;   //   Collapsed  Visible
 		DialogVariablesVisibility = EVisibility::Collapsed;
 		DialogSpikersVisibility = EVisibility::Collapsed;
@@ -7384,9 +5710,7 @@ FReply SDialogWindowWidget::OnButtonSelectLayer(FName MainPanelType)
 	else if (MainPanelType == FName("variables"))
 	{
 		CurrentMainPanel = ECurrentMainPanel::Variables;
-		//++++++++++++++XXXXXXXXXXXXXXXXXXXXXXX+++++++++++++++++++++  CHANGE UP-BUTTON STYLE
-		//ContentPanelShowButton;
-		//VariablesPanelShowButton;
+
 		DialogContentVisibility = EVisibility::Collapsed;   //  // Collapsed  Visible  Hidden
 		DialogVariablesVisibility = EVisibility::Visible;
 		DialogSpikersVisibility = EVisibility::Collapsed;
@@ -7397,12 +5721,6 @@ FReply SDialogWindowWidget::OnButtonSelectLayer(FName MainPanelType)
 	{
 		
 		CurrentMainPanel = ECurrentMainPanel::Spekers;
-		//+++++++++++++++XXXXXXXXXXXXXXXXXXXXXXXXXXXX++++++++++++++++++++++++++  CHANGE UP-BUTTON STYLE
-		//ContentPanelShowButton;
-		//VariablesPanelShowButton;
-
-		//LoadSpekersfromXML();
-		//RedrawSpekersBlock();
 
 		DialogContentVisibility = EVisibility::Collapsed;   //  // Collapsed  Visible  Hidden
 		DialogVariablesVisibility = EVisibility::Collapsed;
@@ -7513,12 +5831,7 @@ const FSlateBrush* SDialogWindowWidget::GetImageButtonSectionCollapsed(EProppert
 							.ReplicSection[PropertyIndex.iReplic].IsSectionOpen)		return ImageButtonSectionExpand;
 		else																					return ImageButtonSectionRollUp;
 	}
-	/*else if (_ProppertyToChange == EProppertyToChange::CollapsedResponseSection)
-	{
-		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-							.ResponseSection[PropertyIndex.iResponse].IsSectionOpen)		return ImageButtonSectionExpand;
-		else																						return ImageButtonSectionRollUp;
-	}*/
+
 	else if (_ProppertyToChange == EProppertyToChange::CollapsedSpeechSection)
 	{
 		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSectionOpen)		return ImageButtonSectionExpand;
@@ -7533,8 +5846,7 @@ const FSlateBrush* SDialogWindowWidget::GetImageButtonSectionCollapsed(EProppert
 
 
 	return ImageButtonSectionRollUp;
-	//or
-	//return ImageButtonSectionExpand;
+
 
 }
 
@@ -7565,16 +5877,7 @@ FSlateColor SDialogWindowWidget::GetSectionTextColor(EProppertyToChange Proppert
 			.IsFastFindMarker) return ColorFastFindMarked;
 		else  return FSlateColor(ColorUsualText);
 	}
-	//else if (ProppertyToChange == EProppertyToChange::MarkerSpeech_Condition)
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.SpeechCondition[PropertyIndex.iSpeechCondition].IsErrorMarker) return FLinearColor(1.f, 0.f, 0.f, 1);
-	//	else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.SpeechCondition[PropertyIndex.iSpeechCondition].IsLinkMarker) return FLinearColor(0.f, 1.f, 0.f, 1);
-	//	else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.SpeechCondition[PropertyIndex.iSpeechCondition].IsUsualMarker) return FLinearColor(0.f, 0.f, 1.f, 1);
-	//	else  return FLinearColor(0.f, 0.f, 0.f, 1);
-	//}
+
 
 	else if (ProppertyToChange == EProppertyToChange::repeatReplic)
 	{
@@ -7585,19 +5888,7 @@ FSlateColor SDialogWindowWidget::GetSectionTextColor(EProppertyToChange Proppert
 		else  return FSlateColor(ColorUsualText);
 	}
 
-	//else if (ProppertyToChange == EProppertyToChange::MarkerReplic_Condition)
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition]
-	//		.IsErrorMarker) return FLinearColor(1.f, 0.f, 0.f, 1);
-	//	else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition]
-	//		.IsLinkMarker) return FLinearColor(0.f, 1.f, 0.f, 1);
-	//	else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition]
-	//		.IsUsualMarker) return FLinearColor(0.f, 0.f, 1.f, 1);
-	//	else  return FLinearColor(0.f, 0.f, 0.f, 1);
-	//}
+
 
 	else if (ProppertyToChange == EProppertyToChange::MarkerRep ||
 			 ProppertyToChange == EProppertyToChange::speker ||
@@ -7615,19 +5906,6 @@ FSlateColor SDialogWindowWidget::GetSectionTextColor(EProppertyToChange Proppert
 		else  return FSlateColor(ColorUsualText);
 	}
 
-	//else if (ProppertyToChange == EProppertyToChange::MarkerRep_Condition)
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep]
-	//		.RepCondition[PropertyIndex.iRepCondition].IsErrorMarker) return FLinearColor(1.f, 0.f, 0.f, 1);
-	//	else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep]
-	//		.RepCondition[PropertyIndex.iRepCondition].IsLinkMarker) return FLinearColor(0.f, 1.f, 0.f, 1);
-	//	else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep]
-	//		.RepCondition[PropertyIndex.iRepCondition].IsUsualMarker) return FLinearColor(0.f, 0.f, 1.f, 1);
-	//	else  return FLinearColor(0.f, 0.f, 0.f, 1);
-	//}
 
 	else if (ProppertyToChange == EProppertyToChange::repeatResponse || 
 			 ProppertyToChange == EProppertyToChange::DialogLink ||
@@ -7641,34 +5919,7 @@ FSlateColor SDialogWindowWidget::GetSectionTextColor(EProppertyToChange Proppert
 			.ResponseSection[PropertyIndex.iResponse].IsUsualMarker) return FSlateColor(ColorUsualMarked);
 		else  return FSlateColor(ColorUsualText);
 	}
-//
-//	else if (ProppertyToChange == EProppertyToChange::MarkerResponse_Condition)
-//	{
-//		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-//			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition]
-//			.IsErrorMarker) return FLinearColor(1.f, 0.f, 0.f, 1);
-//		else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-//			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition]
-//			.IsLinkMarker) return FLinearColor(0.f, 1.f, 0.f, 1);
-//		else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-//			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition]
-//			.IsUsualMarker) return FLinearColor(0.f, 0.f, 1.f, 1);
-//		else  return FLinearColor(0.f, 0.f, 0.f, 1);
-//	}
-//
-//	else if (ProppertyToChange == EProppertyToChange::MarkerResponse_Variable)
-//	{
-//		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-//			.ResponseSection[PropertyIndex.iResponse].VariableSection[PropertyIndex.iResponseVariable]
-//			.IsErrorMarker) return FLinearColor(1.f, 0.f, 0.f, 1);
-//		else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-//			.ResponseSection[PropertyIndex.iResponse].VariableSection[PropertyIndex.iResponseVariable]
-//			.IsLinkMarker) return FLinearColor(0.f, 1.f, 0.f, 1);
-//		else if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-//			.ResponseSection[PropertyIndex.iResponse].VariableSection[PropertyIndex.iResponseVariable]
-//			.IsUsualMarker) return FLinearColor(0.f, 0.f, 1.f, 1);
-//		else  return FLinearColor(0.f, 0.f, 0.f, 1);
-//	}
+
 
 	return FSlateColor(ColorUsualText);
 }
@@ -7711,12 +5962,7 @@ EVisibility SDialogWindowWidget::IsSectionCollapsed(EProppertyToChange _Proppert
 									.ReplicSection[PropertyIndex.iReplic].IsSectionOpen)			return EVisibility::Visible;
 		else																								return EVisibility::Collapsed;
 	}
-	/*else if (_ProppertyToChange == EProppertyToChange::CollapsedResponseSection)
-	{
-		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-									.ResponseSection[PropertyIndex.iResponse].IsSectionOpen)		return EVisibility::Visible;
-		else																								return EVisibility::Collapsed;
-	}*/
+
 	else if (_ProppertyToChange == EProppertyToChange::CollapsedSpeechSection) 
 	{
 		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSectionOpen)		return EVisibility::Visible;
@@ -7741,7 +5987,6 @@ void SDialogWindowWidget::ConfirmEditableMultilineTextBox(const FText& Text, ETe
 
 	float MultiplyEditableTextZoneSize = MultiplyTextSize;
 
-	//int32 sss = EditableChangedText.Len();
 	int32 StartPos = 0;
 	int32 FindingN = EditableChangedText.Find("\n", ESearchCase::Type::IgnoreCase, ESearchDir::Type::FromStart, StartPos);
 	while (FindingN != -1)
@@ -7854,7 +6099,6 @@ FReply SDialogWindowWidget::OnButtonClick(EProppertyToChange ProppertyToChange, 
 	else if (ProppertyToChange == EProppertyToChange::CollapsedDialogSection ||
 			ProppertyToChange == EProppertyToChange::CollapsedSpeechSection ||
 			ProppertyToChange == EProppertyToChange::CollapsedReplicSection ||
-			//ProppertyToChange == EProppertyToChange::CollapsedResponseSection ||
 			ProppertyToChange == EProppertyToChange::CollapsedRep_Condition ||
 			ProppertyToChange == EProppertyToChange::CollapsedReplic_Condition ||
 			ProppertyToChange == EProppertyToChange::CollapsedResponse_Condition ||
@@ -7862,7 +6106,6 @@ FReply SDialogWindowWidget::OnButtonClick(EProppertyToChange ProppertyToChange, 
 			ProppertyToChange == EProppertyToChange::CollapsedResponse_Variables 
 		)
 	{
-		//SwitchCollapsedSection(_ButtonDialogType, _Param_DialogIndex, _Param_SpeechIndex, _Param_ReplicOrResponseIndex);  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		SwitchCollapsedSection(ProppertyToChange, PropertyIndex);
 	}
 
@@ -7936,93 +6179,7 @@ FReply SDialogWindowWidget::OnButtonClick(EProppertyToChange ProppertyToChange, 
 
 	return FReply::Handled();
 }
-//  =====================   Any BUTTON Click. ->> Decide what to do next  =====================
-/*void SDialogWindowWidget::OnDLGButtonClick(EButtonDialogType _ButtonDialogType,
-														int32 _Param_DialogIndex,
-														int32 _Param_SpeechIndex,
-														int32 _Param_ReplicOrResponseIndex,
-														int32 _Param_RepOrConditionIndex,
-														int32 _Param_ConditionIndex)
-{
-	//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString::SanitizeFloat(_Param_DialodTag));
-	////////////////////////+++++++++++++++ConfirmCurrentSelection(ProppertyToChange, PropertyIndex);
 
-
-	FPropertyIndex _PropertyIndex;/////////////////////////  77777777777777777777777777
-	_PropertyIndex.iDialog = _Param_DialogIndex;
-	_PropertyIndex.iSpeech = _Param_SpeechIndex;
-	_PropertyIndex.iReplicOrResponse = _Param_ReplicOrResponseIndex;
-	_PropertyIndex.iRepOrResponsCondition = _Param_RepOrConditionIndex;
-       
-	///////////////////////////  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-
-	//	if (_ButtonDialogType == EButtonDialogType::DialogName)
-	//	{
-	//		FPropertyIndex _PropertyIndex;
-	//		_PropertyIndex.iDialog = _Param_DialogIndex;
-	//		EditProperty(EProppertyToChange::DialogName, _PropertyIndex);
-	//		//EditProperty(EProppertyToChange::DialogName, _Param_DialogIndex);
-	//	}
-	//	//if (_ButtonDialogType == EButtonDialogType::AddNewDialog)
-	//	//{
-	//	//	AddDialogSection(_PropertyIndex);
-	//	//}
-	//		
-
-
-	//if (_Param_SpeechIndex == -1) return;
-
-	//	//if (_ButtonDialogType == EButtonDialogType::AddNewSpeech)
-	//	//{
-	//	//	AddSpeechSection(_PropertyIndex);
-	//	//}
-	//	if (_ButtonDialogType == EButtonDialogType::SpeechName)
-	//	{
-	//		FPropertyIndex _PropertyIndex;
-	//		_PropertyIndex.iDialog = _Param_DialogIndex;
-	//		_PropertyIndex.iSpeech = _Param_SpeechIndex;
-	//		EditProperty(EProppertyToChange::SpeechName, _PropertyIndex);
-	//		//EditProperty(EProppertyToChange::SpeechName, _Param_DialogIndex, _Param_SpeechIndex);
-	//	}
-
-
-
-	//if (_Param_ReplicOrResponseIndex == -1) return;
-
-	//	//if (_ButtonDialogType == EButtonDialogType::AddNewReplick)     
-	//	//{
-	//	//	AddReplicSection(_PropertyIndex);
-	//	//}
-	//	if (_ButtonDialogType == EButtonDialogType::ReplicRepeat)       
-	//	{
-	//		FPropertyIndex _PropertyIndex;
-	//		_PropertyIndex.iDialog = _Param_DialogIndex;
-	//		_PropertyIndex.iSpeech = _Param_SpeechIndex;
-	//		_PropertyIndex.iReplicOrResponse = _Param_ReplicOrResponseIndex;
-	//		//EditProperty(EProppertyToChange::repeatReplic, _Param_DialogIndex, _Param_SpeechIndex, _Param_ReplicOrResponseIndex);
-	//		EditProperty(EProppertyToChange::repeatReplic, _PropertyIndex);
-	//	}
-
-
-
-	//	//if (_ButtonDialogType == EButtonDialogType::AddNewResponse)     
-	//	//{
-	//	//	AddResponseSection(_PropertyIndex);
-	//	//}
-	//	if (_ButtonDialogType == EButtonDialogType::ResponseRepeat)        
-	//	{
-	//		FPropertyIndex _PropertyIndex;
-	//		_PropertyIndex.iDialog = _Param_DialogIndex;
-	//		_PropertyIndex.iSpeech = _Param_SpeechIndex;
-	//		_PropertyIndex.iReplicOrResponse = _Param_ReplicOrResponseIndex;
-	//		EditProperty(EProppertyToChange::repeatResponse, _PropertyIndex);
-	//		//EditProperty(EProppertyToChange::repeatResponse, _Param_DialogIndex, _Param_SpeechIndex, _Param_ReplicOrResponseIndex);
-	//	}
-
-
-
-}
-*/
 
 FReply SDialogWindowWidget::OnButtonRemoveClick(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex)
 {
@@ -8099,51 +6256,9 @@ void SDialogWindowWidget::EditProperty(EProppertyToChange _ProppertyToChange, FP
 	ConfirmCurrentSelection(_ProppertyToChange, PropertyIndex);
 
 
-	//  ---------------------------   Response Link   ----------------------------
-	if (_ProppertyToChange == EProppertyToChange::DialogLink)
-	{
-
-
-
-		/*TArray<FString> TextOptions;
-		TextOptions.Add(TEXT("Option 1"));
-		TextOptions.Add(TEXT("Option 2"));
-
-		FSlateApplication::Get().PushMenu(
-			SharedThis(this),
-			FWidgetPath(),
-			SNew(STextComboPopup)
-			.TextOptions(TextOptions)
-			.OnTextChosen(FSlateApplication::Get().DismissAllMenus()),
-											FSlateApplication::Get().GetCursorPos(),
-									FPopupTransitionEffect(FPopupTransitionEffect::TypeInPopup)
-		);*/
-
-
-
-
-
-		/*DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.RepSection[PropertyIndex.iRepOrResponsCondition].RepCondition[PropertyIndex.iRepCondition].IsProperty_VariableName_EditNow = true;
-
-		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRepOrResponsCondition]
-			.RepCondition[PropertyIndex.iRepCondition].ConditionVariable_Name_Editable.ToSharedRef());*/
-	}
-	else if (_ProppertyToChange == EProppertyToChange::SpeechLink)
-	{
-
-		/*DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.RepSection[PropertyIndex.iRepOrResponsCondition].RepCondition[PropertyIndex.iRepCondition].IsProperty_VariableName_EditNow = true;
-
-		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRepOrResponsCondition]
-			.RepCondition[PropertyIndex.iRepCondition].ConditionVariable_Name_Editable.ToSharedRef());*/
-	}
-
 
 	//  ---------------------------    Variables   Variable__Block  ----------------------------
-	else if (_ProppertyToChange == EProppertyToChange::Variable_varName)
+	if (_ProppertyToChange == EProppertyToChange::Variable_varName)
 	{
 
 		Variables[PropertyIndex.iVariable].IsProperty_VariableName_EditNow = true;  
@@ -8299,51 +6414,6 @@ void SDialogWindowWidget::EditProperty(EProppertyToChange _ProppertyToChange, FP
 		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
 			.SpeechCondition[PropertyIndex.iSpeechCondition].Condition_Type_Editable.ToSharedRef());
 	}
-
-
-
-/////////////////////////  777777777777777777777777777777777777777
-
-	/*else if (_ProppertyToChange == EProppertyToChange::repeatResponse)
-	{
-		if (PropertyIndex.iDialog == -1) return;
-		if (PropertyIndex.iSpeech == -1) return;
-		if (PropertyIndex.iReplicOrResponse == -1) return;
-		// mark this massive-field as selected
-		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iReplicOrResponse].IsSectionEditNow = true;
-		// rid-off hidded-Button
-		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iReplicOrResponse]
-																.ChangeResponseSectionRepeat_Button->ButtonHitted = EVisibility::Hidden;
-		// focus on Editable-box
-		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-															.ResponseSection[PropertyIndex.iReplicOrResponse].ResponseSectionRepeat_Editable.ToSharedRef());
-		//   Stored Propperty-field we change
-		//changingDialod_Index = PropertyIndex.iDialog;
-		//changingSpeech_Index = PropertyIndex.iSpeech;
-		//changingReplicOrResponse_Index = PropertyIndex.iReplicOrResponse;
-		//changingPropperty = EProppertyToChange::repeatResponse;
-	}*/
-
-	/*else if (_ProppertyToChange == EProppertyToChange::repeatReplic)
-	{
-		if (PropertyIndex.iDialog == -1) return;
-		if (PropertyIndex.iSpeech == -1) return;
-		if (PropertyIndex.iReplicOrResponse == -1) return;
-		// mark this massive-field as selected
-		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplicOrResponse].IsSectionEditNow = true;
-		// rid-off hidded-Button
-		//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplicOrResponse]
-		//														.ChangeReplicSectionRepeat_Button->ButtonHitted = EVisibility::Hidden;
-		// focus on Editable-box
-		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-														.ReplicSection[PropertyIndex.iReplicOrResponse].ReplicSectionRepeat_Editable.ToSharedRef());
-		//   Stored Propperty-field we change
-		//changingDialod_Index = PropertyIndex.iDialog;
-		//changingSpeech_Index = PropertyIndex.iSpeech;
-		//changingReplicOrResponse_Index = PropertyIndex.iReplicOrResponse;
-		//changingPropperty = EProppertyToChange::repeatReplic;
-	}*/
-
 	
 	else if (_ProppertyToChange == EProppertyToChange::RepEvent)
 	{
@@ -8357,19 +6427,12 @@ void SDialogWindowWidget::EditProperty(EProppertyToChange _ProppertyToChange, FP
 	{
 
 		if (PropertyIndex.iSpeech == 0) return;
-		//if (PropertyIndex.iDialog == -1) return;
-		//if (PropertyIndex.iSpeech == -1) return;
-		// mark this massive-field as selected
+		
 		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSectionEditNow = true;
-		// rid-off hidded-Button
-		//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ChangeSpeechSectionName_Button->ButtonHitted = EVisibility::Hidden;
-		// focus on Editable-box
+		
 		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
 																							.SpeechSectionName_Editable.ToSharedRef());
-		//   Stored Propperty-field we change
-		//changingDialod_Index = PropertyIndex.iDialog;
-		//changingSpeech_Index = PropertyIndex.iSpeech;
-		//changingPropperty = EProppertyToChange::SpeechName;
+		
 	}
 
 
@@ -8459,25 +6522,8 @@ void SDialogWindowWidget::AddDialogSection(FPropertyIndex PropertyIndex)
 void SDialogWindowWidget::AddSpeechSection(FPropertyIndex PropertyIndex)
 { 
 
-	// -----------   Get free name   --------------
-/*	FName NewSpeechSectionName = FName("DEFAULT");
+	// -----------   Get free name   --------------xxxxxxxxxxxxxx
 
-	for (int32 i_speech = 0; i_speech < DialogSection[PropertyIndex.iDialog].SpeechSection.Num(); i_speech++)
-	{
-		if (DialogSection[PropertyIndex.iDialog].SpeechSection[i_speech].Name == NewSpeechSectionName)
-		{
-			int32 random = FMath::RandRange(1, 100000);
-			FString NewName = FString("NewSpeechName_") + FString::FromInt(random);
-			NewSpeechSectionName = FName(*NewName);
-			i_speech = 0;
-		}
-	}
-
-	//  ---------  form new Massive data  ----------
-	FSpeechSection NewSpeechSection;
-	NewSpeechSection.Name = NewSpeechSectionName;   /////      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxxx  if  not Default
-	//NewSpeechSection.IsSectionOpen = true;
-*/	
 
 	if (ShouldUpdate == EShouldUpdate::none) ShouldUpdate = EShouldUpdate::inSpeech;
 
@@ -8528,9 +6574,7 @@ void SDialogWindowWidget::AddReplicSection(FPropertyIndex PropertyIndex)
 	
 	FReplicSection NewReplicSection;
 	NewReplicSection.ComentTextZoneSizeY = MultiplyTextSize;
-	/*NewReplicSection.RepeatProperty = FName("always");
-	NewReplicSection.IsSectionOpen = true;
-	*/
+
 
 	if (ShouldUpdate == EShouldUpdate::none) ShouldUpdate = EShouldUpdate::inReplic;
 
@@ -8574,9 +6618,7 @@ void SDialogWindowWidget::AddRepSection(FPropertyIndex PropertyIndex)
 	
 	FRepSection NewRepSection;
 	NewRepSection.ComentTextZoneSizeY = MultiplyTextSize;
-	/*//NewRepSection.RepeatProperty = FName("always");
-	NewRepSection.IsSectionOpen = true;
-	*/
+
 
 
 	if (ShouldUpdate == EShouldUpdate::none) ShouldUpdate = EShouldUpdate::inRep;
@@ -8612,9 +6654,6 @@ void SDialogWindowWidget::AddResponseSection(FPropertyIndex PropertyIndex)
 	
 	FResponseSection NewResponseSection;
 	NewResponseSection.ComentTextZoneSizeY = MultiplyTextSize;
-	/*NewResponseSection.RepeatProperty = FName("always");
-	NewResponseSection.IsSectionOpen = true;
-	*/
 
 	if (ShouldUpdate == EShouldUpdate::none) ShouldUpdate = EShouldUpdate::inResponse;
 
@@ -8731,13 +6770,6 @@ void SDialogWindowWidget::AddReplicCondition(FPropertyIndex PropertyIndex)
 
 void SDialogWindowWidget::AddRepCondition(FPropertyIndex PropertyIndex)
 {
-	//FCondition NewCondition;
-	//NewCondition.RepeatProperty = FName("always");
-	//NewCondition.IsSectionOpen = true;
-
-
-	//if (ShouldUpdate == EShouldUpdate::none) ShouldUpdate = EShouldUpdate::inResponse;
-
 
 	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
 		.RepSection[PropertyIndex.iRep].RepCondition.Num() == 0)   // no-one element
@@ -8758,11 +6790,7 @@ void SDialogWindowWidget::AddRepCondition(FPropertyIndex PropertyIndex)
 	}
 
 	UpdateDialogBlock();
-	//if (ShouldUpdate == EShouldUpdate::inResponse)
-	//{
-	//	UpdateDialogBlock();
-	//	ShouldUpdate = EShouldUpdate::none;
-	//}
+
 }
 
 void SDialogWindowWidget::SwitchCollapsedSection(EProppertyToChange _ProppertyToChange, FPropertyIndex PropertyIndex)
@@ -8869,12 +6897,7 @@ void SDialogWindowWidget::SwitchCollapsedSection(EProppertyToChange _ProppertyTo
 
 		}
 	}
-	/*else if (_ProppertyToChange == EProppertyToChange::CollapsedResponseSection)
-	{
-		//bool = !bool
-		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse].IsSectionOpen = !DialogSection[PropertyIndex.iDialog]
-								.SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse].IsSectionOpen;
-	}*/
+
 	else if (_ProppertyToChange == EProppertyToChange::CollapsedReplicSection)
 	{
 		//bool = !bool
@@ -8892,8 +6915,6 @@ void SDialogWindowWidget::SwitchCollapsedSection(EProppertyToChange _ProppertyTo
 				//   draw  "IsUsualMarker"
 				if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
 						.ReplicSection[PropertyIndex.iReplic].RepSection[i_Rep].IsUsualMarker)
-					//!DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-					//	.ReplicSection[PropertyIndex.iReplic].IsSectionOpen)
 				{
 					DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
 										.ReplicSection[PropertyIndex.iReplic].IsUsualMarker = true;
@@ -9347,22 +7368,7 @@ void SDialogWindowWidget::ConfirmCurrentSelection(EProppertyToChange changingPro
 	}
 
 
-
-	//changingDialod_Index = -1;
-	//changingSpeech_Index = -1;
-	//changingReplicOrResponse_Index = -1;
-	//changingRepOrCondition_Index = -1;
-	//changingPropperty = EProppertyToChange::none;
-
 	iCurrentEditableSpeker = -1;   //  Saved SPEKER to aplay ASSET-IMAGE and when editable
-	//changingSpeker_Index = -1;   //  Saved SPEKER to aplay ASSET-IMAGE
-	//...
-	//...
-	//...
-	//...
-	//...
-	//...
-
 }
 
 
@@ -9573,35 +7579,10 @@ EVisibility SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static(EPropper
 							.ResponseSection[PropertyIndex.iResponse].IsSectionEditNow)			return EVisibility::Collapsed;
 		else																							return EVisibility::Visible;
 	}
-	//else if (_ProppertyToChange == EProppertyToChange::repeatReplic)// && changingPropperty == EProppertyToChange::repeatReplic &&
-	//						//_SpeechIndex != -1 && _DialogIndex != -1, _ReplicOrResponseIndex != -1)
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//						.ReplicSection[PropertyIndex.iReplic].IsSectionEditNow)			return EVisibility::Collapsed;
-	//	else																							return EVisibility::Visible;
-	//}
-	//else if (_ProppertyToChange == EProppertyToChange::SpeechName)// &&
-	//						// _SpeechIndex != -1 && _DialogIndex != -1) 
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSectionEditNow)		return EVisibility::Collapsed;
-	//	else																								return EVisibility::Visible;
-	//}
-	//else if (_ProppertyToChange == EProppertyToChange::DialogName)// &&
-	//						// _DialogIndex != -1)
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].IsSectionEditNow)										return EVisibility::Collapsed;
-	//	else																							return EVisibility::Visible;
-	//}
 
 
-	//else if (_ProppertyToChange == EProppertyToChange::speker)
 
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//		.ReplicSection[PropertyIndex.iReplic]
-	//		.RepSection[PropertyIndex.iRep].isSpikerComboBoxEditNow)								return EVisibility::Collapsed;
-	//	else																								return EVisibility::Visible;
-	//}
+
 	else if (_ProppertyToChange == EProppertyToChange::RepEvent)
 	{
 		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
@@ -9743,12 +7724,7 @@ EVisibility SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable(EPropp
 
 
 
-	//else if (_ProppertyToChange == EProppertyToChange::repeatReplic)
-	//{
-	//	if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-	//						.ReplicSection[PropertyIndex.iReplicOrResponse].IsSectionEditNow)				return EVisibility::Visible;
-	//	else																								return EVisibility::Collapsed;
-	//}
+
 	else if (_ProppertyToChange == EProppertyToChange::repeatResponse)
 	{
 		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
@@ -9776,14 +7752,7 @@ EVisibility SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable(EPropp
 
 
 
-	/*else if (_ProppertyToChange == EProppertyToChange::speker)
-												
-	{
-		if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-							.ReplicSection[PropertyIndex.iReplicOrResponse]
-							.RepSection[PropertyIndex.iRep].isSpikerComboBoxEditNow)		return EVisibility::Visible;
-		else																								return EVisibility::Collapsed;
-	}*/
+
 
 	return EVisibility::Visible;
 }
@@ -9926,21 +7895,6 @@ FText SDialogWindowWidget::GetProppertyText(EProppertyToChange _ProppertyToChang
 	}
 
 
-
-
-
-	//////////else if (_ProppertyToChange == EProppertyToChange::repeatResponse)// &&
-	//////////					//PropertyIndex.iSpeech != -1 && PropertyIndex.iDialog != -1 && PropertyIndex.iReplicOrResponse != -1)
-	//////////{
-	//////////	return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iReplicOrResponse].RepeatProperty.ToString());
-	//////////}
-	//else if (_ProppertyToChange == EProppertyToChange::repeatReplic)// && 
-	//					//PropertyIndex.iSpeech != -1 && PropertyIndex.iDialog != -1 && PropertyIndex.iReplicOrResponse != -1)
-	//{
-	//	return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplicOrResponse].RepeatProperty.ToString());
-	//}
-
-
 	else if (_ProppertyToChange == EProppertyToChange::RepEvent)
 	{
 		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
@@ -9956,72 +7910,10 @@ FText SDialogWindowWidget::GetProppertyText(EProppertyToChange _ProppertyToChang
 		return FText::FromString(DialogSection[PropertyIndex.iDialog].Name.ToString());
 	}
 
-	//....................
-	//....................
-	//....................
-	//....................
-	//....................
-
 	return FText::FromString("ERROR");
 }
 
 
-
-
-
-
-/*
-//   ---------------   All "Dialod" subSection set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllSpeechVisible(int32 DialogIndex, bool isVisible)
-{
-
-}
-//   ---------------   All "Speech" subSection-Condition set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllSpeechConditionVisible(int32 SpeechIndex, bool isVisible)
-{
-
-}
-//   ---------------   All "Speech" subSection-Replic set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllReplicVisible(int32 SpeechIndex, bool isVisible)
-{
-
-}
-//   ---------------   All "Speech" subSection-Response set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllResponseVisible(int32 SpeechIndex, bool isVisible)
-{
-
-}
-//   ---------------   All "Replic" subSection-Condition set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllReplicConditionVisible(int32 ReplicIndex, bool isVisible)
-{
-
-}
-
-//   ---------------   All "Replic" subSection-Rep set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllReplicRepVisible(int32 ReplicIndex, bool isVisible)
-{
-
-}
-
-//   ---------------   All "Rep" subSection-Condition set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllRepConditionVisible(int32 RepIndex, bool isVisible)
-{
-
-}
-
-
-//   ---------------   All "Response" subSection-Condition set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllResponseConditionVisible(int32 ResponseIndex, bool isVisible)
-{
-
-}
-
-//   ---------------   All "Response" subSection-Variable set Visible or collapse   ----------------
-void SDialogWindowWidget::SetAllResponseVariableVisible(int32 ResponseIndex, bool isVisible)
-{
-
-}
-*/
 
 
 //        ========================================================================================
@@ -10049,12 +7941,9 @@ void SDialogWindowWidget::RedrawIndicator()
 		.FillHeight(0.01f * VerticalSize)
 		[
 			SNew(SBox)
-			//MaxDesiredWidth(FOptionalSize())
 			.Padding(0)
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
-			//.WidthOverride(5.f * SizeKoef)
-			//.HeightOverride(DialogSectionSize * SizeKoef)
 			[
 				SNew(SButton)
 				.ButtonColorAndOpacity(color)
@@ -10187,8 +8076,6 @@ void SDialogWindowWidget::RedrawIndicator()
 						}
 
 						//   -----------   EditabeText ---------
-						//colorTMP = GetMarkerColor(EProppertyToChange::MarkerReplic, CurrentIndicatorIndex);
-						//IndicatorElement(ReplicMultiplyTextSize);  
 						IndicatorElement(DialogSection[CurrentIndicatorIndex.iDialog].SpeechSection[CurrentIndicatorIndex.iSpeech]
 							.ReplicSection[CurrentIndicatorIndex.iReplic].ComentTextZoneSizeY, ColorInvisible);  //-----------editabeText
 
@@ -10217,8 +8104,6 @@ void SDialogWindowWidget::RedrawIndicator()
 								}
 
 								//   -----------   EditabeText ---------
-								//colorTMP = GetMarkerColor(EProppertyToChange::MarkerRep, CurrentIndicatorIndex);
-								//IndicatorElement(RepMultiplyTextSize);   
 								IndicatorElement(DialogSection[CurrentIndicatorIndex.iDialog].SpeechSection[CurrentIndicatorIndex.iSpeech]
 									.ReplicSection[CurrentIndicatorIndex.iReplic]
 									.RepSection[CurrentIndicatorIndex.iRep].ComentTextZoneSizeY, ColorInvisible);   //-----------editabeText
@@ -10258,8 +8143,6 @@ void SDialogWindowWidget::RedrawIndicator()
 						}
 
 						//   -----------   EditabeText ---------
-						//colorTMP = GetMarkerColor(EProppertyToChange::MarkerResponse, CurrentIndicatorIndex);
-						//IndicatorElement(ResponseMultiplyTextSize); 
 						IndicatorElement(DialogSection[CurrentIndicatorIndex.iDialog].SpeechSection[CurrentIndicatorIndex.iSpeech]
 								.ResponseSection[CurrentIndicatorIndex.iResponse].ComentTextZoneSizeY, ColorInvisible); //-----------editabeText
 					}
@@ -10433,94 +8316,7 @@ FReply SDialogWindowWidget::OnButtonMarkerLink(EProppertyToChange ProppertyToCha
 		}
 
 	}
-/*
-	//  =======================   Set parent-Speech-block marker  ======================= 
 
-	if (PropertyIndex.iDialog != -1 && PropertyIndex.iSpeech != -1 && PropertyIndex.iResponse != -1)
-	{
-		bool HasMarkedChild = false;
-		//DialogSection[PropertyIndex.iDialog].IsUsualMarker = false;
-		//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = false;
-
-		for (int32 i_Response = 0; i_Response < DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-			.ResponseSection.Num(); i_Response++)
-		{
-			if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ResponseSection[i_Response].IsLinkMarker)
-			{
-				//DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-				//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = true;
-				HasMarkedChild = true;
-				break;
-				//RedrawIndicator();
-				//return FReply::Handled();;
-			}
-			else
-			{
-				HasMarkedChild = false;
-			}
-		}
-
-		if (HasMarkedChild)
-		{
-			DialogSection[PropertyIndex.iDialog].IsDestinationMarker = true;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsDestinationMarker = true;
-
-			RedrawIndicator();
-			return FReply::Handled();
-		}
-		else
-		{
-			DialogSection[PropertyIndex.iDialog].IsDestinationMarker =
-				DialogSection[PropertyIndex.iDialog].IsSelfLinkMarker;
-
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsDestinationMarker =
-				DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSelfLinkMarker;
-		}
-	}
-
-	//  =======================   Set parent-Dialog-block marker  =======================
-
-	if (PropertyIndex.iDialog != -1 && PropertyIndex.iSpeech != -1)
-	{
-		bool HasMarkedChild = false;
-		bool HasDestinationMarkedChild = false;
-
-		for (int32 i_Speech = 0; i_Speech < DialogSection[PropertyIndex.iDialog].SpeechSection.Num(); i_Speech++)
-		{
-			if (DialogSection[PropertyIndex.iDialog].SpeechSection[i_Speech].IsSelfLinkMarker)
-			{
-				HasMarkedChild = true;
-				break;
-			}
-			//else if (DialogSection[PropertyIndex.iDialog].SpeechSection[i_Speech].IsDestinationMarker)
-			//{
-			//	HasDestinationMarkedChild = true;
-			//}
-			else
-			{
-				HasMarkedChild = false;
-				HasDestinationMarkedChild = false;
-			}
-		}
-		if (HasMarkedChild)
-		{
-			DialogSection[PropertyIndex.iDialog].IsLinkMarker = true;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsLinkMarker = true;
-		}
-		//else if (HasDestinationMarkedChild)
-		//{
-		//	DialogSection[PropertyIndex.iDialog].IsLinkMarker = true;
-		//}
-		else
-		{
-			DialogSection[PropertyIndex.iDialog].IsLinkMarker =
-				DialogSection[PropertyIndex.iDialog].IsSelfLinkMarker;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsLinkMarker =
-				DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSelfLinkMarker;
-		}
-	}
-*/
 
 	RedrawIndicator();
 
@@ -10542,32 +8338,17 @@ FReply SDialogWindowWidget::OnButtonMarkerUsual(const FGeometry& Geomet, const F
 	
 	if (ProppertyToChange == EProppertyToChange::MarkerDialog)
 	{
-		//if (DialogSection[PropertyIndex.iDialog].IsLinkMarker)
-		//{
-		//	DialogSection[PropertyIndex.iDialog].IsSelfUsualMarker = false;
-		//}
-		//else
-		//{
+
 			DialogSection[PropertyIndex.iDialog].IsSelfUsualMarker = !DialogSection[PropertyIndex.iDialog].IsSelfUsualMarker;
 			DialogSection[PropertyIndex.iDialog].IsUsualMarker = !DialogSection[PropertyIndex.iDialog].IsUsualMarker;
 		//}
 	}
 	else if (ProppertyToChange == EProppertyToChange::MarkerSpeech)
 	{
-		//  Coloring self
-		//if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsLinkMarker)
-		//{
-		//	DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsLinkMarker = false;
-
-		//	//HasChildrenMarker
-		//}
-		//else
-		//{
 			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSelfUsualMarker =
 				!DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSelfUsualMarker;
 			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker =
 				!DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker;
-		//}
 	}
 	else if (ProppertyToChange == EProppertyToChange::MarkerReplic)
 	{
@@ -10589,182 +8370,17 @@ FReply SDialogWindowWidget::OnButtonMarkerUsual(const FGeometry& Geomet, const F
 	}
 	else if (ProppertyToChange == EProppertyToChange::MarkerResponse)
 	{
-		//if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-		//	.ResponseSection[PropertyIndex.iResponse].IsLinkMarker)
-		//{
-		//	DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-		//		.ResponseSection[PropertyIndex.iResponse].IsLinkMarker = false;
-		//}
-		//else
-		//{
+
 			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
 				.ResponseSection[PropertyIndex.iResponse].IsUsualMarker =
 				!DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
 				.ResponseSection[PropertyIndex.iResponse].IsUsualMarker;
-		//}
 	}
-
-
-
-/*
-
-	//-----------------------------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//----------           Dont draw PARENT blocks          -----------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//-----------------------------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//  Coloring parent-Replic block
-	if (PropertyIndex.iDialog != -1 && PropertyIndex.iSpeech != -1 && PropertyIndex.iReplic != -1)
-	{
-		bool HasMarkedChild = false;
-		//DialogSection[PropertyIndex.iDialog].IsUsualMarker = false;
-		//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = false;
-		//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-		//				.ReplicSection[PropertyIndex.iReplic].IsUsualMarker = false;
-		for (int32 i_Rep = 0; i_Rep < DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-									.ReplicSection[PropertyIndex.iReplic].RepSection.Num(); i_Rep++)
-		{
-			if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-							.ReplicSection[PropertyIndex.iReplic].RepSection[i_Rep].IsUsualMarker)
-			{
-				//DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-				//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = true;
-				//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				//				.ReplicSection[PropertyIndex.iReplic].IsUsualMarker = true;
-				HasMarkedChild = true;
-				break;
-				//RedrawIndicator();
-				//return FReply::Handled();;
-			}
-			else
-			{
-				HasMarkedChild = false;
-			}
-		}
-		if (HasMarkedChild)
-		{
-			DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = true;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-							.ReplicSection[PropertyIndex.iReplic].IsUsualMarker = true;
-
-			RedrawIndicator();
-			return FReply::Handled();
-		}
-		else
-		{
-			DialogSection[PropertyIndex.iDialog].IsUsualMarker = 
-				DialogSection[PropertyIndex.iDialog].IsSelfUsualMarker;
-
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker =
-				DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSelfUsualMarker;
-
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ReplicSection[PropertyIndex.iReplic].IsUsualMarker =
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ReplicSection[PropertyIndex.iReplic].IsSelfUsualMarker;
-		}
-
-	}
-	//  Coloring parent-Speech block
-	if (PropertyIndex.iDialog != -1 && PropertyIndex.iSpeech != -1)
-	{
-		bool HasMarkedChild = false;
-		//DialogSection[PropertyIndex.iDialog].IsUsualMarker = false;
-		//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = false;
-		for (int32 i_Replic = 0; i_Replic < DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-																				.ReplicSection.Num(); i_Replic++)
-		{
-			if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-													.ReplicSection[i_Replic].IsUsualMarker)
-			{
-				//DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-				//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = true;
-				HasMarkedChild = true;
-				break;
-				//RedrawIndicator();
-				//return FReply::Handled();;
-			}
-			else
-			{
-				HasMarkedChild = false;
-			}
-		}
-		if (!HasMarkedChild)
-		{
-			for (int32 i_Response = 0; i_Response < DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ResponseSection.Num(); i_Response++)
-			{
-				if (DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-					.ResponseSection[i_Response].IsUsualMarker)
-				{
-					//DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-					//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = true;
-					HasMarkedChild = true;
-					break;
-					//RedrawIndicator();
-					//return FReply::Handled();;
-				}
-				else
-				{
-					HasMarkedChild = false;
-				}
-			}
-		}
-		if (HasMarkedChild)
-		{
-			DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker = true;
-
-			RedrawIndicator();
-			return FReply::Handled();
-		}
-		else
-		{
-			DialogSection[PropertyIndex.iDialog].IsUsualMarker =
-				DialogSection[PropertyIndex.iDialog].IsSelfUsualMarker;
-
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsUsualMarker =
-				DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSelfUsualMarker;
-		}
-	}
-	//  Coloring parent-Dialog block
-	if (PropertyIndex.iDialog != -1)
-	{
-		bool HasMarkedChild = false;
-		//DialogSection[PropertyIndex.iDialog].IsUsualMarker = false;
-		for (int32 i_Speech = 0; i_Speech < DialogSection[PropertyIndex.iDialog].SpeechSection.Num(); i_Speech++)
-		{
-			if (DialogSection[PropertyIndex.iDialog].SpeechSection[i_Speech].IsUsualMarker)
-			{
-				//DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-				HasMarkedChild = true;
-				break;
-				//RedrawIndicator();
-				//return FReply::Handled();;
-			}
-			else
-			{
-				HasMarkedChild = false;
-			}
-		}
-		if (HasMarkedChild)
-		{
-			DialogSection[PropertyIndex.iDialog].IsUsualMarker = true;
-		}
-		else
-		{
-			DialogSection[PropertyIndex.iDialog].IsUsualMarker =
-				DialogSection[PropertyIndex.iDialog].IsSelfUsualMarker;
-		}
-	}
-	
-*/
 
 	RedrawIndicator();
 
 	return FReply::Handled();
 
-	//DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse]
-	//.VariableSection[PropertyIndex.iResponseVariable].VariableName
 }
 
 //        ============================   Marker   END   ================================
@@ -10878,7 +8494,7 @@ float SDialogWindowWidget::GetContentBlockIndex(int32& _iDialodSection, int32& _
 					return Size;
 				}
 
-				_SpeechSectionSize += SpeechSectionSize * SizeKoef;//jjjjjjjjjjjjjjjjjjjjj
+				_SpeechSectionSize += SpeechSectionSize * SizeKoef;
 
 				//  --------------   Speech Condition  -------------
 				if (DialogSection[i_Dlg].SpeechSection[i_Speech].IsConditionOpen)
@@ -10992,7 +8608,7 @@ float SDialogWindowWidget::GetContentBlockIndex(int32& _iDialodSection, int32& _
 				{
 					float CurrContentsSize = GetCurrContentsSize(i_Dlg, i_Speech);
 
-					UE_LOG(LogTemp, Warning, TEXT("SSSSSSSSSSSSSSSSSSSSSSSSS    %f"), CurrContentsSize);
+					//UE_LOG(LogTemp, Warning, TEXT("SSSSSSSSSSSSSSSSSSSSSSSSS    %f"), CurrContentsSize);
 
 					return CurrContentsSize;
 				}
@@ -11001,48 +8617,9 @@ float SDialogWindowWidget::GetContentBlockIndex(int32& _iDialodSection, int32& _
 
 	}
 
-
-
-
-	//for (int32 i_Dlg = 0; i_Dlg < DialogSection.Num(); i_Dlg++)
-	//{
-	//	//  Calculate offset
-		//if (!DialogSection[i_Dlg].IsSectionOpen)
-		//{
-		//	newScrollOffset += DialogSectionSize;
-		//}
-		//else
-		//{
-		//	for (int32 i_Speech = 0; i_Speech < DialogSection[i_Dlg].SpeechSection.Num(); i_Speech++)
-		//	{
-		//		if (!DialogSection[i_Dlg].SpeechSection[i_Speech].IsSectionOpen)
-		//		{
-		//			newScrollOffset += SpeechSectionSize;
-		//		}
-
-		//		if (DialogSection[i_Dlg].name.ToString().Contains(DialodName) &&
-		//			DialogSection[i_Dlg].SpeechSection[i_Speech].name.ToString().Contains(SpeechName))
-		//		{
-
-		//		}
-		//	}
-		//}
-	//}
 	return -1;
 }
-/*
-FReply SDialogWindowWidget::ScrollToContentBlock(int32 iDialog, int32 iSpeech)
-{
-	//for (int32 i_Dlg = 0; i_Dlg < DialogSection.Num(); i_Dlg++)
-	//{
-	//	for (int32 i_Speech = 0; i_Speech < DialogSection[i_Dlg].SpeechSection.Num(); i_Speech++)
-	//	{
-			//MainContentPanelBlock->SetScrollOffset(300.f);
-	//	}
-	//}
-	return FReply::Handled();
-}
-*/
+
 
 
 void SDialogWindowWidget::OnEditableTextChange_ContentFinding(const FText& _Text, FName Type)  // "dialog"  ,   "speech"
@@ -11068,62 +8645,11 @@ void SDialogWindowWidget::ConfirmEditableTextBox(const FText& Text, ETextCommit:
 {
 	//UE_LOG(LogTemp, Warning, TEXT("SEditableTextBox = '%i'"), a);  // EditableText1.GetText()
 
-	//if (MlEditableText2->HasKeyboardFocus())
-		//UE_LOG(LogTemp, Warning, TEXT("SEditableTextBox = '%s'"), *(Text.ToString()));  // EditableText1.GetText()
-	//if (EditableText1->HasKeyboardFocus())
-		//UE_LOG(LogTemp, Warning, TEXT("SEditableTextBox = '%s'"), *(Text.ToString()));  // EditableText1.GetText()
-
-
-	//UE_LOG(LogTemp, Warning, TEXT("SEditableTextBox = '%s'"), *(Text.ToString()));  // EditableText1.GetText()
-
-
 	ConfirmCurrentSelection(ProppertyToChange, PropertyIndex);
 
-	//  TEST
-	//DialogSection;
-	//Speker;
+
 }
 
-
-
-
-
-/*
-	if (ProppertyToChange == EProppertyToChange::replicComent)
-	{
-		if (EditableChangedText != FString(""))
-		{
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ReplicSection[PropertyIndex.iReplic].ComentText = EditableChangedText;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ReplicSection[PropertyIndex.iReplic].ComentTextZoneSizeY = MultiplyEditableTextZoneSize;
-			EditableChangedText = FString("");
-
-			//UE_LOG(LogTemp, Warning, TEXT("replic-------: = '%s'"), *DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic].ComentText);
-		}
-	}
-	if (ProppertyToChange == EProppertyToChange::repComent)
-	{
-		if (EditableChangedText != FString(""))
-		{
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep].ComentText = EditableChangedText;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep].ComentTextZoneSizeY = MultiplyEditableTextZoneSize;
-			EditableChangedText = FString("");
-		}
-	}
-	if (ProppertyToChange == EProppertyToChange::responseComent)
-	{
-		if (EditableChangedText != FString(""))
-		{
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ResponseSection[PropertyIndex.iResponse].ComentText = EditableChangedText;
-			DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
-				.ResponseSection[PropertyIndex.iResponse].ComentTextZoneSizeY = MultiplyEditableTextZoneSize;
-			EditableChangedText = FString("");
-		}
-*/
 
 
 
@@ -11137,19 +8663,9 @@ void SDialogWindowWidget::ConfirmEditableTextBox(const FText& Text, ETextCommit:
 
 
 
-
-
-
-
-
-//   ================================================================================================================================================================
 //   ================================================================================================================================================================
 //   ===============================               COMBO-Box Using        "ReplicRepeat"   "ResponseRepeat"      ======================================================
 //   ================================================================================================================================================================
-//   ================================================================================================================================================================
-
-
-
 void SDialogWindowWidget::GetReplicRepeatComboList(TSharedPtr<FString> NewSelection, ESelectInfo::Type SelectInfo, FPropertyIndex PropertyIndex)
 {	
 	DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic].ReplicRepeatPropperty = NewSelection;
@@ -11213,23 +8729,13 @@ void SDialogWindowWidget::InitComboBox_StaticList()
 	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("click"))));
 	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("click_back"))));
 	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("click_noreplic"))));
-	//ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("CDO (click_default_once)"))));
-	//ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("CDR (click_default_return)"))));
-	//ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("CDN (click_default_noreplic)"))));
+
 	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("pass"))));
 	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("pass_back"))));
 	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("pass_noreplic"))));
-	//ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("PDO (pass_default_once)"))));
-	//ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("PDR (pass_default_return)"))));
-	//ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("PDN (pass_default_noreplic)"))));
-	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("EXT (exit)"))));
 
-	//SoundList.Add(MakeShareable(new FString(TEXT("1"))));
-	//SoundList.Add(MakeShareable(new FString(TEXT("2"))));
-	//SoundList.Add(MakeShareable(new FString(TEXT("3"))));
-	//SoundListComboBox->RefreshOptions();
-	//SoundListComboBox->SetSelectedItem(SpikersList[0]);
-	//CurrentItem = SpikersList[0];  
+	ResponseReturnTypeComboList.Add(MakeShareable(new FString(TEXT("EXT (exit)"))));
+ 
 }
 
 
@@ -11244,7 +8750,7 @@ void SDialogWindowWidget::InitComboBox_StaticList()
 
 
 //  ===========================================================================================
-//  ================================     Shared   SSpinBox    ================================
+//  ================================       SSpinBox    ================================
 //  ===========================================================================================
 
 void SDialogWindowWidget::SetTimeValue(float value, ETextCommit::Type _Type, EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex)
@@ -11333,7 +8839,7 @@ void SDialogWindowWidget::SaveDialogToXML()
 			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
 			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
 			//  XXXXXXXX       Check on ERROR
-					FString IsStrError = FString("ok");   //  error
+					FString IsStrError = FString("ok");   //         not jet
 			//  XXXXXXXX
 			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
 			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
@@ -11609,10 +9115,6 @@ void SDialogWindowWidget::LoadDialogFromXML()
 	//UE_LOG(LogTemp, Warning, TEXT("PathToCurrentXML = '%s'"), *(*PathToCurrentXML));
 	if (*PathToCurrentXML == FString("none"))
 	{
-		//FPropertyIndex PropertyIndex;
-		//PropertyIndex.iDialog = 0;
-		//AddDialogSection(PropertyIndex);
-		//UpdateDialogBlock();
 		return;
 	}
 
@@ -11624,58 +9126,11 @@ void SDialogWindowWidget::LoadDialogFromXML()
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 
 
-	////  ------- Load .xml as String  -------  
-	//FString XmlContentString;
-	//if (!PlatformFile.FileExists(**PathToCurrentXML)) return;
-	//FFileHelper::LoadFileToString(XmlContentString, **PathToCurrentXML);
-
-
 	
-	////  Get xmlString as pugi::xml
-	//+++++++++++++++pugi::xml_document xmlDoc;
-	//std::wstring source_W = TCHAR_TO_ANSI(*XmlContentString);
-	//++++++++++++++std::string source = (TCHAR_TO_UTF8(*XmlContentString));
-	//std::wstring source_W = std::wstring_convert("ПППППЛЛЛЛЛЛЛЛЛЛ");
-//////////	std::wstring source_W = pugi::as_wide(source.c_str());
-	//std::wstring source_W = pugi::as_wide(source.c_str());
-	//std::wstring source_W = (TCHAR*)StringCast<TCHAR>(static_cast<const ANSICHAR*>(source.c_str())).Get();
-	//+77+std::wstring source_W = std::wstring(source.begin(), source.end());
-	//FString TTTST(source_W.c_str());
-	//UE_LOG(LogTemp, Warning, TEXT("RootNode = '%s'"), *TTTST);
-	//-----------std::wstring source_W = "ППППППППППППЛЛЛЛЛЛЛЛЛЛЛЛЛЛЛЛ";
-	//++std::ifstream stream(source_W.c_str());
-	//++xmlDoc.load(stream);
-	//xmlDoc.load((TCHAR*)StringCast<TCHAR>(static_cast<const ANSICHAR*>(source.c_str())).Get());
-	//+77+std::ifstream stream(source.c_str());
-	//+77+xmlDoc.load(stream);
-	//xmlDoc.load(source.c_str());
-	//pugi::xml_parse_result parse_res = xmlDoc.load_file(TCHAR_TO_ANSI(*PathToFile));   //++
-	//pugi::xml_parse_result parse_res = xmlDoc.load_file(StringCast<ANSICHAR>(**PathToCurrentXML).Get());  //+++++
-	//std::wstring source = pugi::as_wide("aaaaaaaa");
-
-	//std::wstring STD_W_str = pugi::as_wide("ПППППППППЛЛЛЛЛЛЛ");
-	//std::string aaa = ("ППППППП");
-	//std::wstring aaaW = pugi::as_wide(aaa.c_str());
-
-	//std::string text = "ПРОЛД";
-	//std::wstring text_wstring11 = pugi::as_wide(text.c_str());
-
-	//std::wstring aaaW = "name";
-	//pugi::char_t aaaW = "name";
-	//  Get Root Node
-	//pugi::xml_node RootNode = xmlDoc.child(aaaW.c_str());
-//	pugi::xml_node RootNode = xmlDoc.child(L"name");
-	//std::string RootNodeStr(RootNode.attribute("name").as_string());
-
-
-
-
 
 	// ------  FileLoadingContent  -----------
-	//std::string source = (TCHAR_TO_UTF8(*XmlContentString));
 	pugi::xml_document xmlDoc;
-	//xmlDoc.load(source.c_str());
-	//pugi::xml_parse_result parse_Res = xmlDoc.load_file(TCHAR_TO_ANSI(*PathToCurrentXML));   //++
+	
 	pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(**PathToCurrentXML).Get());  //+++++
 
 	pugi::xml_node RootNode = xmlDoc.child("name");
@@ -11997,9 +9452,6 @@ void SDialogWindowWidget::LoadDialogFromXML()
 
 
 
-
-
-
 //  ===============================================================================================================================
 //  ===============================================================================================================================
 //  ===============================================================================================================================
@@ -12025,12 +9477,6 @@ void SDialogWindowWidget::SaveVariablesToXML()
 		}
 	}
 
-
-
-	//FString SaveDirectory = FPaths::ProjectContentDir();
-	//FString FileName = FString("Spekers.xml");
-
-
 	// Create .XML,  save "Speker"
 	FString ContentToSave = FString("<local_variables>\n");
 
@@ -12042,32 +9488,17 @@ void SDialogWindowWidget::SaveVariablesToXML()
 			Variables[i].VariableValue.ToString() +
 			FString("\"/>") +
 			FString("\n");
-		//ContentToSave += SpekersAssetPath;
 
-
-		//
-		// Save audioFile
-		//
-		//
-
-		//ContentToSave += FString("\t</variable>") + FString("\n");
 	}
 
 	ContentToSave += FString("</local_variables>");
 
 	// Get file path
 	FString FilePath = DialogXmlContentPath + "/LVariables.xml";
-	// file doesn't already exist
-	//if (!PlatformFile.FileExists(*FilePath))
-	//{
+
 		// save string to file
 	FFileHelper::SaveStringToFile(ContentToSave, *FilePath);
-	//}
-	//if (!PlatformFile.FileExists(*FilePath)) {
-	//	// read file to string
-	//	FFileHelper::LoadFileToString(TextToSave,
-	//		*FilePath);
-	//}
+
 }
 
 void SDialogWindowWidget::LoadVariablesFromXML()
@@ -12078,7 +9509,6 @@ void SDialogWindowWidget::LoadVariablesFromXML()
 	if (!PlatformFile.FileExists(*DialogXmlContentPath))
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, DialogXmlContentPath);
-		//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, FString("Not EXIST"));
 		return;
 	}
 
@@ -12136,10 +9566,7 @@ void SDialogWindowWidget::LoadVariablesFromXML()
 
 void SDialogWindowWidget::AddVariable(FPropertyIndex PropertyIndex)
 {
-	//	if (Variables.Num() == 0)   // no-one element
-	//	{
-	//		Variables.Add(FVariables());
-	//	}
+
 	if (PropertyIndex.iVariable == Variables.Num() - 1)  // if it's last element
 	{
 		Variables.Add(FVariables());
@@ -12172,9 +9599,6 @@ void SDialogWindowWidget::RedrawVariablesBlock()
 	{
 		CurrentPropertyIndex.iVariable = i_Var;
 
-		//GetChildren()->GetChildAt()
-		//RemoveSlot()
-		//ClearChildren()
 		MainVariablesPanelBlock->AddSlot()
 		.Padding(0.f)
 		.HAlign(HAlign_Fill)
@@ -12824,10 +10248,6 @@ void SDialogWindowWidget::RedrawSoundsBlock(int32 iSpeker)
 							.Padding(FMargin(0,0,0,0))
 							.HAlign(HAlign_Left)
 							.VAlign(VAlign_Center)
-							//.HeightOverride(15.f)
-							//.WidthOverride(15.f)
-							//.MaxDesiredWidth(64.f)
-							//.MaxDesiredHeight(64.f)
 							[
 								//SNew(STextBlock).Text(FText::FromString("dd"))
 								SNew(STextBlock)
@@ -12878,8 +10298,6 @@ FSlateColor SDialogWindowWidget::GetSelectedSoundItem_Color(int32 iSpeker, int32
 
 FReply SDialogWindowWidget::ShowSpekerSoundItem(int32 iSpeker, int32 iSound)
 {
-	//changingSpeker_Index = iSpeker;
-	//changingSpekerSound_Index = iSound;
 	iCurrentEditableSpeker = iSpeker;
 	iCurrentEditableSound = iSound;
 	vMainSpikersEditablePanel_FindImage = EVisibility::Collapsed;
@@ -12913,8 +10331,6 @@ FReply SDialogWindowWidget::ShowSpekerSoundItem(int32 iSpeker, int32 iSound)
 				.AutoHeight()
 				[
 					SNew(SEditableTextBox)
-					//.Style(&FCoreStyle::Get().GetWidgetStyle< FEditableTextBoxStyle >("ComboBox"))
-					//.Style(&FCoreStyle::Get().GetWidgetStyle< FEditableTextBoxStyle >("NormalEditableTextBox"))
 					.BackgroundColor(FLinearColor(1, 1, 1, 0))
 					.ForegroundColor(FLinearColor(0.7f, 0.77f, 1.f, 1))
 					.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 16 * SizeKoef))
@@ -12942,8 +10358,6 @@ FReply SDialogWindowWidget::ShowSpekerSoundItem(int32 iSpeker, int32 iSound)
 				.AutoHeight()
 				[
 					SNew(SMultiLineEditableTextBox)
-					//.Style(&FCoreStyle::Get().GetWidgetStyle< FEditableTextBoxStyle >("ComboBox"))
-					//.Style(&FCoreStyle::Get().GetWidgetStyle< FEditableTextBoxStyle >("NormalEditableTextBox"))
 					.BackgroundColor(FLinearColor(1, 1, 1, 0))
 					.ForegroundColor(FLinearColor(0.7f, 0.77f, 1.f, 1))
 					.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 16 * SizeKoef))
@@ -13122,16 +10536,10 @@ void SDialogWindowWidget::RedrawSpekerSoundFindingItem(int32 iSpeker, int32 iSou
 			.ButtonColorAndOpacity(FLinearColor(1, 1, 1, 0))
 			.OnClicked(this, &SDialogWindowWidget::ApplaySaundToSpekerSound, iSpeker, iSound, AssetPathSortByName[i])
 			[
-				/*SNew(SHorizontalBox)
-
-				+ SHorizontalBox::Slot()
-				[*/
 					SNew(STextBlock)
 					.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 					.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 					.Text(FText::FromString(AssetPathName[AssetPathSortByName[i]]))
-					//SNew(STextBlock).Text(FText::FromString("AAAAAAAAAAAAAAAAAAAAAAa"))
-				//]
 			]
 
 		];
@@ -13195,28 +10603,7 @@ void SDialogWindowWidget::SpekerSoundCommentEditableTextBox(const FText& Text, E
 //  ===========================================================================================================================================================
 
 
-//FReply SDialogWindowWidget::AddSpekersElenemt()
-//{
-//
-//	FSpekers SpekerTEMP;
-//	SpekerTEMP.SpekersImageBrush = *SpekersImageDefault;
-//	SpekerTEMP.SpekersAssetPath = "Default Image";
-//	//SpekerTEMP.NeedRedraw = true;
-//
-//	Speker.Add(SpekerTEMP);
-//
-//	
-//	iCurrentEditableSpeker = -1;
-//	iCurrentEditableSound = -1;
-//	vMainSpikersEditablePanel_FindImage = EVisibility::Collapsed;
-//	vMainSpikersEditablePanel_FindSound = EVisibility::Collapsed;
-//	MainSpikersEditablePanelBlock->ClearChildren();   //  CLear Speker-EditablePanel
-//
-//	RedrawSpekersBlock();
-//
-//
-//	return FReply::Handled();
-//}
+
 
 
 
@@ -13490,10 +10877,6 @@ void SDialogWindowWidget::SaveSpekersToXML()
 		}
 	}
 
-
-
-	//FString SaveDirectory = FPaths::ProjectContentDir();
-	//FString FileName = FString("Spekers.xml");
 	
 
 	// -------- Create .XML,  save "Speker" ---------
@@ -13521,17 +10904,9 @@ void SDialogWindowWidget::SaveSpekersToXML()
 
 	// Get file path
 	FString FilePath = DialogXmlContentPath + "/Spekers.xml";
-	// file doesn't already exist
-	//if (!PlatformFile.FileExists(*FilePath))
-	//{
-		// save string to file
+
 		FFileHelper::SaveStringToFile(ContentToSave, *FilePath);
-	//}
-	//if (!PlatformFile.FileExists(*FilePath)) {
-	//	// read file to string
-	//	FFileHelper::LoadFileToString(TextToSave,
-	//		*FilePath);
-	//}
+
 }
  
 
@@ -13567,11 +10942,6 @@ FReply SDialogWindowWidget::ChangeSpekerImage(int32 _index)
 		{
 			AssetImagePath.Add(AssetData[i].GetFullName());
 			AssetImageBrush.Add(UWidgetBlueprintLibrary::MakeBrushFromTexture(FoundTexture2D, 64, 64));
-			//FSpekers SpekerTEMP;
-			//SpekerTEMP.SpekersAssetPath.Add(AssetData[i].GetFullName());
-			//SpekerTEMP.SpekersAssetPath.RemoveFromStart("Texture2D ");
-			//Speker.Add(SpekerTEMP);
-
 
 			// ----- get only Name in FullPathStr  -----
 			int32 CutStartTMP = AssetImagePath.Last().Find(FString("/"), ESearchCase::Type::CaseSensitive, ESearchDir::Type::FromEnd);
@@ -13597,9 +10967,7 @@ void SDialogWindowWidget::RedrawSpekerImageFindingItem(int32 iSpeker, int32 iSou
 	for (int32 i = 0; i < AssetPathSortByName.Num(); i++)
 	{
 		if (AssetPathSortByName[i] < 0 || AssetPathSortByName[i] > AssetPathName.Num() - 1) continue;
-		//if (!IsStartFinding) return;  //+++++++++++++
-	//for (int32 i = 0; i < AssetImageBrush.Num(); i++)
-	//{
+
 		MainSpikersEditablePanelBlock->AddSlot()
 			.Padding(GetPadding(6.f, 6.f, 6.f, 6.f))
 			.HAlign(HAlign_Fill)
@@ -13816,9 +11184,7 @@ void SDialogWindowWidget::RedrawSpekersBlock()
 											SNew(SBox)
 											//+++++++.MinDesiredWidth(100.f)
 											.HAlign(HAlign_Left)
-											.VAlign(VAlign_Fill)
-											//.WidthOverride(50.f)
-											//.HeightOverride(20.f)
+
 											[
 												//  ===========================  SPEKER-Name EditableText  ================================
 												SAssignNew(Speker[i].SpekerName_Editable, SEditableTextBox)
@@ -14567,202 +11933,12 @@ FMargin SDialogWindowWidget::GetPadding(float left, float Up, float Right, float
 	return FMargin(left * SizeKoef, Up * SizeKoef, Right * SizeKoef, Bottom * SizeKoef);
 }
 
-/*
-FReply SDialogWindowWidget::OnClickStacklessAnchor(TSharedPtr<SMenuAnchor> ClickedAnchor)
-{
-
-	LoadSpekersfromXML();
-
-	ClickedAnchor->SetIsOpen(!ClickedAnchor->IsOpen());
-	isHelperMenuOpen = true;
-	
-	return FReply::Handled();
-}
-*/
 
 
 
 
-/*
-//TSharedRef<SWidget> SDialogWindowWidget::MakeAnchorMenuContent(FString ContentLabel) const
-TSharedRef<SWidget> SDialogWindowWidget::MakeAnchorMenuContent(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex) const
-{
 
 
-	
-
-	//Speker;
-
-
-	StacklessAnchorPanelList->ClearChildren();
-
-
-
-	TArray<FString> ListStr;
-
-
-	
-	
-
-
-
-
-	for (int32 i_list = 0; i_list < 5; i_list++)
-	{
-		
-		if (ProppertyToChange == EProppertyToChange::speker)
-		{
-			ListStr.Add(FString("1111111111111111111"));
-		}
-		if (ProppertyToChange == EProppertyToChange::sound)
-		{
-			ListStr.Add(FString("2222222222222222222"));
-		}
-
-		//GetChildren()->GetChildAt()
-		//RemoveSlot()
-		//ClearChildren()
-		StacklessAnchorPanelList->AddSlot()
-			.Padding(50.f)
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			//--.AutoHeight()
-			[
-					SNew(SBox)
-					.Padding(FMargin(1, 1, 1, 1))
-					.MaxDesiredWidth(200.f)
-					//.MinDesiredHeight(30.f)
-					//.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					//.WidthOverride(20.f)
-					//.HeightOverride(30.f)
-					[
-						SNew(STextBlock)
-						.Text(FText::FromString(FString("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111112222222222222222222222222222222222222222222222222222333333333333333333333333333333333333333333333333333333333333333344444444444444444444444444444444444444444444444445555555555555555555555555555555555555555555555555566666666666666666666666666666666666666666666666666666777777777777777777777777777777777777777777777777777888888888888888888888888888888888888888888888888888888888899999999999999999999999999999999999999999999999999")))
-
-					]
-			];
-	}
-
-
-	const TSharedPtr<SScrollBox> StacklessAnchorPanelList111 = StacklessAnchorPanelList;
-
-
-	const TSharedPtr<SBorder> bbb;
-
-		//		SAssignNew(bbb, SBorder)
-		return 	SNew(SBorder)
-			 	//SNew(SBorder)
-				.HAlign(HAlign_Fill)
-				.VAlign(VAlign_Fill)
-				.BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-				.BorderBackgroundColor(FLinearColor(0.0f, 0.0f, 0.0f, 1.0f))
-				.Padding(2)
-				[
-					SNew(SBorder)
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					.BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-					.BorderBackgroundColor(FLinearColor(0.5f, 0.5f, 0.5f, 1.0f))
-					[
-
-						SNew(SBox)
-						.Padding(FMargin(4, 3, 4, 3))
-						.MaxDesiredHeight(700.f)
-						.MinDesiredHeight(40.f)
-						.HAlign(HAlign_Fill)
-						.VAlign(VAlign_Fill)
-						//.WidthOverride(20.f)
-						//.HeightOverride(40.f)
-						[
-							SNew(SVerticalBox)
-
-							+ SVerticalBox::Slot()
-							.Padding(3)
-							.HAlign(HAlign_Fill)
-							.VAlign(VAlign_Top)
-							.AutoHeight()
-							[
-								SNew(SBox)
-								.Padding(FMargin(1, 1, 1, 1))
-								.MaxDesiredHeight(30)
-								.MinDesiredHeight(30.f)
-								.HAlign(HAlign_Fill)
-								.VAlign(VAlign_Top)
-								//.WidthOverride(20.f)
-								//.HeightOverride(30.f)
-								[
-									SNew(SEditableTextBox)
-									//.HAlign(HAlign_Fill)
-									//.VAlign(VAlign_Fill)
-								]
-							]
-							+ SVerticalBox::Slot()
-							.Padding(3).HAlign(HAlign_Fill)
-							.VAlign(VAlign_Fill)
-							[
-
-							 
-
-								//SAssignNew(StacklessAnchorPanelList, SScrollBox)
-								//SNew(SScrollBox)
-								//SAssignNew(MainSpikersEditablePanelBlock, SScrollBox)
-
-
-
-								SNew(SScrollBox)
-								
-
-								+SScrollBox::Slot().Padding(10)
-								[
-									SNew(SBox)
-									.Padding(FMargin(1, 1, 1, 1))
-									.MaxDesiredWidth(200.f)
-									//.MinDesiredHeight(30.f)
-									//.HAlign(HAlign_Fill)
-									.VAlign(VAlign_Fill)
-									//.WidthOverride(20.f)
-									//.HeightOverride(30.f)
-									[
-										SNew(STextBlock)
-										.Text(FText::FromString(FString("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111112222222222222222222222222222222222222222222222222222333333333333333333333333333333333333333333333333333333333333333344444444444444444444444444444444444444444444444445555555555555555555555555555555555555555555555555566666666666666666666666666666666666666666666666666666777777777777777777777777777777777777777777777777777888888888888888888888888888888888888888888888888888888888899999999999999999999999999999999999999999999999999")))
-							
-									]
-								]
-								
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-
-								+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("222222222222")))]
-
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-									+ SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("fffffffffffffff")))]
-	
-								+SScrollBox::Slot().Padding(10)[SNew(STextBlock).Text(FText::FromString(FString("3333333333333333333333333333")))]
-
-							]
-						]
-					]
-
-			];
-
-			//return 	SNew(SBorder);
-	}
-*/
 //  =========================================================================================================
 //  =========================================================================================================
 //  ==================================    Helper Panel     (Finish)    =====================================
@@ -14774,13 +11950,3 @@ TSharedRef<SWidget> SDialogWindowWidget::MakeAnchorMenuContent(EProppertyToChang
 
 
 
-
-
-FReply SDialogWindowWidget::SSS()
-{
-	UE_LOG(LogTemp, Warning, TEXT("SSSSSSSSSSSSSSSSSSSSSSSSS"));
-
-	MainContentPanelBlock->SetScrollOffset(300.f);
-
-	return FReply::Handled();
-}
