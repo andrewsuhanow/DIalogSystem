@@ -88,8 +88,26 @@ void ADLG_GlobalActor::DLG_InitLocalVariables()
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	if (!PlatformFile.FileExists(*LVariableXmlPath)) return;
 
-	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
-	if (!parse_VariablesRes) return;
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//   ----------------  Parse XML in Pakage to string  ----------------------
+	FString str_LocalVariablesContent;
+	FFileHelper::LoadFileToString(str_LocalVariablesContent, *LVariableXmlPath);
+	std::string std_LocalVariablesContent = (TCHAR_TO_UTF8(*str_LocalVariablesContent));
+	//  -----------------  Load string as pugi   -------------------------------
+	pugi::xml_parse_result parse_Res = xmlVariables.load(std_LocalVariablesContent.c_str());
+	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
+	if (!parse_Res)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("can't parse  %s   ERROR"), *str_LocalVariablesContent);
+		return;
+	}
+
 
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
@@ -209,8 +227,30 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	//IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	if (!PlatformFile.FileExists(**XmlFilePath)) return;
 
-	pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(**XmlFilePath).Get());
-	if (!parse_Res) return;
+
+
+
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx   +++++++++++++++++++++++++++
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+	//   ----------------------   Content fron XML   ----------------------
+	//   ----------------  Parse XML in Pakage to string  ----------------------
+	FString str_DlgFileContent;
+	FFileHelper::LoadFileToString(str_DlgFileContent, **XmlFilePath);
+	std::string std_DlgFileContent = (TCHAR_TO_UTF8(*str_DlgFileContent));
+	//  -----------------  Load string as pugi   -------------------------------
+	pugi::xml_parse_result parse_Res = xmlDoc.load(std_DlgFileContent.c_str());
+//	pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(**XmlFilePath).Get());
+	if (!parse_Res)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("can't parse  %s   ERROR"), *str_DlgFileContent);
+		return;
+	}
 
 	//  Get Root Node
 	pugi::xml_node DialogRootNode = xmlDoc.child("name");
@@ -223,8 +263,28 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	//IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	if (!PlatformFile.FileExists(*LVariableXmlPath)) return;
 
-	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
-	if (!parse_VariablesRes) return;
+
+
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx        Local Variables       7777777777777777777777
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	//   ----------------  Parse XML in Pakage to string  ----------------------
+	FString str_LocalVariablesContent;
+	FFileHelper::LoadFileToString(str_LocalVariablesContent, *LVariableXmlPath);
+	std::string std_LocalVariablesContent = (TCHAR_TO_UTF8(*str_LocalVariablesContent));
+	//  -----------------  Load string as pugi   -------------------------------
+	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load(std_LocalVariablesContent.c_str());
+	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
+	if (!parse_VariablesRes)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("can't parse  %s   ERROR"), *str_LocalVariablesContent);
+		return;
+	}
+
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
 	
@@ -386,8 +446,32 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 			FString SpekerXmlPath = FPaths::ProjectContentDir() + FString("Dialog/") + FString("Spekers.xml");
 			IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();//----------
 			if (!PlatformFile.FileExists(*SpekerXmlPath)) return false;//-------+++++
-			pugi::xml_parse_result parse_SpekerRes = xmlSpeker.load_file(StringCast<ANSICHAR>(*SpekerXmlPath).Get());
-			if (!parse_SpekerRes) return false;
+
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+			//   ----------------  Parse XML in Pakage to string  ----------------------
+			FString str_SpekerXmlContent;
+			FFileHelper::LoadFileToString(str_SpekerXmlContent, *SpekerXmlPath);
+			std::string std_SpekerXmlContent = (TCHAR_TO_UTF8(*str_SpekerXmlContent));
+			//  -----------------  Load string as pugi   -------------------------------
+			pugi::xml_parse_result parse_SpekerRes = xmlSpeker.load(std_SpekerXmlContent.c_str());
+			//pugi::xml_parse_result parse_SpekerRes = xmlSpeker.load_file(StringCast<ANSICHAR>(*SpekerXmlPath).Get());
+			if (!parse_SpekerRes)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("can't parse  %s   ERROR"), *str_SpekerXmlContent);
+				return false;
+			}
+
+
+
+
+
 			pugi::xml_node SpekerRootNode = xmlSpeker.child("game_spekers"); //  Get Root Node
 
 			//  ----------  Found Required Speker  ----------

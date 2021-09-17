@@ -78,9 +78,10 @@ void UDLG_DialogItem::InitDialog()
 	}
 
 
-	//if (DialogParameter.isAlredyLoad) return;  //  77777777777777777777777777777777777777777
-	//UE_LOG(LogTemp, Warning, TEXT("2222222222222222222222222222222222   DLG"));
+	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+	
 
+/*
 	//   ============   Get LocalVariables from .xml   ====================
 	pugi::xml_document xmlVariables;
 
@@ -88,39 +89,18 @@ void UDLG_DialogItem::InitDialog()
 
 	UE_LOG(LogTemp, Warning, TEXT("strstrstrstr VAR   DLG  %s") , *LVariableXmlPath);
 
-	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+	
 	if (!PlatformFile.FileExists(*LVariableXmlPath)) return;
-
 
 	//UE_LOG(LogTemp, Warning, TEXT("333333333333333333333333333   DLG"));
 
 
 
 
-	//    ===============  Get Path thrue DielogWindow  ====================
+
+
 	
-	//FString Path = FPaths::ProjectContentDir();  //FString("C:\\Program Files\\7-Zip");//
-	//FString FileName = FString("LVariables.xml");  //FString("C:\\Program Files\\7-Zip");//
-/*	TArray<FString> str;
-	if (Path.Find(FString("/"), ESearchCase::Type::CaseSensitive, ESearchDir::Type::FromStart, 0) != -1)
-	{
-		Path.ParseIntoArray(str, TEXT("/"), true);
-	}
-	//else if (Path.Find(FString("\\"), ESearchCase::Type::CaseSensitive, ESearchDir::Type::FromStart, 0) != -1)
-	//{
-	//	Path.ParseIntoArray(str, TEXT("\\"), true);
-	//}
-	Path = FString("");
-	for (int32 i_str = 0; i_str < str.Num(); i_str++)
-	{
-		Path += str[i_str] + FString("\\\\");       //  
-	}
-	Path += "Dialog\\\\";
-	Path += FileName;
 
-
-	UE_LOG(LogTemp, Warning, TEXT("char VAR   DLG   %s"), *Path);
-*/	
 
 
 	//  RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
@@ -134,16 +114,37 @@ void UDLG_DialogItem::InitDialog()
 	//+++FString aaa = FString(ANSI_TO_TCHAR(sss));
 	//UE_LOG(LogTemp, Warning, TEXT("char toFSTR   DLG   %s"), *aaa);
 	//TCHAR_TO_ANSI(*LVariableXmlPath)
-	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
+	//++++pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(StringCast<ANSICHAR>(*LVariableXmlPath).Get());
 	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(std::string(TCHAR_TO_UTF8(*LVariableXmlPath)));
 	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file("DialogSystem_Test\\Content\\Dialog\\LVariables.xml");
 	//pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file("G:\\ARCHIV\\Archive\\UE_Proj\\DialogSystem_Test\\Content\\Dialog\\LVariables.xml");
 	//++++pugi::xml_parse_result parse_VariablesRes = xmlVariables.load_file(sss);
+
+	//pugi::xml_document xmlDoc;
+	//xmlDoc.load(source.c_str());
+	//pugi::xml_node RootNode = xmlDoc.child("name");
+
+	//   ----------------  Parse XML in Pakage to string  ----------------------
+	FString str_LocalVariablesContent;
+	FFileHelper::LoadFileToString(str_LocalVariablesContent, *LVariableXmlPath);
+	std::string std_LocalVariablesContent = (TCHAR_TO_UTF8(*str_LocalVariablesContent));
+	//  -----------------  Load string as pugi   -------------------------------
+	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load(std_LocalVariablesContent.c_str());
 	if (!parse_VariablesRes) return;
 
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
 	//UE_LOG(LogTemp, Warning, TEXT("4444444444444444444444444444444444   DLG"));
+
+	//  Get Root Node
+	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
+*/
+
+
+
+
+
+
 
 
 
@@ -158,16 +159,25 @@ void UDLG_DialogItem::InitDialog()
 					//These Macro-calls only should be used when they are used as a function parameter.
 	//pugi::xml_parse_result parse_Res = xmlDoc.load_file(TCHAR_TO_ANSI(*PathToFile));   //++++++
 
-
-	UE_LOG(LogTemp, Error, TEXT("PathToFile 1  %s"), *(PathToFile));
+	//   ----------------------   Content fron XML   ----------------------
 	PathToFile = FPaths::ProjectContentDir() + PathToFile;
-	UE_LOG(LogTemp, Error, TEXT("PathToFile 2  %s"), *(PathToFile));
+	//   ----------------  Parse XML in Pakage to string  ----------------------
+	FString str_LocalDlgFileContent;
+	FFileHelper::LoadFileToString(str_LocalDlgFileContent, *PathToFile);
+	std::string std_LocalDlgFileContent = (TCHAR_TO_UTF8(*str_LocalDlgFileContent));
+	//  -----------------  Load string as pugi   -------------------------------
+	pugi::xml_parse_result parse_Res = xmlDoc.load(std_LocalDlgFileContent.c_str());
+	if (!parse_Res) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unit %s  can't parse _*_dialog_*_.xml   ERROR"), *GetOwner()->GetName());
+		return;
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("Unit %s  parse _*_dialog_*_.xml  OK"), *GetOwner()->GetName());
+	//   pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(*PathToFile).Get());  //+++++
 
-	pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(*PathToFile).Get());  //+++++
 
 
-
-	UE_LOG(LogTemp, Error, TEXT("PathToFile 1  %s"), *(PathToFile));
+	//UE_LOG(LogTemp, Warning, TEXT("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO   DLG"));
 
 
 	//  Get Root Node
