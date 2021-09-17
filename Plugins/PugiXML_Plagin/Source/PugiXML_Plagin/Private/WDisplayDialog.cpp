@@ -27,44 +27,8 @@ void UWDisplayDialog::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-
-	//CurrentSpikerImage->SetVisibility(ESlateVisibility::Collapsed);
-	//CurrentSpekerName->SetVisibility(ESlateVisibility::Collapsed);
-
-	//    TEST
-	/*for (int32 i = 0; i < 20; i++)
-	{
-		UTextBlock* ttt = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
-		///UTextBlock* ttt = ConstructObject<UTextBlock>(UTextBlock::StaticClass(), this);
-		ttt->SetText(FText::FromString(TEXT("Default Tex")));
-		ReplicsScrollBox->AddChild(ttt);
-		ReplicsText.Add(ttt);
-	}*/
-
-
-	//FVector2D ReplicPanelSize = ReplicBorder->GetCachedGeometry().GetLocalSize();  //  All replic zone size
-	//UE_LOG(LogTemp, Warning, TEXT("sxxxxx = '%f'"), ReplicPanelSize.X);
 }
 
-/*
-void UWDisplayDialog::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	
-	if (ReplicDelayTime > 0)
-	{
-		ReplicDelayTime -= InDeltaTime;
-	}
-	else if ( ReplicDelayTime > -1 )
-	{
-		ReplicDelayTime = -1;
-		DrawDialog(*ReplicToDraw, *ResponseToDraw);
-	}
-
-	//if (doOffsetReplicScroll)
-	//{
-		//ReplicsScrollBox->ScrollToEnd();
-	//}
-}*/
 
 
 void UWDisplayDialog::Init(ADLG_GlobalActor* _GlobagDialogActorRef, bool _Scrolling_dialog, bool _IsSpekerImage)
@@ -128,10 +92,7 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 
 
 	   
-	//USoundBase* MySoundWave = LoadObject<USoundBase>(this, TEXT("/Game/VoiceSound/DialogRUS_Test.DialogRUS_Test"));
-	//AudioComponentRef->SetSound(MySoundWave);
-	//AudioComponentRef->Play();
-	//++++if(AudioComponent->IsPlaying())	AudioComponent->Stop();
+	
 
 	
 
@@ -261,13 +222,6 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 
 
 
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxD
 		
 		//++++USoundBase* MySoundWave = LoadObject<USoundBase>(this, TEXT("/Game/VoiceSound/Dialog_Test.Dialog_Test"));
 		//++++++AudioComponent->SetSound(MySoundWave);
@@ -292,7 +246,11 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 			AudioComponentRef->Play();               //    At Location   7777777777777777777777777777
 			//++++if(AudioComponent->IsPlaying())	AudioComponent->Stop();
 
+
+
+
 			//  ===============   Set time Delay   ======================
+
 			if ((*ReplicToDraw)[0].Time == FString("sound_length"))
 			{
 				float time = MySoundWave->GetDuration();
@@ -319,32 +277,6 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 		}
 	
 
-		
-
-
-		
-
-		//UTextBlock* ReplicTextTMP = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
-		//ReplicTextTMP->SetAutoWrapText(true);  //   7777777777777777
-		////--Cast<TSharedPtr<STextBlock>>(sTextBlock)->SetWrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping);
-		////--ReplicTextTMP->SetWrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping);  //
-		//ReplicTextTMP->SetText(FText::FromString((*ReplicToDraw)[0].ReplicTextStr));
-
-		////++TSharedPtr<SWidget> sTextBlock = ReplicTextTMP->TakeWidget();
-		//
-		////  ----   Calculate Size Under  ----
-		//FVector2D ReplicPanelSize = ReplicBorder->GetCachedGeometry().GetLocalSize();
-		////FVector2D ReplicPanelSize = ReplicBorder->GetCachedGeometry().LocalToAbsolute(ReplicBorder->GetCachedGeometry().GetLocalSize());
-		////FVector2D ReplicPanelSize = ReplicSizeBox->HeightOverride;
-		//
-	
-		//UE_LOG(LogTemp, Warning, TEXT("Rep-panet = '%f'"), ReplicPanelSize.Y);
-		//UE_LOG(LogTemp, Warning, TEXT("Text = '%f'"), TextSizeTMP.Y);
-		//UE_LOG(LogTemp, Warning, TEXT("Text = '%f'"), BorderPaddingUnder_Size);
-		///UE_LOG(LogTemp, Warning, TEXT("size = '%f'   '%f'"), Size2D.X, Size2D.Y);
-
-
-
 
 		(*ReplicToDraw).RemoveAt(0);
 
@@ -370,9 +302,6 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 				if ((*ResponseToDraw)[i].ResponseReturn == EResponseReturn::pass_link_once ||
 					(*ResponseToDraw)[i].ResponseReturn == EResponseReturn::pass_link_back ||
 					(*ResponseToDraw)[i].ResponseReturn == EResponseReturn::pass_link_noreplic)
-					//(*ResponseToDraw)[i].ResponseReturn == EResponseReturn::pass_default_once ||
-					//(*ResponseToDraw)[i].ResponseReturn == EResponseReturn::pass_default_back ||
-					//(*ResponseToDraw)[i].ResponseReturn == EResponseReturn::pass_default_noreplic )
 				{
 					GlobagDialogActorRef->ChangeVariables((*ResponseToDraw)[i]);
 
@@ -426,8 +355,6 @@ void UWDisplayDialog::DrawResponseAsReplic(FString sText)
 		FString ActualPlayername = FString("None");
 		if (GlobagDialogActorRef->OtherPlayerName == FName("none"))	ActualPlayername = GlobagDialogActorRef->PlayerName.ToString();
 		else ActualPlayername = GlobagDialogActorRef->OtherPlayerName.ToString();
-		//if (GlobagDialogActorRef->OtherPlayerName == FName("none"))	CurrentSpekerNameStr = GlobagDialogActorRef->PlayerName.ToString();
-		//else CurrentSpekerNameStr = GlobagDialogActorRef->OtherPlayerName.ToString();
 
 
 		//  -----------   String to draw (response as Raplic)   -------------
@@ -494,18 +421,7 @@ void UWDisplayDialog::DrawResponseAsReplic(FString sText)
 
 void UWDisplayDialog::ReplicDelay()
 {
-	
-
 	DrawDialog(*ReplicToDraw, *ResponseToDraw);
-
-	//DrawDialog(TArray<FReplicToDraw> & _ReplicToDraw,
-	//	TArray<FResponseToDraw> & _ResponseToDraw)
-
-	//if (GlobagDialogActorRef)
-	//{
-		//++++++++++
-		//GlobagDialogActorRef->DLG_PlayDialog(*XmlFileContent, TransitType, LastDialog, LastSpeech);
-	//}
 }
 
 void UWDisplayDialog::StopDialog()
@@ -668,7 +584,6 @@ void UWDisplayDialog::KeyMouseLeftDown()
 	if (GetWorld()->GetTimerManager().IsTimerActive(TimerHandle_ReplicDelay))
 	{
 		GetWorld()->GetTimerManager().ClearTimer(TimerHandle_ReplicDelay);
-		//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX	
 	}
 	DrawDialog(*ReplicToDraw, *ResponseToDraw);
 }
@@ -677,8 +592,7 @@ void UWDisplayDialog::KeySpace()
 {
 	if (GetWorld()->GetTimerManager().IsTimerActive(TimerHandle_ReplicDelay))
 	{
-		GetWorld()->GetTimerManager().ClearTimer(TimerHandle_ReplicDelay);
-		//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX	
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandle_ReplicDelay);	
 	}
 	DrawDialog(*ReplicToDraw, *ResponseToDraw);
 }
@@ -694,8 +608,14 @@ void UWDisplayDialog::KeyEscape()
 
 
 
-//---------------------------------------------
 
+
+
+
+
+
+
+/////////////=======================		Not USE now		  ========================
 
 
 
@@ -722,106 +642,7 @@ void UWDisplayDialog::ShowResponsePanel(bool Show)
 	if (Show) ResponseBorder->SetVisibility(ESlateVisibility::Visible);   //   Collapsed,  Hidden,  Visible  
 	else ResponseBorder->SetVisibility(ESlateVisibility::Collapsed);
 
-	//OnShowResponsePanel(Show, Replic);           //  For flexible logic
-}
-/*
-////+++++++++++++++++++++++++++++++++++++++++++++
-//void UWDisplayDialog::DrawReplic(FString& _XmlFileContent, FString& _LastDialog, FString& _LastSpeech,
-//											FString& _Replic, float _SoundDelay, ETransitType _TransitType)
-//{
-//
-//	if (ReplicsScrollBox)
-//	{
-//		Replic = _Replic;
-//		LastDialog = _LastDialog;
-//		LastSpeech = _LastSpeech;
-//		SoundDelay = _SoundDelay;
-//		XmlFileContent = &_XmlFileContent;
-//		TransitType = _TransitType;
-//
-//
-//		UTextBlock* elTxt = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
-//		///UTextBlock* ttt = ConstructObject<UTextBlock>(UTextBlock::StaticClass(), this);
-//		elTxt->SetText(FText::FromString(_Replic));
-//		ReplicsScrollBox->AddChild(elTxt);
-//		ReplicsText.Add(elTxt);
-//
-//
-//		//  For flexible logic
-//		bool T = true;
-//		OnShowReplicPanel(T, Replic);
-//
-//		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   DON'T DELATE BUT WAIT WHILE PRESS KEY
-//		if (SoundDelay < -0.5)           //   if == -1   -> Don't delay, but wait while press KEY
-//		{
-//			//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//			//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//			//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//			// wait press KEY, then:
-//			// ReplicDelay();
-//		}
-//		//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++S
-//		else
-//		{
-//			GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, SoundDelay, false);
-//		}
-//	}
-//}
 
-
-void UWDisplayDialog::DrawResponse(FString& _XmlFileContent, FString& _LastDialog, FString& _LastSpeech,
-													TArray<FString>& _Response, TArray<int32>& _ResponseIndex)
-{
-	for (int32 i = 0; i < _Response.Num(); i++)
-	{
-		if (GlobagDialogActorRef && ResponseScrollBox && ResponseButtonClassBP)
-		{
-			
-
-
-			UWResponseButton* elResponse = CreateWidget<UWResponseButton>(this, ResponseButtonClassBP);
-			//UWResponseButton* elResponse = WidgetTree->ConstructWidget<UWResponseButton>(UWResponseButton::StaticClass());
-			elResponse->init(GlobagDialogActorRef, _XmlFileContent, _LastDialog, _LastSpeech, _Response[i], _ResponseIndex[i]);
-			ResponseButton.Add(elResponse);
-
-			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   MABE DON'T ADD TO SCROLL
-
-			//  =======================   Add  to  PARENT    =======================     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			ResponseScrollBox->AddChild(elResponse);   //  7777777777777777777777777777777777
-			//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-			//   TEST
-			//if(aaa)	GlobagDialogActorRef->DLG_PlayDialog(*XmlFileContent);
-			//aaa = false;
-		}
-	}
 }
 
-
-
-
-
-
-
-//  ---------  Clear replic panel  ----------
-void UWDisplayDialog::DrawResponsePrepare()
-{
-	for (UWResponseButton* elResponse : ResponseButton) elResponse->RemoveFromParent();
-	ResponseButton.Empty();
-}
-
-
-//  ---------  Clear replic panel  ----------   
-void UWDisplayDialog::DrawReplicPrepare()
-{
-	if (!Scrolling_dialog)  //  if NOT SCROLLING REPLICS
-	{
-		for (UTextBlock* elTxt : ReplicsText)   elTxt->RemoveFromParent();
-		ReplicsText.Empty();
-	}
-}
-
-*/
 

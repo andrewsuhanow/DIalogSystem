@@ -230,21 +230,6 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	
 
 
-
-
-/*
-	if (_ResponseReturn == EResponseReturn::click_default_once ||
-		_ResponseReturn == EResponseReturn::click_default_back ||
-		_ResponseReturn == EResponseReturn::click_default_noreplic ||
-		_ResponseReturn == EResponseReturn::pass_default_once ||
-		_ResponseReturn == EResponseReturn::pass_default_back ||
-		_ResponseReturn == EResponseReturn::pass_default_noreplic)
-	{
-		_NextDialogNode = FString("DEFAULT");
-		_NextSpeechNode = FString("DEFAULT");
-	}
-*/
-
 	 
 	//  =========================  Check Node Condition AtAll  =======================
 	auto CheckCondition = [&](pugi::xml_node _DlgBranchRootNode,      //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX   COPY OR REF
@@ -256,9 +241,6 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	{
 
 		// ==========================    CONDITION  ============================
-
-		
-
 		bool isCurrentNodeTest = true;
 		TArray<std::string> Or_ToCheck;
 		TArray<std::string> Or_ToIgnor;
@@ -317,18 +299,7 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 					}
 				}
 				if(VariableIsAbsent) isCurrentConditionTest = false;  // Variable is absent in LVariable_XmlFile
-						
-				/*if ((_Checking_LocalVariable.Num()-1) < i_Condition ||
-					_Checking_LocalVariable[i_Condition] == -1 ||			 //  Has condition-Variable but absent LVariable in File
-					(_LocalVariables.Num()-1) < _Checking_LocalVariable[i_Condition])
-				{
-					isCurrentConditionTest = false;
-				}		
-				else if(FName(*VarValue_Str) != _LocalVariables[_Checking_LocalVariable[i_Condition]]) 
-					isCurrentConditionTest = false;
-				else if (_Checking_LocalVariable.Num() == 0) //  if NoOne local Condition  =>>  chech next cindition
-					isCurrentConditionTest = true;
-				*/ 					 
+										 
 			}
 
 			//   And / Or   (result alredy have)
@@ -355,49 +326,13 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 
 	 
 
-	auto GetAppropriateREP = [&](pugi::xml_node _DlgBranchRootNode, // REPLIC.node()  // XXXXXXXXXXXXXXXXXXXXXXXXXXXXX   COPY OR REF
+	auto GetAppropriateREP = [&](pugi::xml_node _DlgBranchRootNode, // REPLIC.node()  // XXXXXXXXXXXXXX   COPY OR REF
 									pugi::char_t* NodeNameStr, 
 									TArray<FName>& _LocalVariables,
 									FReplicNode& ReplicNodeParam,
 									TMap<FName, FName> *&_GlobalVariable,
 									FReplicToDraw& ReplicsToDrawTMP_Ref)
 	{
-		// ==========================    REP   ============================
-		/*TArray<int32> CorrectReps;
-		pugi::xpath_node_set DLG_Rep = DLG_Replic[i_Replic].node().select_nodes("rep");
-		for (int32 i_Rep = 0; i_Rep < DLG_Rep.size(); i_Rep++)
-		{
-			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  if TMap.iSEmpty()   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  if TMap.iSEmpty()   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  if TMap.iSEmpty()   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  if TMap.iSEmpty()   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-			//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  if TMap.iSEmpty()   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-			bool isCurrentRepTest = CheckCondition(DLG_Rep[i_Rep].node(),
-				"rep_condition",
-				LocalVariables,
-				_DialogParameter.DialogNode[i_Dlg].SpeechNode[i_Speech].ReplicNode[i_Replic].RepNode[i_Rep].DLGVariable_Checking,
-				GlobalVariable);
-
-			// -----------  if this "Rep" satisfy of condition =>> save it for further (random) Geting  ----------
-			if (isCurrentRepTest) CorrectReps.Add(i_Rep);
-		}
-
-		int32 IndexOfChosedRep = 0;
-		if (CorrectReps.Num() == 0) continue;  // if NOone "Reps" is alloud =>> spend "Replic"
-		else
-		{
-			IndexOfChosedRep = RandRange(0, CorrectReps.Num() - 1);
-
-			FReplicToDraw ReplicsToDrawTMP;
-
-			ReplicsToDrawTMP.ReplicTextStr = FString("..........................");
-			ReplicsToDrawTMP.SpekerImagePath = FString("..........................");
-			ReplicsToDrawTMP.SoundPath = FString("..........................");
-			ReplicsToDrawTMP.Time = 2;
-			ReplicsToDrawTMP.Delay = 1;
-
-		}*/
-
 		TArray<int32> CorrectReps;
 		pugi::xpath_node_set DLG_Rep = _DlgBranchRootNode.select_nodes(NodeNameStr);
 		for (int32 i_Rep = 0; i_Rep < DLG_Rep.size(); i_Rep++)
@@ -486,8 +421,6 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 						}
 					}
 				}
-
-				//--
 			}
 		}
 		return true;
@@ -654,8 +587,6 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 				//FString ResponseRepeatStr(STD_ResponseRepeatStr.c_str());
 
 
-				
-				//bool aaaaaaaaaaaaaa = (*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].ResponseNode[i_Response].IsRepeatOnce_Done;
 				// ===============  Check repet property:  (once / always)  =================
 				if (STD_ResponseRepeatStr == "once" &&
 					(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].ResponseNode[i_Response].IsRepeatOnce_Done)
@@ -680,7 +611,7 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 
 					//   777777777777777777777777777777777777777777777777777777777777777777777777777777777
 					//   777777777777777777777777777777777777777777777777777777777777777777777777777777777
-					//						 Referens      (use in WResponseButtone)
+					//						 Referens      (use in WResponseButton)
 					//   777777777777777777777777777777777777777777777777777777777777777777777777777777777
 					//   777777777777777777777777777777777777777777777777777777777777777777777777777777777
 					//FResponseNode * sssssssssss = &(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].ResponseNode[i_Response];
@@ -715,13 +646,7 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 					//else if(STD_ResponseReturnTypeStr == "CLN (click_link_noreplic)")
 					else if(STD_ResponseReturnTypeStr == "click_noreplic")
 						ResponseToDrawTMP.ResponseReturn = EResponseReturn::click_link_noreplic;
-					//else if(STD_ResponseReturnTypeStr == "CDO (click_default_once)")
-					//	ResponseToDrawTMP.ResponseReturn = EResponseReturn::click_default_once;
-					//else if(STD_ResponseReturnTypeStr == "CDR (click_default_return)")
-					//	ResponseToDrawTMP.ResponseReturn = EResponseReturn::click_default_back;
-					//else if(STD_ResponseReturnTypeStr == "CDN (click_default_noreplic)")
-					//	ResponseToDrawTMP.ResponseReturn = EResponseReturn::click_default_noreplic;
-					//else if(STD_ResponseReturnTypeStr == "PLO (pass_link_once)")
+
 					else if(STD_ResponseReturnTypeStr == "pass")
 						ResponseToDrawTMP.ResponseReturn = EResponseReturn::pass_link_once;
 					//else if(STD_ResponseReturnTypeStr == "PLR (pass_link_return)")
@@ -730,12 +655,6 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 					//else if(STD_ResponseReturnTypeStr == "PLN (pass_link_noreplic)")
 					else if(STD_ResponseReturnTypeStr == "pass_noreplic")
 						ResponseToDrawTMP.ResponseReturn = EResponseReturn::pass_link_noreplic;
-					//else if(STD_ResponseReturnTypeStr == "PDO (pass_default_once)")
-					//	ResponseToDrawTMP.ResponseReturn = EResponseReturn::pass_default_once;
-					//else if(STD_ResponseReturnTypeStr == "PDR (pass_default_return)")
-					//	ResponseToDrawTMP.ResponseReturn = EResponseReturn::pass_default_back;
-					//else if(STD_ResponseReturnTypeStr == "PDN (pass_default_noreplic)")
-					//	ResponseToDrawTMP.ResponseReturn = EResponseReturn::pass_default_noreplic;
 					else //std::string("EXT (exit)")
 						ResponseToDrawTMP.ResponseReturn = EResponseReturn::exit;
 					
@@ -863,19 +782,8 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 
 
 }
-/*
-void ADLG_GlobalActor::DLG_DrawResponseAsReplic(FString sText,
-											EResponseReturn ResponseReturn,
-											FString _NextDialogNode,
-											FString _NextSpeechNode)
-{
-	if (DisplayDialog->AudioComponentRef)
-	{
-		//  test   ResponsesToDraw.Empty();
-		DisplayDialog->DrawResponseAsReplic(ReplicsToDraw, ResponsesToDraw);
-	}
-}
-*/
+
+
 
 void ADLG_GlobalActor::DLG_StopDialog()
 {
@@ -892,8 +800,6 @@ void ADLG_GlobalActor::DLG_StopDialog()
 
 
 	OtherPlayerName = FName("none");
-	// TEST
-	//Cast<UDLG_DialogItem>(ActorSpeker)->PlayDialog();
 
 
 }
@@ -918,19 +824,11 @@ void ADLG_GlobalActor::OnRepDrawn(FString _Event)
 		DLGReplicDrawn.Broadcast(_Event);
 	}
 }
-/*
-void ADLG_GlobalActor::aaa(TArray<FName> VarName, TArray<FName> VarLastValue, TArray<FName> NewValue)
-{
-	int32 a = 4;
-}
-*/ 
+
 //  ==================   ResponseButton.    ChangeVariables  =================== 
 void ADLG_GlobalActor::ChangeVariables(FResponseToDraw& CurrentResponse)
 {
 	//  -----------  for return delegate Event  ------------
-	//TArray<FName> VarName;
-	//TArray<FName> VarLastValue;
-	//TArray<FName> NewValue;
 	VarName.Empty();
 	VarLastValue.Empty();
 	NewValue.Empty();
@@ -972,42 +870,6 @@ void ADLG_GlobalActor::ChangeVariables(FResponseToDraw& CurrentResponse)
 
 
 
-
-/*   77777777777777777777777777777777777777777777777777777
-void ADLG_GlobalActor::DLG_GenerateDialog(FString& _LastDialog, FString& _LastSpeech, TArray<FString> &_Replic, 
-										TArray<FString> &_Response, TArray<int32> &_ResponseIndex,  bool isNew)  // isNew = false
-{
-	//if(isNew)
-	//{
-	//	DisplayDialog->PrepareToNewGenerate();
-	//}
-	//else
-	//{
-	//	DisplayDialog->PrepareToContinueGenerate();
-	//}
-
-	//DisplayDialog->GenerateDialogPanel(this, _LastDialog, _LastSpeech, _Replic, _Response, _ResponseIndex);
-}
-*/
-
-
-
-
-// Called every frame
-//void ADLG_GlobalActor::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//}
-
-
-
-
-
-
-
-
-
 //  ===============================================================================================
 //  ===============================================================================================
 //  ===========================              Global variable           ============================
@@ -1017,35 +879,10 @@ void ADLG_GlobalActor::DLG_GenerateDialog(FString& _LastDialog, FString& _LastSp
 
 void ADLG_GlobalActor::SetGlobalVariablesMapRef(UPARAM(ref) TMap<FName, FName>& _GlobalVariable)
 {
-	GlobalVariable = &_GlobalVariable;
-	/*for (const TPair<FName, FName>& pair : _GlobalVariable)
-	{
-		GlobalVariable.Add(pair.Key, &pair.Value);
+	GlobalVariable = &_GlobalVariable; //  ref to TMap
 	
-	}*/
-	//GlobalVariable.KeySort([](FName A, FName B) { return A < B; }); 
 	GlobalVariable->KeySort([](FName A, FName B) { return A.LexicalLess(B); });
 
-
-
-
-
-	/*
-	FName* GlobalValueRef = _GlobalVariable.Find(FName("G_Variable_01"));
-	if (GlobalValueRef)* GlobalValueRef = FName("1111111111111");
-
-	FName* GlobalValueRef1 = GlobalVariable->Find(FName("G_Variable_02"));
-	if (GlobalValueRef1) * GlobalValueRef1 = FName("2222222222222");
-	*/
-
-
-	/*
-	UE_LOG(LogTemp, Warning, TEXT("-----------DDDDDDDDDDDDDDD------------"));
-	for (auto& Elem : GlobalVariable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TMap-------: = '%s', '%s'"), *Elem.Key.ToString(), *Elem.Value.ToString());
-	}
-	*/
 }
 
 
@@ -1057,29 +894,17 @@ void ADLG_GlobalActor::AddGlobalVar(FName _key, FName _value)
 	//GlobalVariable.KeySort([](FName A, FName B)	{ return A < B; });
 	GlobalVariable->KeySort([](FName A, FName B) { return A.LexicalLess(B); });
 
-	/*UE_LOG(LogTemp, Warning, TEXT("-----------------------"));
-	for (auto& Elem : GlobalVariable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TMap-------: = '%s', '%s'"), *Elem.Key.ToString(), *Elem.Value.ToString());
-	}*/
+
 }
 
 FName ADLG_GlobalActor::GetGlobalVar(FName _key)    //---------------------------NOT
 {
-	//FPlatformMisc::LocalPrint(*FString::Printf(TEXT("(%i, \"%i\")%i"), 10, 20, 30));
-
 	FName val = (*GlobalVariable)[_key];
 	//UE_LOG(LogTemp, Warning, TEXT("TMap-------: = '%s', '%s'"), *_key.ToString(), *val.ToString());
 	return val;
 	//return _key;
 }
-/*
-//void ADLG_GlobalActor::OnVariableSet_Implementation(UPARAM(ref) FName& key, UPARAM(ref) FName& value)
-void ADLG_GlobalActor::OnVariableSet_Implementation(FName& key, FName& value)
-{
 
-}
-*/
 
 
 

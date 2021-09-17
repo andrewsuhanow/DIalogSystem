@@ -7,9 +7,9 @@
 //#include "DLG_GlobalActor.h"
 //#include "../../PugiXML_Plagin/Public/DLG_GlobalActor.h"
 
-//#include "DLGButtonDialog.h"
-//#include "DLGButtonCondition.h"
-//#include "DLGButtonResponse.h"
+//#include "DLGButtonDialog.h"//-----------
+//#include "DLGButtonCondition.h"//-----------
+//#include "DLGButtonResponse.h"//-----------
 
 #include "Widgets/Input/SSpinBox.h"
 
@@ -505,10 +505,6 @@ enum class EProppertyToChange : uint8
 	RemoveResponse_Condition,
 	RemoveResponse_Variable,
 
-	
-	 
-
-
 	CollapsedDialogSection,
 	CollapsedSpeechSection,
 	CollapsedSpeech_Condition,
@@ -519,18 +515,11 @@ enum class EProppertyToChange : uint8
 	CollapsedResponse_Condition,
 	CollapsedResponse_Variables,
 
-
 	MarkerDialog,
 	MarkerSpeech,
-	//MarkerSpeech_Condition,
 	MarkerReplic,
-	//MarkerReplic_Condition, 
 	MarkerRep,
-	//MarkerRep_Condition,
 	MarkerResponse,
-	//MarkerResponse_Condition,
-	//MarkerResponse_Variable,
-
 
 	ButtonAdd_Variable,
 	ButtonRemove_Variable,
@@ -811,23 +800,6 @@ public:
 	TArray<FDialogSection> DialogSection;
 
 
-	
-
-	/*
-	.OptionsSource(&SpikersList)
-	.OnComboBoxOpening( this, &SDialogWindowWidget::OnSpekerComboBoxOpening, CurrentPropertyIndex)
-	.OnGenerateWidget(this, &SDialogWindowWidget::HandleComboBoxGenerateWidget)
-	.OnSelectionChanged(this, &SDialogWindowWidget::GetSpekerComboList, CurrentPropertyIndex)
-	//.InitiallySelectedItem(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].CurrentSpiker)
-	[
-
-		SNew(STextBlock)
-		.Text(this, &SDialogWindowWidget::GetCurrentItemLabelXXXXXXXXXXXXXXXXXXXXXXXXX, CurrentPropertyIndex)
-		*/
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////  EditProperty
-
-
 	//        ============================   Marker   ================================
 	//++++++++++++FReply OnButtonMarkerUsual(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
 	UFUNCTION()  
@@ -966,23 +938,8 @@ public:
 	FString FastFindingHelperString = FString("");
 	UPROPERTY()  
 	TArray<int32> HelperPanel_FastFindingListIndexes;
-	//TSharedPtr<SMenuAnchor> StacklessAnchorPanel;
-	//FReply OnClickStacklessAnchor(TSharedPtr<SMenuAnchor> ClickedAnchor);
-	//TSharedRef<SWidget> MakeAnchorMenuContent(FString ContentLabel) const;
-	//TSharedRef<SWidget> MakeAnchorMenuContent(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex) const;
-	  
-/*
-	TArray<TSharedPtr<FString>> SpikersList;
-	TArray<TSharedPtr<FString>> SoundList;
-	//  -- Speker ComboBox  ---
-	void GetSpekerComboList(TSharedPtr<FString> NewSelection, ESelectInfo::Type SelectInfo, FPropertyIndex PropertyIndex);   //XXXXXXXXXXX   ++++++++++++++
-	void OnSpekerComboBoxOpening(FPropertyIndex PropertyIndex);   
-	FText GetCurrentSpikerLabel(FPropertyIndex PropertyIndex) const;
-	//  -- Sound ComboBox  ---
-	void GetSoundComboList(TSharedPtr<FString> NewSelection, ESelectInfo::Type SelectInfo, FPropertyIndex PropertyIndex);
-	void OnSoundComboBoxOpening(FPropertyIndex PropertyIndex);
-	FText GetCurrentSoundLabel(FPropertyIndex PropertyIndex) const;
-*/
+
+
 	
 	// ---------------- SSpinBox -----------------------
 	//float GetTimeValue(float value);
@@ -1253,50 +1210,6 @@ public:
 	//this, &SDialogWindowWidget::GetDuttonSize, ReplicButtonBigSize
 	
 	//++++++++++++++++++++++++++++++++++++++++++++++++
-	//FReply SSS();
-	
-	   
+   
 
-
-	
-
-
-
-
-/*
-
-
-	TSharedPtr<class SVerticalBox> ContentArea;
-	TSharedPtr<class SVerticalBox> VariablesArea;
-
-	FReply OnButtonContentDialog(FName str);
-	//EVisibility GetContentPanelState() const;
-	//EVisibility GetVariablesPanelState() const;
-	EVisibility ContentPanelState = EVisibility::Visible;
-	EVisibility VariablesPanelState = EVisibility::Collapsed;
-
-
-	
-	//FReply ButtonContentDialog_Presed(int32 a) ;
-
-
-
-	TSharedPtr<class SEditableTextBox> EditableText1;
-	FString str1 = FString("str1111122222233333");
-	TSharedPtr<class SMultiLineEditableTextBox> MlEditableText2;
-	TSharedPtr<class SEditableTextBox> EditableText3;
-	//void OnButtonT(const FText& Text);
-	
-
-
-
-
-
-
-	//       =========================         COMBP BPX       ========================
-
-	TSharedPtr<SComboBox<TSharedPtr<FString>>> SecondComboBox;
-	TArray<TSharedPtr<FString>> SecondComboBoxOptions;
-	TSharedPtr<FString>	CurrentItem;
-*/
 };

@@ -131,10 +131,6 @@ FReply FDLGObjectCustomizationDetails::ClickBtnPopulate()
 
 					FString RelativePath = OutFileNames[0].Mid(FPaths::ProjectContentDir().Len(), OutFileNames[0].Len());
 
-					//UE_LOG(LogTemp, Warning, TEXT("---------1----------------'%s'------------"), *FPaths::ProjectContentDir());
-					//UE_LOG(LogTemp, Warning, TEXT("---------2----------------'%s'------------"), *OutFileNames[0]);
-					//UE_LOG(LogTemp, Warning, TEXT("---------2----------------'%s'------------"), *RelativePath);
-
 					SelectedActor = Cast<UDLG_DialogItem>(SelectedObjectList[0].Get());
 					Cast<UDLG_DialogItem>(SelectedActor)->PathToFile = RelativePath;   // FString(" Path_to_DialogFile.xml ");
 				}

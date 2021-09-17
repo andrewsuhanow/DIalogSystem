@@ -44,20 +44,11 @@ protected:
 		UBorder* ReplicBorder;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		USizeBox* ReplicSizeBox;
-//	UPROPERTY()
-//		TArray<UVerticalBox*> FullReplicsBySpeker;
-	//UPROPERTY()
-	//	int32 TextStringsNum = 0;
+
 	
 	UPROPERTY()
 		TArray<UTextBlock*> AllSpekersName;
-	//UPROPERTY()
-	//	bool doOffsetReplicScroll = true;
-	//UPROPERTY()
-	//	float SctollOffset = 0;
-		//bool IsNewSpekerIsOld = false;
-//	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-//		TArray<UTextBlock*> ReplicsText;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "DialogSystem")
 		float TextSize = 32.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "DialogSystem")
@@ -82,20 +73,13 @@ protected:
 	//   ------------ Response ------------
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		UBorder* ResponseBorder;
-	//UPROPERTY()
-	//	FVector2D ResponseBorderSize;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		UScrollBox* ResponseScrollBox;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<UWResponseButton> ResponseButtonClassBP;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		TArray<UWResponseButton*> ResponseButton;
-	//	TArray<UButton*> ResponseButton;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	//	TArray<UTextBlock*> ResponseText;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialog (Read only)")
-	//	TArray<FString> Response;
 
 
 public:
@@ -149,8 +133,6 @@ public:
 	UFUNCTION()
 		float MakeReplicLines(TArray<FString>& TextStringArray);
 
-	//UFUNCTION(BlueprintImplementableEvent)  
-	//	void OnShowReplicPanel();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void OnShowReplicPanel(UPARAM(ref) bool& Show, UPARAM(ref) FString& s);
 		void OnShowReplicPanel_Implementation(UPARAM(ref) bool& Show, UPARAM(ref) FString& s);
@@ -163,27 +145,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ShowResponsePanel(bool Show = true);
 	
-	
-	//UFUNCTION()
-	//	void DrawReplicPrepare();
-	//UFUNCTION()
-	//	void DrawResponsePrepare();
-
-
-	
-/*
-
-
-	//UFUNCTION()
-		//+++++++++++++++++++++++++++++++++++
-	//	void DrawReplic(FString& XmlFileContent, FString& _LastDialog, FString& _LastSpeech,
-	//										FString& _Replic, float _SoundDelay, ETransitType _TransitTypePlayingCategory);
-	UFUNCTION()
-		void DrawResponse(FString& _XmlFileContent, FString& _LastDialog, FString& _LastSpeech, 
-											TArray<FString>& _Response, TArray<int32>& _ResponseIndex);
-
-
-*/
 	
 public:
 
@@ -200,25 +161,11 @@ public:
 		UImage* CurrentSpikerImage;   
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (BindWidget))
 		UTextBlock* CurrentSpekerName;          //  Global name, Drawing Outside
-
-	//++++++++++++void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	  
 public:
 
 	//   --------  for CallBack with DLG_GlobalActor  ---------
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialog (Read only)")
 		ADLG_GlobalActor* GlobagDialogActorRef = nullptr;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialog (Read only)")
-	//	FString LastDialog; 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialog (Read only)")
-	//	FString LastSpeech;
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialog (Read only)")
-	//	FString Replic; 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialog (Read only)")
-	//	float SoundDelay;
 
-	//FString* XmlFileContent;
-
-
-	//	bool aaa = true;
 };

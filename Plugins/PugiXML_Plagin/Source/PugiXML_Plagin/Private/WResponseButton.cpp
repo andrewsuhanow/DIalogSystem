@@ -83,9 +83,6 @@ void UWResponseButton::init(ADLG_GlobalActor*& _GlobagDialogActorRef, UWDisplayD
 	WDisplayDialog = _WDisplayDialog;
 	CurrentResponse = &_CurrentResponse;
 
-	//ResponseSizeBox->SetWidthOverride(300);
-	//ResponseSizeBox->SetHeightOverride(50);
-	//ResponseButton->SetRenderScale(FVector2D(300, 50));
 	ResponseText->SetText(FText::FromString((*CurrentResponse).str));
 }
 

@@ -16,24 +16,7 @@
 
 
 
-/*
-UENUM()   // BlueprintType, Blueprintable
-enum class ETransitType : uint8
-{
-	//  condition 'DLG_PlayDialog' repeat
-	StartDialog,
-	//ContinueReplic,
-	//BreakAfterResponse,
-	//BackAfterResponse,
 
-	//  check current playingMode
-	//none,
-	Once,
-	AfterOnce,
-	Back,
-	Breack
-}; 
-*/
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FDLGVariableChange, const TArray<FName>&, VariableName, 
 																	const TArray<FName>&, LastValue,
@@ -235,16 +218,6 @@ public:
 		void KeySpace();
 	UFUNCTION()
 		void KeyEscape();
-	//UFUNCTION()
-		//void UnbindDefaultKeys() {};
-	       
 
-	//UPROPERTY()
-	//	FString LastDialogNode_Global = FString("none");
-	//UPROPERTY()
-	//	FString LastSpeechNode_Global = FString("none");
-//public:	
-	// Called every frame
-	//virtual void Tick(float DeltaTime) override;
 
 };

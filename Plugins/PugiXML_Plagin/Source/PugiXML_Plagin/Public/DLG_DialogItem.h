@@ -41,10 +41,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-//public:	
-	// Called every frame
-	//virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 
 
 
@@ -63,9 +59,7 @@ public:
 
 	
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
-		FString PathToFile = FString("Your dialog file.xml");      //   PATH TO DIALOG.XML (only end),   should be set in "DLGObjectCustomizationDetails.cpp"
-	//UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
-	//	FString FullPathToFile = FString("none"); //   FULL PATH TO DIALOG.XML ( ...Conntent/ + ...DIALOG.XML),
+		FString PathToFile = FString("Your dialog file.xml");      //   PATH TO DIALOG.XML.   should be set in "DLGObjectCustomizationDetails.cpp"
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
 		FDialogParameter DialogParameter;
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")

@@ -26,10 +26,6 @@ UDLG_DialogItem::UDLG_DialogItem()  // const FObjectInitializer& ObjectInitializ
 
 	// ...
 
-
-	//AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
-	///AudioComponent->AttachParent = RootComponent;
-	//AudioComponent->bAutoActivate = true;
 }
 
 
@@ -58,224 +54,7 @@ void UDLG_DialogItem::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-	
-
-
-
 	InitDialog();
-
-
-
-/*
-
-	
-	//td::string text11(RootNode.text().as_string());
-	std::string text11 = "ППППППРРРООООООООООО";
-	std::wstring text_wstring11 = pugi::as_wide(text11.c_str());
-	FString aaaa(text_wstring11.c_str());
-	UE_LOG(LogTemp, Warning, TEXT("YYYYYYYYYYYYYYYYYYYYYYYY '%s'"), *aaaa);
-
-
-
-	 
-	//   Drew all  TEST
-	//std::ostringstream ss;
-	//xmlDoc.save(ss);
-	////std::string s = ss.str();
-	//std::wstring ws = pugi::as_wide(ss.str());
-	//FString FSss(ws.c_str());
-	//UE_LOG(LogTemp, Warning, TEXT("unit->data->py = '%s'"), *FSss);
-
-
-	
-/*
-
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
-	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
-
-
-	//  Get Pugi::Content from FString
-	std::string source = (TCHAR_TO_UTF8(*XmlFileContent));
-	pugi::xml_document xmlDoc;
-	///pugi::xml_parse_result parse_Res = xmlDoc.load_file("G:\\ARCHIV\\Archive\\UE_Proj\\XML\\Dialod_Name_01.xml");
-	//pugi::xml_parse_result parse_Res = xmlDoc.load_buffer(source.c_str(), source.size());  //+++++++
-	xmlDoc.load(source.c_str());
-
-
-	// ========== Get Root Node ==========
-	pugi::xml_node RootNode = xmlDoc.child("name");
-	std::string RootNodeStr(RootNode.attribute("name").as_string());
-	//std::wstring RootNodeWStr = pugi::as_wide(RootNodeStr.c_str());//
-	//FString RootNodeFStr(RootNodeWStr.c_str());//
-	//UE_LOG(LogTemp, Warning, TEXT("RootNode = '%s'"), *RootNodeFStr);//
-
-
-	////pugi::xml_node node1 = xmlDoc.child("unit").attribute("name");
-	//std::string val1(xmlDoc.child("level1").attribute("name").value());
-	//std::string val2(xmlDoc.child("level1").child("data").child("transform").attribute("py").value());
-	////-------std::string val3(xmlDoc.child("transform").attribute("py").value());
-	//std::string val4(xmlDoc.next_sibling("level1").attribute("name").value());
-
-	//FString str(val4.c_str());
-
-
-	//// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	//pugi::xpath_node xpathNode = xmlDoc.child("dialog").select_single_node("param11");  // find first node in 'dialog' with param 'param11'
-	//if (xpathNode)
-	//{
-	//	pugi::xml_node selectedNode = xpathNode.node();
-	//	std::string val5(xpathNode.node().attribute("param").value());
-	//	FString str1(val5.c_str());
-	//	UE_LOG(LogTemp, Warning, TEXT("unit->data->...... = '%s'"), *str1)
-	//}
-	////vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
-
-	std::string CurrentNodeSTD;
-	FString FStringFromSTD;
-
-	//  Get Root Node
-	pugi::xml_node RootNode = xmlDoc.child("name");
-	std::string RootNodeStr(RootNode.attribute("name").as_string());
-	FString RootNodeFStr(RootNodeStr.c_str());
-	UE_LOG(LogTemp, Warning, TEXT("RootNode = '%s'"), *RootNodeFStr);
-	//std::string _str(node.attribute("name").value());   +++++++++++++++++++++++++++++++++++
-	//std::string _str(node.text().as_string());   ++++++++++++++++++++++++++++++++++++++++
-
-	//+++++++++++++++++++++++++++++++
-	//pugi::xml_node RootNode1 = xmlDoc.child("name");
-	//std::string _str0(RootNode1.attribute("name").value());
-	//std::string _str1(RootNode1.first_child().attribute("DlgName").value());
-	//std::string _str2(RootNode1.next_sibling().attribute("DlgName").value());
-
-	//  ===================    Get <active_dialog>   =================
-	CurrentNodeSTD = std::string(RootNode.child("active_dialog").text().as_string());
-	FStringFromSTD = FString(CurrentNodeSTD.c_str());
-	DialogParameter.CurrentDialog = FName(*FStringFromSTD);
-	UE_LOG(LogTemp, Warning, TEXT("<active_dialog> = '%s'"), *DialogParameter.CurrentDialog.ToString());
-
-
-
-	//^^^^^^^^^^^^^^  wstring  ^^^^^^^^^   .set_value  ^^^^^^^^^    pugi::as_wide   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	pugi::xpath_node_set DLG_DialogBranchNode = RootNode.select_nodes("dialog");
-	for (int32 i = 0; i < DLG_DialogBranchNode.size(); i++)
-	{
-
-		//   look for attribute("DlgName")  ==  "DEFAULT"
-		std::string _Str(DLG_DialogBranchNode[i].node().attribute("DlgName").as_string());
-		//std::wstring _WStr = pugi::as_wide(RootNodeStr.c_str());//
-		//FString val(_WStr.c_str());//
-		//UE_LOG(LogTemp, Warning, TEXT("value = '%s'"), *val);//
-		//-----------------
-		//std::string _Str1(DLG_DialogBranchNode[i].node().text().as_string());
-		//std::wstring _WStr1 = pugi::as_wide(RootNodeStr.c_str());//
-		//FString valval(_WStr1.c_str());//
-		//UE_LOG(LogTemp, Warning, TEXT("text = '%s'"), *valval);//
-
-		if (_Str == std::string("DEFAULT"))
-		{
-			DLG_DialogBranchNode[i].node().attribute("DlgName").set_value("34567890");
-		}
-	}
-	//vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-
-
-
-
-
-	pugi::xpath_node_set DLG_AllSegmentsNode = RootNode.select_nodes("dialog");
-	for (int32 i = 0; i < DLG_AllSegmentsNode.size(); i++)
-		//for (pugi::xml_node DLGSegmentNode : RootNode.child("dialog"))
-		//for (pugi::xml_node DLGSegmentNode = RootNode.first_child(); DLGSegmentNode; DLGSegmentNode = DLGSegmentNode.next_sibling())
-	{
-
-		////////std::string _Str(DLG_DialogBranchNode[i].node().attribute("DlgName").as_string());
-
-		////////if (_Str == std::string("DEFAULT"))
-		////////{
-		////////	DLG_DialogBranchNode[i].node().attribute("DlgName").set_value("34567890");
-		////////}
-
-
-		//++++++++++++++++++++++++++++++++++   DLG_AllSegmentsNode[i].node()
-		//std::string _str(DLG_AllSegmentsNode[i].node().attribute("DlgName").as_string());
-		//FString val(_str.c_str());
-		//UE_LOG(LogTemp, Warning, TEXT("unit->data->py = '%s'"), *val);
-
-		pugi::xpath_node_set REP_AllSegmentsNode = DLG_AllSegmentsNode[i].node().select_nodes("replic");
-		for (int32 i_Rep = 0; i_Rep < REP_AllSegmentsNode.size(); i_Rep++)
-		{
-			std::string _str(REP_AllSegmentsNode[i_Rep].node().attribute("if").as_string());
-			FString val(_str.c_str());
-			UE_LOG(LogTemp, Warning, TEXT("unit->data->py = '%s'"), *val);
-		}
-
-	}
-
-
-
-
-
-	//   ============================   Change attribute .XML by Pugi   =================================
-	//pugi::xpath_node_set DLG_LocalVariableNode = RootNode.select_nodes("dialog_variable");
-	//for (int32 vr_loc = 0; vr_loc < DLG_LocalVariableNode.size(); vr_loc++)
-	//{
-	//	//++++++++++++++++++++++++++++++++++   DLG_LocalVariableNode[i].node()......Check  attribute("DlgName") == "DEFAULT"
-	//	std::string _str(DLG_LocalVariableNode[vr_loc].node().attribute("name").as_string());
-	//	FString val(_str.c_str());
-	//	UE_LOG(LogTemp, Warning, TEXT("unit->data->py = '%s'"), *val);
-	//	if (_str == std::string("var1_name"))
-	//	{
-	//		DLG_LocalVariableNode[vr_loc].node().attribute("value").set_value("2233");
-	//	}
-	//}
-
-	//xmlDoc.save_file("G:\\ARCHIV\\Archive\\UE_Proj\\XML\\Dialod_Name_01_NEW_1.xml");
-
-
-//   ============================   Save .XML by Pugi   =================================
-	//pugi::xml_document ExportXML_Doc;
-
-	//pugi::xml_node root = ExportXML_Doc.document_element();
-
-	//auto declarationNode = ExportXML_Doc.append_child(pugi::node_declaration);
-	//declarationNode.append_attribute("version") = "1.0";
-	//declarationNode.append_attribute("encoding") = "ISO-8859-1";
-	//declarationNode.append_attribute("standalone") = "yes";
-
-
-	//pugi::xml_node  element = ExportXML_Doc.append_child("file");
-	//element.append_child(pugi::node_pcdata).set_value("World");
-
-	//pugi::xml_node nodeChild = element.append_child("Hello");
-
-	//nodeChild.append_attribute("version") = "1.0";
-	//nodeChild.append_child(pugi::node_pcdata).set_value("World");
-
-	//pugi::xml_node nodeChild1 = element.append_child("Happy");
-
-	//nodeChild1.append_child(pugi::node_pcdata).set_value("India");
-
-	//bool saveSucceeded = ExportXML_Doc.save_file("G:\\ARCHIV\\Archive\\UE_Proj\\XML\\EXPORT.xml");
-//--------------------------------------------------------------------------------
-
-
-*/
-	/*
-	for (pugi::xml_node tool = tools.child("Tool"); tool; tool = tool.next_sibling("Tool"))
-	{
-		 "Tool " << tool.attribute("Filename").value();
-		 ": AllowRemote " << tool.attribute("AllowRemote").as_bool();
-		 ", Timeout " << tool.attribute("Timeout").as_int();
-		 ", Description '" << tool.child_value("Description") << "'\n";
-	}
-	*/
-
 
 }
 
@@ -290,7 +69,7 @@ void UDLG_DialogItem::SetAudioComponent(UAudioComponent* _AudioComponentRef)
 void UDLG_DialogItem::InitDialog()
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("1111111111111111111111111111111   DLG"));
+	//UE_LOG(LogTemp, Warning, TEXT("1111111111111111111111111111111   DLG"));
 
 	if (PathToFile == FString("Your dialog file.xml"))
 	{
@@ -300,7 +79,7 @@ void UDLG_DialogItem::InitDialog()
 
 
 	//if (DialogParameter.isAlredyLoad) return;  //  77777777777777777777777777777777777777777
-	UE_LOG(LogTemp, Warning, TEXT("2222222222222222222222222222222222   DLG"));
+	//UE_LOG(LogTemp, Warning, TEXT("2222222222222222222222222222222222   DLG"));
 
 	//   ============   Get LocalVariables from .xml   ====================
 	pugi::xml_document xmlVariables;
@@ -313,7 +92,7 @@ void UDLG_DialogItem::InitDialog()
 	if (!PlatformFile.FileExists(*LVariableXmlPath)) return;
 
 
-	UE_LOG(LogTemp, Warning, TEXT("333333333333333333333333333   DLG"));
+	//UE_LOG(LogTemp, Warning, TEXT("333333333333333333333333333   DLG"));
 
 
 
@@ -343,6 +122,12 @@ void UDLG_DialogItem::InitDialog()
 	UE_LOG(LogTemp, Warning, TEXT("char VAR   DLG   %s"), *Path);
 */	
 
+
+	//  RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+	//  RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+	//  RRR            ERROR LOAD when Pakaged           RR
+	//  RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+	//  RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 	//+++const char* sss = "G:\\ARCHIV\\Archive\\UE_Proj\\DialogSystem_Test\\Content\\Dialog\\LVariables.xml";
 	//----const char* sss = std::string(TCHAR_TO_UTF8(*LVariableXmlPath));
 	//++const char* sss = TCHAR_TO_ANSI(*Path);
@@ -358,9 +143,7 @@ void UDLG_DialogItem::InitDialog()
 
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
-
-
-	UE_LOG(LogTemp, Warning, TEXT("4444444444444444444444444444444444   DLG"));
+	//UE_LOG(LogTemp, Warning, TEXT("4444444444444444444444444444444444   DLG"));
 
 
 
@@ -643,18 +426,6 @@ void UDLG_DialogItem::InitDialog()
 void UDLG_DialogItem::PlayDialog(FName _PlayerName)
 {
 	
-	UE_LOG(LogTemp, Error, TEXT("_PlayerName   %s"), *(_PlayerName.ToString()));
-	if(AudioComponentRef)
-		UE_LOG(LogTemp, Error, TEXT("AudioComponentRef   ++++++++++"));
-	if (!AudioComponentRef)
-		UE_LOG(LogTemp, Error, TEXT("AudioComponentRef   -----------"));
-
-	UE_LOG(LogTemp, Error, TEXT("PathToFile   %s"), *(PathToFile));
-	//   ================== Get  "DLG_Global  --  Actor  (Sub_BP) on Scene"   -- DoOnce --   ==================
-	
-
-
-
 	if (!DLG_GlobalActor)
 	{
 		//for (TObjectIterator<ADLG_GlobalActor> Itr; Itr; ++Itr)
@@ -786,15 +557,6 @@ void UDLG_DialogItem::PlayDialog(FName _PlayerName)
 
 //  --------------------------------------------   INTERFACE   ----------------------------------------------
 
-
-
-
-/*
-void UDLG_DialogItem::GetActorAudioCompomemt(class UAudioComponent*& AudioComponent)
-{
-
-}
-*/
 
 
 
