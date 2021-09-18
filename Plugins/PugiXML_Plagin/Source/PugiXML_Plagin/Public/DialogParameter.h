@@ -6,7 +6,7 @@
 
 
 
-
+ 
 UENUM()  //BlueprintType, Blueprintable
 enum class EReplicRepeat : uint8
 {

@@ -225,7 +225,7 @@ struct FReplicSection
 
 
 	UPROPERTY()  
-		FString ComentText = FString("none");
+		FString ComentText = FString("Commentary about all replic content. It's newer seen in game.");
 	UPROPERTY()  
 		float ComentTextZoneSizeY = 0;
 		//TSharedPtr<class SMultiLineEditableTextBox> ReplicComent_EditableMultiline;
@@ -1179,34 +1179,34 @@ public:
 	float RepButtonSmallInsileSSize = 20.f;
 
 	UPROPERTY()  
-	FLinearColor ColorUsualText = FLinearColor(0.7f, 0.77f, 1.f, 1);     // Blue (light)
+		FLinearColor ColorUsualText = FLinearColor(0.7f, 0.77f, 1.f, 1);     // Blue (light)
 	UPROPERTY()  
-	FLinearColor ColorUsualMarked = FLinearColor(1.f, 0.25f, 0.f, 1);     // Brown
+		FLinearColor ColorUsualMarked = FLinearColor(1.f, 0.25f, 0.f, 1);     // Brown
 	UPROPERTY()  
-	FLinearColor ColorFastFindMarked = FLinearColor(1.f, 0.7f, 0.3f, 1);     // Brown (light)
+		FLinearColor ColorFastFindMarked = FLinearColor(1.f, 0.7f, 0.3f, 1);     // Brown (light)
 
 	//FLinearColor ColorLinkMarked = FLinearColor(0.f, 0.f, 1.f, 1);        //  Blue
 	UPROPERTY()  
-	FLinearColor ColorLinkMarked = FLinearColor(0.15f, 0.15f, 0.8f, 1);        // blue                  ///  purple 
+		FLinearColor ColorLinkMarked = FLinearColor(0.15f, 0.15f, 0.8f, 1);        // blue                  ///  purple 
 
 	//FLinearColor ColorDestinationLinkMarked = FLinearColor(0.f, 0.7f, 0.f, 1);  // Green
 	UPROPERTY()  
-	FLinearColor ColorDestinationLinkMarked = FLinearColor(0.3f, 0.8f, 0.3f, 1);  //  Green          // blue
+		FLinearColor ColorDestinationLinkMarked = FLinearColor(0.3f, 0.8f, 0.3f, 1);  //  Green          // blue
 	UPROPERTY()  
-	FLinearColor ColorErrorMarked = FLinearColor(0.8f, 0.f, 0.f, 1);     // Red
+		FLinearColor ColorErrorMarked = FLinearColor(0.8f, 0.f, 0.f, 1);     // Red
 	UPROPERTY()  
-	FLinearColor ColorInvisible = FLinearColor(0.f, 0.f, 0.f, 0);     // Red
+		FLinearColor ColorInvisible = FLinearColor(0.f, 0.f, 0.f, 0);     // Red
 
 	UPROPERTY()  
-	FSlateColor SelectedSoundItemColor = FSlateColor(FLinearColor(0.8f, 0.8f, 0.8f, 0.5f));
+		FSlateColor SelectedSoundItemColor = FSlateColor(FLinearColor(0.8f, 0.8f, 0.8f, 0.5f));
 	UPROPERTY()  
-	FSlateColor UnSelectedSoundItemColor = FSlateColor(FLinearColor(1.f, 1.f, 1.f, 0.2f));
+		FSlateColor UnSelectedSoundItemColor = FSlateColor(FLinearColor(1.f, 1.f, 1.f, 0.2f));
 
 	//float RepButtonBigSize = 27.f;
 	UFUNCTION()  
-	FOptionalSize GetButtonSize(float size) const;
+		FOptionalSize GetButtonSize(float size) const;
 	UFUNCTION()  
-	FMargin GetPadding(float left, float Up, float Right, float Bottom);
+		FMargin GetPadding(float left, float Up, float Right, float Bottom);
 	//this, &SDialogWindowWidget::GetDuttonSize, ReplicButtonBigSize
 	
 	//++++++++++++++++++++++++++++++++++++++++++++++++

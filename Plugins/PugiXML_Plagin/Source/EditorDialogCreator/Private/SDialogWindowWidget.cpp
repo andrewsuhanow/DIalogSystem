@@ -2168,15 +2168,18 @@ void SDialogWindowWidget::UpdateDialogBlock()
 
 					//       ======================     REPLICK  Editable Multiline zone     ========================
 					+ SVerticalBox::Slot()
-					.Padding(GetPadding(90.f, 3.f, 10.f, 1.f))
-					.AutoHeight()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					[
-						SNew(SBox)
-						.MaxDesiredHeight(ReplicMultiplyTextSize * SizeKoef)
+						.Padding(GetPadding(90.f, 3.f, 10.f, 1.f))
+						.AutoHeight()
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						[
+							SNew(SBox)
+							.MaxDesiredHeight(ReplicMultiplyTextSize * SizeKoef)
 						[
 							SNew(SMultiLineEditableTextBox)
+							.BackgroundColor(FLinearColor(0.13f, 0.13f, 0.13f, 1))
+							//---.ColorAndOpacity(ColorUsualText)
+							.ForegroundColor(ColorUsualText)
 							.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
 							.Text(FText::FromString(DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].ComentText))
 							.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableMultilineTextBox, EProppertyToChange::replicComent, CurrentPropertyIndex)
@@ -6426,8 +6429,6 @@ void SDialogWindowWidget::EditProperty(EProppertyToChange _ProppertyToChange, FP
 	else if (_ProppertyToChange == EProppertyToChange::SpeechName)
 	{
 
-		if (PropertyIndex.iSpeech == 0) return;
-		
 		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].IsSectionEditNow = true;
 		
 		FSlateApplication::Get().SetKeyboardFocus(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
@@ -11423,7 +11424,6 @@ FReply SDialogWindowWidget::OnHelperPanelClick(EProppertyToChange ProppertyToCha
 	{
 		OnHelperPanel_FindingEditableText->SetVisibility(EVisibility::Visible);
 
-		ListElementTmp.Add(FString("DEFAULT"));
 
 		//  Get current chois "dialog"
 		FName CurrDialogLink = DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
@@ -11439,30 +11439,47 @@ FReply SDialogWindowWidget::OnHelperPanelClick(EProppertyToChange ProppertyToCha
 			}
 		}
 
+		//  make massive of availability Speech names
 		if (CurrDialogIndex != -1)
 		{
-			int32 iTmp = 0;
-			HelperPanel_FastFindingListIndexes.Add(0);  //  "DEFAULT"  in Top
+			int32 iTmp = -1; // ------ index. of witch element of HelperPanel_FastFindingListIndexes[] is referens on ListElementTmp[]
+
+
+			// ---------   Add "Speech DEFAULT" on TOP if this Dialog has any   ---------
 			for (int32 i_speech = 0; i_speech < DialogSection[CurrDialogIndex].SpeechSection.Num(); i_speech++)
 			{
-				iTmp++;
+				if (DialogSection[CurrDialogIndex].SpeechSection[i_speech].Name == FName("DEFAULT"))
+				{
+					ListElementTmp.Add(FString("DEFAULT"));
+					HelperPanel_FastFindingListIndexes.Add(0);  //  "DEFAULT"  in Top
+					iTmp = 0;  //  if Dialog-Block has any_Speech-DEFAULT =>> start increasing from "0" else start from "-1"
+					break;
+				}
+			}
+
+
+			//  --------   form list to draw  from all Speech in current dialog   ------------
+			for (int32 i_speech = 0; i_speech < DialogSection[CurrDialogIndex].SpeechSection.Num(); i_speech++)
+			{
+				
 				if (DialogSection[CurrDialogIndex].SpeechSection[i_speech].Name != FName("DEFAULT"))
 				{
-					//  form list to draw
+					iTmp++;
+
+					//  form list to draw // add all Speech
 					ListElementTmp.Add(DialogSection[CurrDialogIndex].SpeechSection[i_speech].Name.ToString());
 
-					//  Fast Finding Indexes
+					//  ---------   Fast Finding Indexes   ----------
+					// add all suitable element to FastFinding
 					if (FastFindingHelperString == FString("")) HelperPanel_FastFindingListIndexes.Add(iTmp);
-					else if (DialogSection[CurrDialogIndex].SpeechSection[i_speech].Name.ToString()
-													.Contains(FastFindingHelperString, ESearchCase::Type::IgnoreCase))
+					else if(DialogSection[CurrDialogIndex].SpeechSection[i_speech].Name.ToString()
+									.Contains(FastFindingHelperString, ESearchCase::Type::IgnoreCase))
 					{
-						//  stored suitable indexes in "ListElementTmp[]"
+						//  stored suitable indexes of  "ListElementTmp[]" in HelperPanel_FastFindingListIndexes[]
 						HelperPanel_FastFindingListIndexes.Add(iTmp);
 						iTmp++;
-					}
-					
+					}					
 				}
-				else iTmp--;
 			}
 
 		}		

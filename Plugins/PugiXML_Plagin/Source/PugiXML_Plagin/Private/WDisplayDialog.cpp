@@ -288,7 +288,7 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 
 
 
-
+	 
 
 
 	//  Draw Response Panel

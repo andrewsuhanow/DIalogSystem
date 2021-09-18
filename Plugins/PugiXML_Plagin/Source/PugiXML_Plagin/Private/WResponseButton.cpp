@@ -66,7 +66,7 @@ void UWResponseButton::OnClick()
 		WDisplayDialog->DrawResponseAsReplic((*CurrentResponse).str);
 	}
 
-
+	 
 	//  -----------    Generate next DialogStep  --------------------
 	GlobagDialogActorRef->GenerateDialog((*CurrentResponse).ResponseReturn, 
 											(*CurrentResponse).LinkDialog.ToString(),

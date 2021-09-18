@@ -176,7 +176,7 @@ void UDLG_DialogItem::InitDialog()
 	//   pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(*PathToFile).Get());  //+++++
 
 
-
+	 
 	//UE_LOG(LogTemp, Warning, TEXT("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO   DLG"));
 
 
@@ -212,7 +212,7 @@ void UDLG_DialogItem::InitDialog()
 			FString SpeechStr(STD_W_SpeechStr.c_str());
 
 			SpeechTMP.Name = FName(*SpeechStr);
-			
+		 	
 
 			////   3333333  ================    SPEECH_CONDITION   nodes  =================	
 			//pugi::xpath_node_set DLG_SpeechConditionNodes = DLG_SpeechNodes[i_Speech].node().select_nodes("speech_condition");

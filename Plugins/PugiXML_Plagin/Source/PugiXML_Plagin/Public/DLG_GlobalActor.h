@@ -171,7 +171,7 @@ public:
 	UPROPERTY()
 		TArray<FResponseToDraw> ResponsesToDraw;
 
-
+	 
 	UFUNCTION()
 		void ChangeVariables(FResponseToDraw& _CurrentResponse);
 	UFUNCTION()

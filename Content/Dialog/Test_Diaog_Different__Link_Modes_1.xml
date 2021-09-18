@@ -1,0 +1,93 @@
+<name name="Test_Diaog_Different__Link_Modes_1" redy="ok">
+	<dialog dialog_name="DEFAULT">
+		<speech speech_name="DEFAULT">
+			<replic repeat="always">
+				 Testing using different links modes
+ 				<rep speker="Eva" sound="t1" event="RETURN_EVENT" time="0.5" delay="0">
+					 Testing using different links modes
+ 				</rep>
+			</replic>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="BLOCK_WITH_RETURNS_WARIANTS" return_type="click">
+				 Go to branch whan we can testing different modes of return back to here.
+ 			</response>
+		</speech>
+	</dialog>
+	<dialog dialog_name="Dialog_Branch_1">
+		<speech speech_name="MAIN">
+			<replic repeat="once">
+				 It's the "OtherDialogBlock" with parameter "once".  Its only showen when you first time come to SpeechBranch (if you come from another branch, returning type mast be "once").
+ 				<rep speker="Eva" sound="t1" event="RETURN_EVENT" time="while_press" delay="0">
+					 It's the "OtherDialogBlock" with parameter "once".  Its only showen when you first time come to SpeechBranch (if you come from another branch, returning type mast be "once"). 
+This Block has only one RESPONSE with Return-Type "PASS", so after finish all Replics it automaticly send you to other block.  (Press key to continue)
+ 				</rep>
+			</replic>
+			<replic repeat="after_once">
+				 It's the "OtherDialogBlock" with parameter "after once".  Its showen always except fitst time (if you come from another branch, returning type mast be "once").
+ 				<rep speker="Eva" sound="t1" event="RETURN_EVENT" time="while_press" delay="0">
+					 It's the "OtherDialogBlock" with parameter "after once".  Its showen always except fitst time (if yoe come from another branch, returning type mast be "once").
+This Block has only one RESPONSE with Return-Type "PASS", so after finish all Replics it automaticly send you to other block. (Press key to continue)
+ 				</rep>
+			</replic>
+			<replic repeat="back">
+				 It's the "OtherDialogBlock" with parameter "back".  Its showen when you come from another branch, with returning type "back").
+ 				<rep speker="Eva" sound="t1" event="RETURN_EVENT" time="while_press" delay="0">
+					 It's the "OtherDialogBlock" with parameter "back".  Its showen when you come from another branch, with returning type "back").
+This Block has only one RESPONSE with Return-Type "PASS", so after finish all Replics it automaticly send you to other block.  (Press key to continue)
+ 				</rep>
+			</replic>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="BLOCK_WITH_RETURNS_WARIANTS" return_type="pass">
+				 none
+ 			</response>
+		</speech>
+		<speech speech_name="MAIN_With_parrameter__NO_REPLIC">
+			<replic repeat="always">
+				 ITS A BLOCK TO TESTING NO-REPLIC RETURN-TYPE  *#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*#=!-@******  SO YOU NEWER SEE THIS IN GAME   ******#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*
+ 				<rep speker="Eva" sound="t1" event="RETURN_EVENT" time="20.17544" delay="0">
+					 *#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*#=!-@******       YOU NEWER SEE THIS IN GAME        ******#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*#=!-@*
+ 				</rep>
+			</replic>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="BLOCK_WITH_RETURNS_WARIANTS" return_type="click">
+				 It's Block where you come with "noreplic" return-type. So you dont see any Replics in this Block, just Responre (Click to return back)
+ 			</response>
+		</speech>
+		<speech speech_name="BLOCK_WITH_RETURNS_WARIANTS">
+			<replic repeat="always">
+				 try to return in different way
+ 				<rep speker="Eva" sound="t1" event="RETURN_EVENT" time="0.5" delay="0">
+					 try to return with different way
+ 				</rep>
+			</replic>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="MAIN" return_type="click">
+				 Go to OtherDialogBlock (SHOW all REPLICS with mode "ONCE" or "AFTER ONCE" and all RESPONSES)
+ 			</response>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="MAIN" return_type="click_back">
+				 Go to OtherDialogBlock (SHOW all REPLICS with mode "BACK" and all RESPONSES)
+ 			</response>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="MAIN" return_type="click_noreplic">
+				 Go to OtherDialogBlock (SHOW only RESPONSES, pass all REPLICS)(NOTICE. destination branch has only one Response with Return-Type "PASS" so we spend all Replics and automaticly go next, to here. so nothing effect)
+ 			</response>
+			<response repeat="always" dialog_link="Dialog_Branch_1" speech_link="MAIN_With_parrameter__NO_REPLIC" return_type="click_noreplic">
+				 Go to OtherDialogBlock (SHOW only RESPONSES, pass all REPLICS)
+ 			</response>
+			<response repeat="always" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="click">
+				 Exit to main
+ 			</response>
+			<response repeat="always" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="EXT (exit)">
+				 Exit
+ 			</response>
+		</speech>
+	</dialog>
+	<dialog dialog_name="NewDialogName_59798">
+		<speech speech_name="DEFAULT">
+			<replic repeat="always">
+				 none
+ 				<rep speker="none" sound="none" event="RETURN_EVENT" time="0" delay="0">
+					 none
+ 				</rep>
+			</replic>
+			<response repeat="always" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="click">
+				 none
+ 			</response>
+		</speech>
+	</dialog>
+</name>

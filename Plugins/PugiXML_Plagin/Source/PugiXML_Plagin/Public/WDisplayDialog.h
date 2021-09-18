@@ -21,7 +21,7 @@ class UScrollBox;
 class UTextBlock;
 class UWResponseButton;
 
-
+ 
 
 UCLASS()
 class PUGIXML_PLAGIN_API UWDisplayDialog : public UUserWidget

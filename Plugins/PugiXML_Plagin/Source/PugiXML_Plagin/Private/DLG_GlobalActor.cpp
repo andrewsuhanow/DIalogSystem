@@ -907,7 +907,7 @@ void ADLG_GlobalActor::OnRepDrawn(FString _Event)
 		DLGReplicDrawn.Broadcast(_Event);
 	}
 }
-
+  
 //  ==================   ResponseButton.    ChangeVariables  =================== 
 void ADLG_GlobalActor::ChangeVariables(FResponseToDraw& CurrentResponse)
 {
