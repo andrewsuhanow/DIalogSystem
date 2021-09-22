@@ -18,12 +18,207 @@
 #include "PugiXML_Plagin/Include/pugixml.hpp"
 //#include <fstream>   //  pugi load std::ifstream
 
+
+UENUM()  //BlueprintType, Blueprintable
+enum class EProppertyToChange : uint8
+{
+	none,
+
+	DialogName,
+	SpeechName,
+	repeatReplic,
+	repeatResponse,
+	DialogLink,
+	SpeechLink,
+	//Delay,
+	//AfrerDelay,
+	speker,
+	sound,
+	RepEvent,
+	time,
+	delay,
+
+	Speech_condition_type,
+	Speech_condition_varType,
+	Speech_condition_CompareType,
+	Speech_condition_varName,
+	Speech_condition_varValue,
+	Replic_condition_type,
+	Replic_condition_varType,
+	Replic_condition_CompareType,
+	Replic_condition_varName,
+	Replic_condition_varValue,
+	rep_condition_type,
+	rep_condition_varType,
+	rep_condition_CompareType,
+	rep_condition_varName,
+	rep_condition_varValue,
+	Response_condition_type,		// and/or
+	Response_condition_varType,   // Global/LOcal
+	Response_condition_CompareType,
+	Response_condition_varName,
+	Response_condition_varValue,
+
+	//Response_variable_type,
+	Response_variable_varType,
+	Response_variable_varName,
+	Response_variable_varValue,
+	//VariableName_Property,
+	//VariableValue_Property,
+	//dialogLink,
+	//gotoMarker,
+	//gotoType,
+
+	replicComent,
+	repComent,
+	responseComent,
+
+
+
+
+	SpekerinSpekerBlock,
+
+
+	AddDialog,
+	AddSpeech,
+	AddReplick,
+	AddResponse,
+	ButtonAddRep,
+	ButtonAddSpeech_Condition,
+	ButtonAddReplic_Condition,
+	ButtonAddResponse_Condition,
+	ButtonAddResponse_Variable,
+	ButtonAddRep_Condition,
+
+	MoveDialog,
+	MoveSpeech,
+	//MoveSpeech_Condition,  //--
+	MoveReplic,
+	//MoveReplic_Condition,  //--
+	MoveRep,
+	MoveRep_Condition,
+	MoveResponse,
+	//MoveResponse_Condition,  //--
+	MoveResponse_Variable,
+	Move_Condition,//77777777777777777777
+
+	RemoveDialog,
+	RemoveSpeech,
+	RemoveSpeech_Condition,
+	RemoveReplic,
+	RemoveReplic_Condition,
+	RemoveRep,
+	RemoveRep_Condition,
+	RemoveResponse,
+	RemoveResponse_Condition,
+	RemoveResponse_Variable,
+
+	CollapsedDialogSection,
+	CollapsedSpeechSection,
+	CollapsedSpeech_Condition,
+	CollapsedReplicSection,
+	CollapsedReplic_Condition,
+	CollapsedRep_Condition,
+	CollapsedResponseSection,
+	CollapsedResponse_Condition,
+	CollapsedResponse_Variables,
+		 
+	MarkerDialog,
+	MarkerSpeech,
+	MarkerReplic,
+	MarkerRep,
+	MarkerResponse,
+
+	ButtonAdd_Variable,
+	ButtonRemove_Variable,
+	Variable_varName,
+	Variable_varValue
+};
+
+
+UENUM()  //BlueprintType, Blueprintable
+enum class EShouldUpdate : uint8
+{
+	none,
+	inDialog,
+	inSpeech,
+	inReplic,
+	inRep,
+	inResponse
+};
+
+
+struct FPropertyIndex
+{
+	//EProppertyToChange ProppertyToChange;
+	UPROPERTY()
+		int32 iDialog = -1;
+	UPROPERTY()
+		int32 iSpeech = -1;
+	UPROPERTY()
+		//int32 iReplicOrResponse = -1;
+		int32 iReplic = -1;
+	UPROPERTY()
+		int32 iResponse = -1;
+	//int32 iRepOrResponsCondition = -1;  //777777777
+	//-----------int32 iResponseCondition = -1;  //77777777777777	
+	UPROPERTY()
+		int32 iRep = -1;
+
+
+	UPROPERTY()
+		int32 iSpeechCondition = -1;
+	UPROPERTY()
+		int32 iReplicCondition = -1;
+	UPROPERTY()
+		int32 iRepCondition = -1;
+	UPROPERTY()
+		int32 iResponseCondition = -1;
+	UPROPERTY()
+		int32 iResponseVariable = -1;   // response block
+
+
+	UPROPERTY()
+		int32 iVariable = -1;     //  Variable block
+	UPROPERTY()
+		int32 SpekerIndex = -1;
+};
+
+
+
 struct FIndicator
 {
 	FLinearColor color = FLinearColor(0.7f, 0.77f, 1.f, 1);
 	float size = 0.f;
 };
 
+struct FVariablesParameter
+{
+	TSharedPtr<SVerticalBox>* ConditionBlock;
+	TSharedPtr<SEditableTextBox>* TextBoxCondition_Type;
+	TSharedPtr<SEditableTextBox>* TextBoxVariable_Name;
+	TSharedPtr<SEditableTextBox>* TextBoxVariable_Value;
+	UPROPERTY()
+		FName* Type_Text;
+	UPROPERTY()
+		FName* VariableName_Text;
+	UPROPERTY()
+		FName* VariableValue_Text;
+	UPROPERTY()
+		EProppertyToChange AddButtonPropperty;
+	UPROPERTY()
+		EProppertyToChange RemoveButtonPropperty;
+	UPROPERTY()
+		EProppertyToChange ConditionTypePropperty;  // and/or
+	UPROPERTY()
+		EProppertyToChange CompareType;				//  =, != <, >, <=, >=
+	UPROPERTY()
+		EProppertyToChange VarTypePropperty;		// local / global
+	UPROPERTY()
+		EProppertyToChange VarNamePropperty;
+	UPROPERTY()
+		EProppertyToChange VarValuePropperty;
+};
 
 struct FVariables
 {
@@ -72,6 +267,9 @@ struct FCondition
 		TSharedPtr<class UButton> ChangeConditionVariable_Name_Button;
 	UPROPERTY()  
 		bool IsProperty_VariableName_EditNow = false;
+
+	UPROPERTY()
+		FName VariableCompareType = FName("=");
 
 	UPROPERTY()  
 		FName VariableValue = FName("none");
@@ -415,166 +613,7 @@ enum class ECurrentMainPanel : uint8
 	Spekers,
 };
 
-UENUM()  //BlueprintType, Blueprintable
-enum class EProppertyToChange : uint8
-{
-	none,
 
-	DialogName,
-	SpeechName,
-	repeatReplic,   
-	repeatResponse,   
-	DialogLink,
-	SpeechLink,
-	//Delay,
-	//AfrerDelay,
-	speker,
-	sound,
-	RepEvent,
-	time,
-	delay,
-	 
-	Speech_condition_type,
-	Speech_condition_varType,
-	Speech_condition_varName,
-	Speech_condition_varValue,
-	Replic_condition_type,
-	Replic_condition_varType,
-	Replic_condition_varName,
-	Replic_condition_varValue,
-	rep_condition_type,
-	rep_condition_varType,
-	rep_condition_varName,
-	rep_condition_varValue,
-	Response_condition_type,		// and/or
-	Response_condition_varType,   // Global/LOcal
-	Response_condition_varName,
-	Response_condition_varValue,
-
-	//Response_variable_type,
-	Response_variable_varType,
-	Response_variable_varName,
-	Response_variable_varValue,
-	//VariableName_Property,
-	//VariableValue_Property,
-	//dialogLink,
-	//gotoMarker,
-	//gotoType,
-
-	replicComent,
-	repComent,
-	responseComent,
-
-
-
-
-	SpekerinSpekerBlock,
-
-
-	AddDialog,
-	AddSpeech,
-	AddReplick,
-	AddResponse,
-	ButtonAddRep,
-	ButtonAddSpeech_Condition,
-	ButtonAddReplic_Condition,
-	ButtonAddResponse_Condition,
-	ButtonAddResponse_Variable,
-	ButtonAddRep_Condition,
-
-	MoveDialog,
-	MoveSpeech,
-	//MoveSpeech_Condition,  //--
-	MoveReplic,
-	//MoveReplic_Condition,  //--
-	MoveRep,
-	MoveRep_Condition,
-	MoveResponse,
-	//MoveResponse_Condition,  //--
-	MoveResponse_Variable,
-	Move_Condition,//77777777777777777777
-
-	RemoveDialog,
-	RemoveSpeech,
-	RemoveSpeech_Condition,
-	RemoveReplic,
-	RemoveReplic_Condition,
-	RemoveRep,
-	RemoveRep_Condition,
-	RemoveResponse,
-	RemoveResponse_Condition,
-	RemoveResponse_Variable,
-
-	CollapsedDialogSection,
-	CollapsedSpeechSection,
-	CollapsedSpeech_Condition,
-	CollapsedReplicSection,
-	CollapsedReplic_Condition,
-	CollapsedRep_Condition,
-	CollapsedResponseSection,
-	CollapsedResponse_Condition,
-	CollapsedResponse_Variables,
-
-	MarkerDialog,
-	MarkerSpeech,
-	MarkerReplic,
-	MarkerRep,
-	MarkerResponse,
-
-	ButtonAdd_Variable,
-	ButtonRemove_Variable,
-	Variable_varName,
-	Variable_varValue
-};
-
-
-UENUM()  //BlueprintType, Blueprintable
-enum class EShouldUpdate : uint8
-{
-	none,
-	inDialog,
-	inSpeech,
-	inReplic,
-	inRep,
-	inResponse
-};
-
-
-struct FPropertyIndex
-{
-	//EProppertyToChange ProppertyToChange;
-	UPROPERTY()  
-		int32 iDialog = -1;
-	UPROPERTY()  
-		int32 iSpeech = -1;
-	UPROPERTY()  
-		//int32 iReplicOrResponse = -1;
-		int32 iReplic = -1;
-	UPROPERTY()  
-		int32 iResponse = -1;
-		//int32 iRepOrResponsCondition = -1;  //777777777
-		//-----------int32 iResponseCondition = -1;  //77777777777777	
-	UPROPERTY()  
-		int32 iRep = -1;
-	
-
-	UPROPERTY()  
-		int32 iSpeechCondition = -1;
-	UPROPERTY()  
-		int32 iReplicCondition = -1;
-	UPROPERTY()  
-		int32 iRepCondition = -1;
-	UPROPERTY()  
-		int32 iResponseCondition = -1;
-	UPROPERTY()  
-		int32 iResponseVariable = -1;   // response block
-
-	 
-	UPROPERTY()  
-		int32 iVariable = -1;     //  Variable block
-	UPROPERTY()  
-		int32 SpekerIndex = -1;
-};
 
   
  
@@ -751,25 +790,26 @@ public:
 	
 	//  ========  copu or move section
 	UPROPERTY()  
-	EProppertyToChange SectionToMove_Propperty;
+		EProppertyToChange SectionToMove_Propperty;
 	UPROPERTY()  
-	FPropertyIndex iSectionToMove;
+		FPropertyIndex iSectionToMove;
 	UPROPERTY()  
-	FCondition MovingCondition;
+		FCondition MovingCondition;
 	UPROPERTY()  
-	bool isCurrSectionToMove_Cut = false;
+		bool isCurrSectionToMove_Cut = false;
 	//--------------
 
 	UFUNCTION()  
-	FReply SaveAll();
+		FReply SaveAll();
 	UFUNCTION()  
-	FReply LoadAll();
+		FReply LoadAll();
 	  
 	//void UpdateContentPanel();
 	UFUNCTION()  
-	void UpdateDialogBlock();
-	UFUNCTION()  
-	void DrawConditionElement(TSharedPtr<SVerticalBox>& RepConditionBlock,
+		void UpdateDialogBlock();
+	UFUNCTION()
+		void DrawConditionElement(FPropertyIndex& CurrentPropertyIndex, FVariablesParameter& VarParam);
+/*	void DrawConditionElement(TSharedPtr<SVerticalBox> &RepConditionBlock,
 								FPropertyIndex& CurrentPropertyIndex,
 								EProppertyToChange AddButtonPropperty,
 								//EProppertyToChange MoveButtonPropperty,
@@ -778,7 +818,9 @@ public:
 								TSharedPtr<class SEditableTextBox> &TextBoxCondition_Type,
 								FName& Type_Text,
 								EProppertyToChange ConditionTypePropperty,
-								TSharedPtr<class SEditableTextBox> &TextBoxVariable_Name,
+
+								TSharedPtr<class SEditableTextBox> *TextBoxVariable_Name,
+
 								FName& VariableName_Text,
 								EProppertyToChange VarNamePropperty,
 								TSharedPtr<class SEditableTextBox> &TextBoxVariable_Value,
@@ -786,34 +828,34 @@ public:
 								EProppertyToChange VarValuePropperty,
 
 								EProppertyToChange VarTypePropperty);
-
+*/
 	//bool Update = true;
 	UPROPERTY()  
-	EShouldUpdate ShouldUpdate = EShouldUpdate::none;
+		EShouldUpdate ShouldUpdate = EShouldUpdate::none;
 
 	UFUNCTION()  
-	void EditProperty(EProppertyToChange _ProppertyToChange, FPropertyIndex PropertyIndex);  
+		void EditProperty(EProppertyToChange _ProppertyToChange, FPropertyIndex PropertyIndex);  
 	UFUNCTION()  
-	void SwitchCollapsedSection(EProppertyToChange _ProppertyToChange, FPropertyIndex PropertyIndex);
+		void SwitchCollapsedSection(EProppertyToChange _ProppertyToChange, FPropertyIndex PropertyIndex);
 
 	UPROPERTY()  
-	TArray<FDialogSection> DialogSection;
+		TArray<FDialogSection> DialogSection;
 
 
 	//        ============================   Marker   ================================
 	//++++++++++++FReply OnButtonMarkerUsual(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
 	UFUNCTION()  
-	FReply OnButtonMarkerUsual(const FGeometry& Geomet, const FPointerEvent& PEvent, EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
+		FReply OnButtonMarkerUsual(const FGeometry& Geomet, const FPointerEvent& PEvent, EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
 	UFUNCTION()  
-	FReply OnButtonMarkerLink(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
+		FReply OnButtonMarkerLink(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
 	//FLinearColor GetSectionTextColor(EProppertyToChange ProppertyToChange, FPropertyIndex PropertyIndex);
 	UPROPERTY()  
-	bool IsLinkMarkerDrawn = false;			 //  selected child
+		bool IsLinkMarkerDrawn = false;			 //  selected child
 	UPROPERTY()  
-	int32 LastClickedSectionDialogIndex;  //  selected child
+		int32 LastClickedSectionDialogIndex;  //  selected child
 	UPROPERTY()  
 	int32 LastClickedSectionSpeechIndex;  //  selected child
-	UPROPERTY()  
+		UPROPERTY()  
 	int32 LastClickedSectionResponseIndex;  //  selected child
 	
 

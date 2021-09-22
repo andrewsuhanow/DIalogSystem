@@ -54,6 +54,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "DialogSystem")
 		float CurrentSpikerImageSize = 50.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "DialogSystem")
+		float SoundingSymbolLanght = 0.04f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "DialogSystem")
 		FSlateColor PlayerNameTextColor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, category = "DialogSystem")
 		FSlateColor OpponentNameTextColor;

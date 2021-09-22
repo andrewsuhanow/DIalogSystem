@@ -81,26 +81,13 @@ void UDLG_DialogItem::InitDialog()
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	
 
-/*
+
 	//   ============   Get LocalVariables from .xml   ====================
 	pugi::xml_document xmlVariables;
 
 	FString LVariableXmlPath = FPaths::ProjectContentDir() + FString("Dialog/") + FString("LVariables.xml");
-
-	UE_LOG(LogTemp, Warning, TEXT("strstrstrstr VAR   DLG  %s") , *LVariableXmlPath);
-
 	
 	if (!PlatformFile.FileExists(*LVariableXmlPath)) return;
-
-	//UE_LOG(LogTemp, Warning, TEXT("333333333333333333333333333   DLG"));
-
-
-
-
-
-
-	
-
 
 
 	//  RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
@@ -130,20 +117,62 @@ void UDLG_DialogItem::InitDialog()
 	std::string std_LocalVariablesContent = (TCHAR_TO_UTF8(*str_LocalVariablesContent));
 	//  -----------------  Load string as pugi   -------------------------------
 	pugi::xml_parse_result parse_VariablesRes = xmlVariables.load(std_LocalVariablesContent.c_str());
-	if (!parse_VariablesRes) return;
-
+	if (!parse_VariablesRes) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unit %s  can't parse '..content/Dialog/LVariables.xml'   ERROR"), *GetOwner()->GetName());
+		return;
+	}
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
-	//UE_LOG(LogTemp, Warning, TEXT("4444444444444444444444444444444444   DLG"));
-
-	//  Get Root Node
-	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
-*/
 
 
 
+	
 
+	auto MatchVariables = [&](FVariables& _Variable,   //  return
+		pugi::xml_node _VariableRootNode,              //  node from LVariable.xml
+		std::string& STD_VarTypeStr, // local/global	//  parrameter from node from Dialod.xml
+		std::string& STD_VarNameStr,					//  parrameter from node from Dialod.xml
+		FString& VarValueStr)							//  parrameter from node from Dialod.xml
+	{
+		if (STD_VarTypeStr == "local")
+		{
+			//   444444444444444444  ================    LVariable   nodes  =================	
+			//bool isVariableAbsent = true;
+			pugi::xpath_node_set DLG_SpeechVariables = _VariableRootNode.select_nodes("variable");
 
+			//  if local variable absent =>> save index = -1
+			//FVariables LVariableTMP;
+			_Variable.Name = FName("CURRENT__LOCAL_VARIABLE__IS__ABSENT"); //FName(*FString::FromInt(-1));
+
+			// ----- find variables in variablesFile.xml, and save--------
+			for (int32 i_Variables = 0; i_Variables < DLG_SpeechVariables.size(); i_Variables++)
+			{
+				std::string STD_Tmp_SpeechVarNameStr(DLG_SpeechVariables[i_Variables].node().attribute("name").as_string());  //   get attribute("var_name")
+				if (STD_VarNameStr == STD_Tmp_SpeechVarNameStr)
+				{
+					//SpeechTMP.IndexLocalVar.Add(i_Variables);
+					//isVariableAbsent = false;  //  LocalVariabl is exist in LVariableFile
+					_Variable.Name = FName(*FString::FromInt(i_Variables));   //  save index of local variable
+					_Variable.Value = FName(*VarValueStr);
+					//SpeechTMP.Variables.Add(LVariableTMP);
+					break;
+				}
+			}
+			//  -----if "checking variable" is absent in "localVariables"  =>> it woun't take into consideration----
+			//if (isVariableAbsent)    SpeechTMP.IndexLocalVar.Add(-1);
+		}
+		else // if Global
+		{
+			//  --------  name variables in speech node   --------
+			FString SpeechVarNameStr(STD_VarNameStr.c_str());
+
+			//FVariables VariableTMP;
+			_Variable.Name = FName(*SpeechVarNameStr);
+			_Variable.Value = FName(*VarValueStr);
+			//SpeechTMP.Variables.Add(VariableTMP);
+		}
+	};
 
 
 
@@ -172,7 +201,7 @@ void UDLG_DialogItem::InitDialog()
 		UE_LOG(LogTemp, Warning, TEXT("Unit %s  can't parse _*_dialog_*_.xml   ERROR"), *GetOwner()->GetName());
 		return;
 	}
-	else UE_LOG(LogTemp, Warning, TEXT("Unit %s  parse _*_dialog_*_.xml  OK"), *GetOwner()->GetName());
+	//else UE_LOG(LogTemp, Warning, TEXT("Unit %s  parse _*_dialog_*_.xml  OK"), *GetOwner()->GetName());
 	//   pugi::xml_parse_result parse_Res = xmlDoc.load_file(StringCast<ANSICHAR>(*PathToFile).Get());  //+++++
 
 
@@ -213,39 +242,26 @@ void UDLG_DialogItem::InitDialog()
 
 			SpeechTMP.Name = FName(*SpeechStr);
 		 	
+			//   3333333  ================    SPEECH_CONDITION   nodes      (Cash Variable to Compare)   =================	
+			pugi::xpath_node_set DLG_SpeechConditionNodes = DLG_SpeechNodes[i_Speech].node().select_nodes("speech_condition");
+			for (int32 i_SpeechCondition = 0; i_SpeechCondition < DLG_SpeechConditionNodes.size(); i_SpeechCondition++)
+			{
+				std::string STD_SpeechVarTypeStr(DLG_SpeechConditionNodes[i_SpeechCondition].node().attribute("var_type").as_string());  //   get attribute("Local/Global")
 
-			////   3333333  ================    SPEECH_CONDITION   nodes  =================	
-			//pugi::xpath_node_set DLG_SpeechConditionNodes = DLG_SpeechNodes[i_Speech].node().select_nodes("speech_condition");
-			//for (int32 i_SpeechCondition = 0; i_SpeechCondition < DLG_SpeechConditionNodes.size(); i_SpeechCondition++)
-			//{
-			//	//FDLGVariable Speech_VariableTMP; 
-			//					
-			//	std::string STD_SpeechVarTypeStr(DLG_SpeechConditionNodes[i_SpeechCondition].node().attribute("var_type").as_string());  //   get attribute("Local/Global")
-
-			//	std::string STD_SpeechVarNameStr(DLG_SpeechConditionNodes[i_SpeechCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
-
-
-			//	//VarIndexOrName = 
-
-			//	if (STD_SpeechVarTypeStr == "local")
-			//	{
-			//		//   444444444444444444  ================    LVariable   nodes  =================	
-			//		bool isVariableAbsent = true;
-			//		pugi::xpath_node_set DLG_SpeechVariables = VariableRootNode.select_nodes("variable");
-			//		for (int32 i_SpeechVariables = 0; i_SpeechVariables < DLG_SpeechVariables.size(); i_SpeechVariables++)
-			//		{
-			//			std::string STD_Tmp_SpeechVarNameStr(DLG_SpeechVariables[i_SpeechVariables].node().attribute("name").as_string());  //   get attribute("var_name")
-			//			if (STD_SpeechVarNameStr == STD_Tmp_SpeechVarNameStr)
-			//			{
-			//				SpeechTMP.IndexLocalVar.Add(i_SpeechVariables);
-			//				isVariableAbsent = false;  //  LocalVariabl ise exist in LVariableFile
-			//				break;
-			//			}	
-			//		}
-			//		//  if "checking variable" is absent in "localVariables"  =>> it woun't take into consideration
-			//		if (isVariableAbsent)    SpeechTMP.IndexLocalVar.Add(-1);
-			//	}
-			//}
+				std::string STD_SpeechVarNameStr(DLG_SpeechConditionNodes[i_SpeechCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
+					// -----  get var value -----
+				std::string STD_SpeechVarValueStr(DLG_SpeechConditionNodes[i_SpeechCondition].node().text().as_string());     //  var value
+				FString SpeechVarValueStr(STD_SpeechVarValueStr.c_str());
+				
+				// ----    Asociate ConditionVariable from SPEECH with LocalVarInFile or GlobalVar   ------
+				FVariables VariableTMP;
+				MatchVariables(VariableTMP, 
+					VariableRootNode, 
+					STD_SpeechVarTypeStr,
+					STD_SpeechVarNameStr,
+					SpeechVarValueStr);  
+				SpeechTMP.Variables.Add(VariableTMP);
+			} 
 
 			//   33333  ================    REPLIC   nodes  =================	
 			pugi::xpath_node_set DLG_ReplicNodes = DLG_SpeechNodes[i_Speech].node().select_nodes("replic");
@@ -253,74 +269,55 @@ void UDLG_DialogItem::InitDialog()
 			{
 				FReplicNode ReplicTMP;
 
+				////   444444  ================    REPLIC_CONDITION   nodes      (Cash Variable to Compare)   =================	
+				pugi::xpath_node_set DLG_ReplicConditionNodes = DLG_ReplicNodes[i_Replic].node().select_nodes("replic_condition");
+				for (int32 i_ReplicCondition = 0; i_ReplicCondition < DLG_ReplicConditionNodes.size(); i_ReplicCondition++)
+				{					
+					std::string STD_ReplicVarTypeStr(DLG_ReplicConditionNodes[i_ReplicCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 
-				////   444444  ================    REPLIC_CONDITION   nodes  =================	
-				//pugi::xpath_node_set DLG_ReplicConditionNodes = DLG_ReplicNodes[i_Replic].node().select_nodes("replic_condition");
-				//for (int32 i_ReplicCondition = 0; i_ReplicCondition < DLG_ReplicConditionNodes.size(); i_ReplicCondition++)
-				//{					
-				//	std::string STD_ReplicVarTypeStr(DLG_ReplicConditionNodes[i_ReplicCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
+					std::string STD_ReplicVarNameStr(DLG_ReplicConditionNodes[i_ReplicCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
+						// -----  get var value -----
+					std::string STD_ReplicVarValueStr(DLG_ReplicConditionNodes[i_ReplicCondition].node().text().as_string());     //  var value
+					FString ReplicVarValueStr(STD_ReplicVarValueStr.c_str());
 
-				//	std::string STD_ReplicVarNameStr(DLG_ReplicConditionNodes[i_ReplicCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
-
-				//	if (STD_ReplicVarTypeStr == "local")
-				//	{
-				//		//   5555555555  ================    LVariable   nodes  =================	
-				//		bool isVariableAbsent = true;
-				//		pugi::xpath_node_set DLG_ReplicVariables = VariableRootNode.select_nodes("variable");
-				//		for (int32 i_ReplicVariables = 0; i_ReplicVariables < DLG_ReplicVariables.size(); i_ReplicVariables++)
-				//		{
-				//			std::string STD_Tmp_ReplicVarNameStr(DLG_ReplicVariables[i_ReplicVariables].node().attribute("name").as_string());  //   get attribute("var_name")
-				//			if (STD_ReplicVarNameStr == STD_Tmp_ReplicVarNameStr)
-				//			{
-				//				ReplicTMP.IndexLocalVar.Add(i_ReplicVariables);
-				//				isVariableAbsent = false;  //  LocalVariabl ise exist in LVariableFile
-				//				break;
-				//			}
-
-				//		}
-				//		//  if "checking variable" is absent in "localVariables"  =>> it woun't take into consideration
-				//		if (isVariableAbsent)    ReplicTMP.IndexLocalVar.Add(-1);
-				//	}
-				//}
-
+					// ----    Asociate ConditionVariable from REOLIC with LocalVarInFile or GlobalVar   ------
+					FVariables VariableTMP;
+					MatchVariables(VariableTMP,
+						VariableRootNode,
+						STD_ReplicVarTypeStr,
+						STD_ReplicVarNameStr,
+						ReplicVarValueStr);
+					ReplicTMP.Variables.Add(VariableTMP);
+				}
+				
 				//   44444  ================    REP   nodes  =================	
 				pugi::xpath_node_set DLG_RepNodes = DLG_ReplicNodes[i_Replic].node().select_nodes("rep");
 				for (int32 i_Rep = 0; i_Rep < DLG_RepNodes.size(); i_Rep++)
 				{
 					FRepNode RepTMP;
 
-				//	//   55555  ================    REP_CONDITION   nodes  =================	
-				//	pugi::xpath_node_set DLG_RepConditionNodes = DLG_RepNodes[i_Rep].node().select_nodes("rep_condition");
-				//	for (int32 i_RepCondition = 0; i_RepCondition < DLG_RepConditionNodes.size(); i_RepCondition++)
-				//	{
+				//	 55555  ================    REP_CONDITION   nodes        (Cash Variable to Compare)   =================	
+					pugi::xpath_node_set DLG_RepConditionNodes = DLG_RepNodes[i_Rep].node().select_nodes("rep_condition");
+					for (int32 i_RepCondition = 0; i_RepCondition < DLG_RepConditionNodes.size(); i_RepCondition++)
+					{
+						std::string STD_RepVarTypeStr(DLG_RepConditionNodes[i_RepCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 
-				//		std::string STD_RepVarTypeStr(DLG_RepConditionNodes[i_RepCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
+						std::string STD_RepVarNameStr(DLG_RepConditionNodes[i_RepCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
+							// -----  get var value -----
+						std::string STD_RepVarValueStr(DLG_RepConditionNodes[i_RepCondition].node().text().as_string());  //  var value
+						FString RepVarValueStr(STD_RepVarValueStr.c_str());
 
-				//		std::string STD_RepVarNameStr(DLG_RepConditionNodes[i_RepCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
-
-				//		if (STD_RepVarTypeStr == "local")
-				//		{
-				//			//   66666666666666  ================    LVariable   nodes  =================	
-				//			bool isVariableAbsent = true;
-				//			pugi::xpath_node_set DLG_RepVariables = VariableRootNode.select_nodes("variable");
-				//			for (int32 i_RepVariables = 0; i_RepVariables < DLG_RepVariables.size(); i_RepVariables++)
-				//			{
-				//				std::string STD_Tmp_RepVarNameStr(DLG_RepVariables[i_RepVariables].node().attribute("name").as_string());  //   get attribute("var_name")
-				//				if (STD_RepVarNameStr == STD_Tmp_RepVarNameStr)
-				//				{
-				//					RepTMP.IndexLocalVar.Add(i_RepVariables);
-				//					isVariableAbsent = false;  //  LocalVariabl is exist in LVariableFile
-				//					break;
-				//				}
-				//			}
-				//			//  if "checking variable" is absent in "localVariables"  =>> it woun't take into consideration
-				//			if (isVariableAbsent)    RepTMP.IndexLocalVar.Add(-1);
-				//		}
-				//	}
+						// ----    Asociate ConditionVariable from REP with LocalVarInFile or GlobalVar   ------
+						FVariables VariableTMP;
+						MatchVariables(VariableTMP,
+							VariableRootNode,
+							STD_RepVarTypeStr,
+							STD_RepVarNameStr,
+							RepVarValueStr);
+						RepTMP.Variables.Add(VariableTMP);
+					}
 					ReplicTMP.RepNode.Add(RepTMP);
-				}
-
-				
+				}				
 				SpeechTMP.ReplicNode.Add(ReplicTMP);
 			}
 
@@ -330,80 +327,51 @@ void UDLG_DialogItem::InitDialog()
 			{
 				FResponseNode ResponseTMP;
 
-				////   444444  ================    RESPONSE_CONDITION   nodes  =================	
-				//pugi::xpath_node_set DLG_ResponseConditionNodes = DLG_ResponseNodes[i_Response].node().select_nodes("response_condition");
-				//for (int32 i_ResponseCondition = 0; i_ResponseCondition < DLG_ResponseConditionNodes.size(); i_ResponseCondition++)
-				//{
-				//	//bool isValid = true;
-				//	//FDLGVariable Response_VariableTMP;
+				////   444444  ================    RESPONSE_CONDITION   nodes      (Cash Variable to Compare)   =================	
+				pugi::xpath_node_set DLG_ResponseConditionNodes = DLG_ResponseNodes[i_Response].node().select_nodes("response_condition");
+				for (int32 i_ResponseCondition = 0; i_ResponseCondition < DLG_ResponseConditionNodes.size(); i_ResponseCondition++)
+				{
+					std::string STD_ResponseVarTypeStr(DLG_ResponseConditionNodes[i_ResponseCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 
-				//	std::string STD_ResponseVarTypeStr(DLG_ResponseConditionNodes[i_ResponseCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
+					std::string STD_ResponseVarNameStr(DLG_ResponseConditionNodes[i_ResponseCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
+						// -----  get var value -----
+					std::string STD_ResponseVarValueStr(DLG_ResponseConditionNodes[i_ResponseCondition].node().text().as_string());  //  var value
+					FString ResponseVarValueStr(STD_ResponseVarValueStr.c_str());
 
-				//	std::string STD_ResponseVarNameStr(DLG_ResponseConditionNodes[i_ResponseCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
-
-				//	if (STD_ResponseVarTypeStr == "local")
-				//	{
-				//		//   5555555555  ================    LVariable   nodes  =================
-				//		bool isVariableAbsent = true;
-				//		pugi::xpath_node_set DLG_ResponseVariables = VariableRootNode.select_nodes("variable");
-				//		for (int32 i_Variables = 0; i_Variables < DLG_ResponseVariables.size(); i_Variables++)
-				//		{
-				//			std::string STD_Tmp_ResponseVarNameStr(DLG_ResponseVariables[i_Variables].node().attribute("name").as_string());  //   get attribute("var_name")
-				//			if (STD_ResponseVarNameStr == STD_Tmp_ResponseVarNameStr)
-				//			{
-				//				ResponseTMP.IndexLocalVar.Add(i_Variables);
-				//				isVariableAbsent = false;  //  LocalVariabl ise exist in LVariableFile
-				//				break;
-				//			}
-				//		}
-				//		//  if "checking variable" is absent in "localVariables"  =>> it woun't take into consideration
-				//		if (isVariableAbsent)    ResponseTMP.IndexLocalVar.Add(-1);
-				//	}
-				//}
+					// ----    Asociate ConditionVariable from REP with LocalVarInFile or GlobalVar   ------
+					FVariables VariableTMP;
+					MatchVariables(VariableTMP,
+						VariableRootNode,
+						STD_ResponseVarTypeStr,
+						STD_ResponseVarNameStr,
+						ResponseVarValueStr);
+					ResponseTMP.Variables.Add(VariableTMP);
+				}
 
 
-				////   444444  ================    RESPONSE_Change_VARIABLES   nodes  =================	
-				//pugi::xpath_node_set DLG_ResponseVariablesNodes = DLG_ResponseNodes[i_Response].node().select_nodes("change_variable");
-				//for (int32 i_ResponseVariables = 0; i_ResponseVariables < DLG_ResponseVariablesNodes.size(); i_ResponseVariables++)
-				//{
-				//	//bool isValid = true;
-				//	//FDLGVariable Response_VariableTMP;
+				////   444444  ================    RESPONSE_Change_VARIABLES   nodes     (Cash Variable to change)  =================	
+				pugi::xpath_node_set DLG_ResponseVariablesNodes = DLG_ResponseNodes[i_Response].node().select_nodes("change_variable");
+				for (int32 i_ResponseVariables = 0; i_ResponseVariables < DLG_ResponseVariablesNodes.size(); i_ResponseVariables++)
+				{
+					std::string STD_ResponseVarTypeStr(DLG_ResponseVariablesNodes[i_ResponseVariables].node().attribute("var_type").as_string());  //   get attribute("var_type")
 
-				//	std::string STD_ResponseVarTypeStr(DLG_ResponseVariablesNodes[i_ResponseVariables].node().attribute("var_type").as_string());  //   get attribute("var_type")
+					std::string STD_ResponseVarNameStr(DLG_ResponseVariablesNodes[i_ResponseVariables].node().attribute("var_name").as_string());  //   get attribute("var_name")
+					// -----  get var value -----
+					std::string STD_ResponseVarValueStr(DLG_ResponseVariablesNodes[i_ResponseVariables].node().text().as_string());  //  var value
+					FString ResponseVarValueStr(STD_ResponseVarValueStr.c_str());
 
-				//	std::string STD_ResponseVarNameStr(DLG_ResponseVariablesNodes[i_ResponseVariables].node().attribute("var_name").as_string());  //   get attribute("var_name")
-				//	//if (STD_ResponseVarTypeStr == "global")  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-				//	//{
-				//	//	GlobalVariable.Contains(FName(*VarName_Str))
-				//	//	//FString ResponseVarNameStr(STD_ResponseVarNameStr.c_str());
-				//	//	//Response_VariableTMP.NameGlobalVar = FName(*ResponseVarNameStr);
-				//	//}
-				//	//else // if  "local" variable
-				//	
-				//	if (STD_ResponseVarTypeStr == "local")
-				//	{
-
-				//		//   5555555555  ================    LVariable   nodes  =================	
-				//		bool isVariableAbsent = true;
-				//		pugi::xpath_node_set DLG_ResponseVariables = VariableRootNode.select_nodes("variable");
-				//		for (int32 i_Variables = 0; i_Variables < DLG_ResponseVariables.size(); i_Variables++)
-				//		{
-				//			std::string STD_Tmp_ResponseVarNameStr(DLG_ResponseVariables[i_Variables].node().attribute("name").as_string());  //   get attribute("var_name")
-				//			if (STD_ResponseVarNameStr == STD_Tmp_ResponseVarNameStr)
-				//			{
-
-				//				ResponseTMP.IndexLocalVar_ToChange.Add(i_Variables);
-				//				isVariableAbsent = false;  //  LocalVariabl ise exist in LVariableFile
-				//				break;
-				//			}
-				//		}
-				//		//  if "checking variable" is absent in "localVariables"  =>> it woun't take into consideration
-				//		if (isVariableAbsent)    ResponseTMP.IndexLocalVar_ToChange.Add(-1);
-				//	}
-				//}
+					// ----    Asociate ConditionVariable from REP with LocalVarInFile or GlobalVar   ------
+					FVariables VariableTMP;
+					MatchVariables(VariableTMP,
+						VariableRootNode,
+						STD_ResponseVarTypeStr,
+						STD_ResponseVarNameStr,
+						ResponseVarValueStr);
+					ResponseTMP.Variables_ToChange.Add(VariableTMP);
+				}
 
 				SpeechTMP.ResponseNode.Add(ResponseTMP);
-			}
+			} 
 
 			DialogTMP.SpeechNode.Add(SpeechTMP);
 		}//

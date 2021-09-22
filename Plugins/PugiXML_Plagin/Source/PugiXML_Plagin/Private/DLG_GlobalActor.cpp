@@ -111,7 +111,7 @@ void ADLG_GlobalActor::DLG_InitLocalVariables()
 
 	//  Get Root Node
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
-	VariableRootNode = xmlVariables.child("local_variables");
+
 
 	LocalVariables.Empty();
 	pugi::xpath_node_set DLG_Var = VariableRootNode.select_nodes("variable");
@@ -120,7 +120,15 @@ void ADLG_GlobalActor::DLG_InitLocalVariables()
 		std::string STD_VarValueStr(DLG_Var[i_Variables].node().attribute("value").as_string());	//   get attribute("value")
 		std::wstring STD_W_VarValueStr = pugi::as_wide(STD_VarValueStr.c_str());
 		FString VarValueStr(STD_W_VarValueStr.c_str());
-		LocalVariables.Add(FName(*VarValueStr));
+
+		//  ------------   Cash locale variables   ------------    deprecated   will Dell
+		//LocalVariables.Add(FName(*VarValueStr));  //--------  777777777777777777777777XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+		//  ------------   Cash locale variables   ------------
+		FVariables LVariablesTMP;
+		LVariablesTMP.Value = FName(*VarValueStr);
+		LVariablesTMP.Name = FName(*FString::FromInt(i_Variables));    
+		LVariablesStored.Add(LVariablesTMP);
 	}
 	
 }
@@ -255,6 +263,21 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	//  Get Root Node
 	pugi::xml_node DialogRootNode = xmlDoc.child("name");
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//std::string RootNodeStr(RootNode.attribute("name").as_string());
 //   ================================   Get LocalVariables from .xml   ====================
 	pugi::xml_document xmlVariables;
@@ -289,77 +312,157 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	pugi::xml_node VariableRootNode = xmlVariables.child("local_variables");
 	
 
-
-	 
 	//  =========================  Check Node Condition AtAll  =======================
-	auto CheckCondition = [&](pugi::xml_node _DlgBranchRootNode,      //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX   COPY OR REF
-							pugi::char_t* NodeNameStr,
-							TArray<FName>& _LocalVariables,
-							pugi::xml_node _VariableRootNode,      //  XXXXXXXXXXXXXXXXXXXXXXXXXXXXX   COPY OR REF
+	auto ResulrByCompareType = [&](std::string STD_CompareType_Str, FName& VarVal_Real, FName& Val_InActorCash)
+	{
+		if ((STD_CompareType_Str == "=" && VarVal_Real == FName(*Val_InActorCash.ToString())) ||
+			(STD_CompareType_Str == "!=" && VarVal_Real != FName(*Val_InActorCash.ToString())))
+		{
+			//isCurrentConditionTest = true;
+			return true;
+		}
+		else //if (STD_CompareType_Str == ">" || STD_CompareType_Str == "<" ||
+			 //	STD_CompareType_Str == ">=" || STD_CompareType_Str == "<=")
+		{
+			// if value for compare is numeric (RVel - numeric)
+			///int32 ComparedValue = FCString::Atoi(*DialogParameter_CurrBranch.Variables[i_Condition].Value.ToString());
+			int32 ComparedValue = FCString::Atoi(*Val_InActorCash.ToString());
+			if (ComparedValue == 0 && Val_InActorCash != FName("0"))
+			{
+				ComparedValue = -1;   //  -----  ComparedValue not numeric  ----- 
+			}
+			if (ComparedValue != -1)
+			{
+				//  -------  get last symbols of number  -----------
+				FString RealNumberStr = VarVal_Real.ToString();
+				int32 StrLen = RealNumberStr.Len();
+				FString VarsNumber_Endind_Str = FString("");
+				int32 VarsNumber_Endind = 0;
+				while (RealNumberStr.Mid(--StrLen, 1).IsNumeric() && StrLen != -1)   // ssss.Equals(TEXT("0")
+				{
+					VarsNumber_Endind_Str = RealNumberStr.Mid(StrLen, 1) + VarsNumber_Endind_Str;
+				}
+				VarsNumber_Endind = FCString::Atoi(*VarsNumber_Endind_Str);
+
+				if (VarsNumber_Endind > ComparedValue && STD_CompareType_Str == ">" ||
+					VarsNumber_Endind >= ComparedValue && STD_CompareType_Str == ">=" ||
+					VarsNumber_Endind < ComparedValue && STD_CompareType_Str == "<" ||
+					VarsNumber_Endind <= ComparedValue && STD_CompareType_Str == "<=")
+				{
+					//isCurrentConditionTest = true;
+					return true;
+				}
+				else
+				{
+					//isCurrentConditionTest = false;   // -----  if condition not true  -----
+					return  false;   // -----  if condition not true  -----
+				}
+			}
+			else
+			{
+				//isCurrentConditionTest = false;  //  -----  ComparedValue not numeric  ----- 
+				return false;  //  -----  ComparedValue not numeric  ----- 
+			}
+			return false;  //  if here =>> ERROR
+		}
+		return false;  //  if here =>> ERROR
+	};
+
+	//  =========================  Check Node Condition AtAll  =======================
+	auto CheckCondition = [&](TArray<FVariables>& CurrBranchs_Variables,  //  Cashed conditions parrameter (for compare), in EachActor  
+																///why777 <<Variables Cashed in Actor has its index in xml, so it's faster to get>>
+							pugi::xml_node _DlgBranchRootNode,			//  Concrete Brunch from Dialog.xml  //COPY OR REF (7777777)
+							pugi::char_t* NodeNameStr,					//  name of checking node  №: "speech_condition", "rep_condition"....
+							//TArray<FName>& _LocalVariables,        // -----------   Cashed Variables in GlobalActor  Old like FName
+							TArray<FVariables>& _LVariablesStored,        //  Cashed Variables from localVar.xml in GlobalActor 
+							//TArray<FVariables> &Variables;
+							//pugi::xml_node _VariableRootNode,      //  XXXXXX---------------XXXXXXXX   COPY OR REF
 							//TArray<int32>& _Checking_LocalVariable,
 							TMap<FName, FName> *&_GlobalVariable)
-	{
-
+	{ 
+		//Variables;
 		// ==========================    CONDITION  ============================
 		bool isCurrentNodeTest = true;
+		//FSpeechNode* AAAAAAAAAAAAAAA = &DialogParameterBranch;
+
+		
 		TArray<std::string> Or_ToCheck;
 		TArray<std::string> Or_ToIgnor;
-		//std::wstring STD_W_NodeNameStr = pugi::as_wide(STD_NodeNameStr.c_str());
+
 		pugi::xpath_node_set DLG_ConditionNode = _DlgBranchRootNode.select_nodes(NodeNameStr);
 		for (int32 i_Condition = 0; i_Condition < DLG_ConditionNode.size(); i_Condition++)
 		{
+			bool isCurrentConditionTest = true;     //  is test ok or failed
+
 			// ======== Get Condition Type  (And/Or) =========
 			std::string STD_TypeOrAnd_Str(DLG_ConditionNode[i_Condition].node().attribute("type").as_string()); // Attribute(Or/And)
+
+			// ======== Get Compare Type  (And/Or) =========
+			std::string STD_CompareType_Str(DLG_ConditionNode[i_Condition].node().attribute("compare_type").as_string()); // Attribute(compare_type)
+
+
 			// ======== Get variable Type  (Local/Global) =========
-			std::string STD_TypeLocalGlobal_Str(DLG_ConditionNode[i_Condition].node().attribute("var_type").as_string());  //   get attribute("Local/Global")
-			// ======== Get variable Value =========
-			std::string STD_VarValue_Str(DLG_ConditionNode[i_Condition].node().text().as_string());   //   get variable "Value"
-			FString VarValue_Str(STD_VarValue_Str.c_str());
-			// ======== Get variable Name =========
-			std::string STD_VarName_Str(DLG_ConditionNode[i_Condition].node().attribute("var_name").as_string()); // Attribute(var_name)
-			FString VarName_Str(STD_VarName_Str.c_str());
+			int32 IsGlobal_or_LocalIndex = FCString::Atoi(*CurrBranchs_Variables[i_Condition].Name.ToString());
+			if (IsGlobal_or_LocalIndex == 0 )
+			{
+				if (CurrBranchs_Variables[i_Condition].Name == FName("CURRENT__LOCAL_VARIABLE__IS__ABSENT"))
+				{
+					IsGlobal_or_LocalIndex = -200; // it's local Variable and it's absent in stored variavles 
+				}
+				else if (CurrBranchs_Variables[i_Condition].Name != FName("0"))
+				{
+					IsGlobal_or_LocalIndex = -1; // its GLOBAL Variable with name
+				}
+				//->  else:   it's local Variable with index '
+			}
+			//->  else:   its LOCAL and it's index = IsGlobal_or_LocalIndex;
+			
+
+			///++++++++std::string STD_TypeLocalGlobal_Str(DLG_ConditionNode[i_Condition].node().attribute("var_type").as_string());  //   get attribute("Local/Global")
+			/// ======== Get variable Value =========
+			///++++++std::string STD_VarValue_Str(DLG_ConditionNode[i_Condition].node().text().as_string());   //   get variable "Value"
+			///++++++++FString VarValue_Str(STD_VarValue_Str.c_str());
+			/// ======== Get variable Name =========
+			///+++std::string STD_VarName_Str(DLG_ConditionNode[i_Condition].node().attribute("var_name").as_string()); // Attribute(var_name)
+			///+++FString VarName_Str(STD_VarName_Str.c_str());
 
 			// ======== Check if need ignore variable, becose "Or-type" and alredy "true" ========
 			if (Or_ToIgnor.Contains(STD_TypeOrAnd_Str)) continue;
 
-			bool isCurrentConditionTest = true;
+
 
 			// ==============   "global"   ===================
-			if (STD_TypeLocalGlobal_Str == "global")
+			if (IsGlobal_or_LocalIndex == -1)//if (STD_TypeLocalGlobal_Str == "global")
 			{
 				// ========  Compare with 'GlobalVariable_value'  =========
 				// ------- Find "Variable" in global by "Name" -------
-				FName* GlobalValueRef = (*_GlobalVariable).Find(FName(*VarName_Str));
+				FName* GlobalValueRef = (*_GlobalVariable).Find(FName(*CurrBranchs_Variables[i_Condition].Name.ToString()));  // VarName_Str   7777777777777
+				///+++++FName* GlobalValueRef = (*_GlobalVariable).Find(FName(*VarName_Str));    //   VarName_Str   7777777777777
 				if (GlobalValueRef) 
 				{
-					FName realGlobalVariable_value = *GlobalValueRef;
-					if (FName(*VarValue_Str) != realGlobalVariable_value) isCurrentConditionTest = false;
-				}
-				else isCurrentConditionTest = false;
+					FName RealGlobalVariable_value = *GlobalValueRef;
+
+					// --------  check variables value (varInStored with varInCondition) depending with compare parameter   -------
+					isCurrentConditionTest = ResulrByCompareType(STD_CompareType_Str,
+																RealGlobalVariable_value,
+																CurrBranchs_Variables[i_Condition].Value);
+				} 
+				else isCurrentConditionTest = false;   // -----  if Global value notExist  -----
 			}
 
 			// ==============   "Local"   ===================
 			else  
 			{ 
-				bool VariableIsAbsent = true;
-				pugi::xpath_node_set XML_Var = VariableRootNode.select_nodes("variable");
-				for (int32 i_Variables = 0; i_Variables < XML_Var.size(); i_Variables++)
+				if (IsGlobal_or_LocalIndex == -200) isCurrentConditionTest = false;  // Variable is absent in LVariable_XmlFile
+				else
 				{
-					//  name of local variable in LVariable_XmlFile
-					std::string STD_XmlVarNameStr(XML_Var[i_Variables].node().attribute("name").as_string());	//   get attribute("name")
+					FName RealGlobalVariable_value = _LVariablesStored[IsGlobal_or_LocalIndex].Value;
 
-					if (STD_VarName_Str == STD_XmlVarNameStr)
-					{
-						VariableIsAbsent = false;
-
-						//std::string STD_XmlVarValueStr(XML_Var[i_Variables].node().attribute("value").as_string());	//   get attribute("value")				
-						if (VarValue_Str != _LocalVariables[i_Variables].ToString()) isCurrentConditionTest = false;
-						//if (STD_VarValue_Str != STD_XmlVarValueStr) isCurrentConditionTest = false;
-						break;
-					}
-				}
-				if(VariableIsAbsent) isCurrentConditionTest = false;  // Variable is absent in LVariable_XmlFile
-										 
+					// --------  check variables value (varInStored with varInCondition) depending with compare parameter   -------
+					isCurrentConditionTest = ResulrByCompareType(STD_CompareType_Str,
+														RealGlobalVariable_value,
+														CurrBranchs_Variables[i_Condition].Value);
+				}									 
 			}
 
 			//   And / Or   (result alredy have)
@@ -380,36 +483,62 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 			if (!isCurrentNodeTest) break;
 		}
 		if (Or_ToCheck.Num() > 0) isCurrentNodeTest = false;
-
+		
 		return isCurrentNodeTest;
 	};
 
 	 
 
-	auto GetAppropriateREP = [&](pugi::xml_node _DlgBranchRootNode, // REPLIC.node()  // XXXXXXXXXXXXXX   COPY OR REF
-									pugi::char_t* NodeNameStr, 
-									TArray<FName>& _LocalVariables,
-									FReplicNode& ReplicNodeParam,
+	auto GetAppropriateREP = [&](FReplicNode& ReplicNode,   // REPLIC.node() from Cash in ActorDlgParameterStored (for get variables condition)
+									pugi::xml_node _DlgBranchRootNode, // REPLIC.node() from xml file  // XXXXXXXXXXXXXX   COPY OR REF
+									//pugi::char_t* NodeNameStr, 
+									//TArray<FName>& _LocalVariables,
+									TArray<FVariables>& _LVariablesStored,        //  Cashed Variables from localVar.xml in GlobalActor 
+									//FReplicNode& ReplicNodeParam,
 									TMap<FName, FName> *&_GlobalVariable,
 									FReplicToDraw& ReplicsToDrawTMP_Ref)
 	{
 		TArray<int32> CorrectReps;
-		pugi::xpath_node_set DLG_Rep = _DlgBranchRootNode.select_nodes(NodeNameStr);
+		pugi::xpath_node_set DLG_Rep = _DlgBranchRootNode.select_nodes("rep");
 		for (int32 i_Rep = 0; i_Rep < DLG_Rep.size(); i_Rep++)
 		{
-			bool isCurrentRepTest = CheckCondition(DLG_Rep[i_Rep].node(),
+
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+			//bool isCurrentRepTest = true;  //  TEST
+			bool isCurrentRepTest = CheckCondition(ReplicNode.Variables,
+												DLG_Rep[i_Rep].node(),
 												"rep_condition",
-												_LocalVariables,
-												VariableRootNode,
+												//_LocalVariables,
+												_LVariablesStored,
+												//VariableRootNode,
 												//ReplicNodeParam.RepNode[i_Rep].IndexLocalVar,
 												_GlobalVariable);
+
+
+
+			//bool isCurrentSpeechTest = CheckCondition((*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech],
+					//	DLG_Speech[i_Speech].node(),   //  ---------
+					//	"speech_condition",            //  ---------
+					//	//LocalVariables,   //  ==>> Stored
+					//	LVariablesStored,
+					//	//(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].Variables;
+					//								//VariableRootNode,
+					//								//(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].IndexLocalVar,
+					//	GlobalVariable);
 
 			// -----------  if this "Rep" satisfy of condition =>> save it for further (random) Geting  ----------
 			if (isCurrentRepTest) CorrectReps.Add(i_Rep);
 		}
 
 		int32 IndexOfChosedRep = 0;
-		if (CorrectReps.Num() == 0) return false;  // if NOone "Reps" is alloud =>> spend "Replic"
+		if (CorrectReps.Num() == 0) return false;  // if NOone "Reps" is allowed =>> spend "Replic"
 		else
 		{
 			//  ---------    Get random Rep from allowed Rep   ----------
@@ -523,7 +652,7 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 	std::string STD_DlgStr(DLG_Dialog[i_Dlg].node().attribute("dialog_name").as_string());  //   get attribute("dialog_name")
 	FString DlgStr(STD_DlgStr.c_str());
 	if (DlgStr == _NextDialogNode)
-	{
+	{ 
 		// ==========================    SPEECH  ============================
 		bool IsSpeechNodeGenerate_ok = false;
 		pugi::xpath_node_set DLG_Speech = DLG_Dialog[i_Dlg].node().select_nodes("speech");
@@ -532,12 +661,16 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 		std::string STD_SpeechStr(DLG_Speech[i_Speech].node().attribute("speech_name").as_string());  //   get attribute("speech_name")
 		FString SpeechStr(STD_SpeechStr.c_str());
 		if (SpeechStr == _NextSpeechNode)
-		{			
+		{		 	
 			//  ========================   Check "Speech" CONDITION  ===========================
-			bool isCurrentSpeechTest = CheckCondition(DLG_Speech[i_Speech].node(),
-											"speech_condition",
-											LocalVariables,
-											VariableRootNode,
+			//FSpeechNode* AAAAAAAAAAAAAAA = &(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech];
+			bool isCurrentSpeechTest = CheckCondition((*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].Variables,
+											DLG_Speech[i_Speech].node(),   //  ---------
+											"speech_condition",            //  ---------
+											//LocalVariables,   //  ==>> Stored
+											LVariablesStored,
+											//(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].Variables;
+											//VariableRootNode,
 											//(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].IndexLocalVar,
 											GlobalVariable);
 
@@ -603,24 +736,40 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 					// ===============  Check repet property:  (once/after_once/comeback), (always)  =================
 					if(RequireReplicRepeat != STD_ReplicRepeatStr && STD_ReplicRepeatStr != "always") continue;
 				
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+					//bool isCurrentReplicTest = true;  //  TEST
 					//  ========================   CHECK "Replic" CONDITION  ===========================
-					bool isCurrentReplicTest = CheckCondition(DLG_Replic[i_Replic].node(),
+					bool isCurrentReplicTest = CheckCondition((*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech]
+																								.ReplicNode[i_Replic].Variables,
+																DLG_Replic[i_Replic].node(),
 																"replic_condition",
-																LocalVariables,
-																VariableRootNode,
+																//LocalVariables,
+																LVariablesStored,
+																//VariableRootNode,
 																//(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech]
 																//			.ReplicNode[i_Replic].IndexLocalVar,
 																GlobalVariable);
+
 
 					if (!isCurrentReplicTest) continue;
 					else
 					{
 						FReplicToDraw ReplicsToDrawTMP;
-						bool IsAlloudRepExist = GetAppropriateREP(DLG_Replic[i_Replic].node(),
-												"rep",
-												LocalVariables,
-												(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech]
-																				.ReplicNode[i_Replic],
+						bool IsAlloudRepExist = GetAppropriateREP((*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech]
+																									.ReplicNode[i_Replic],
+												DLG_Replic[i_Replic].node(),
+												//"rep",
+												//LocalVariables,
+												LVariablesStored,
+												//(*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech]
+												//								.ReplicNode[i_Replic],
 												GlobalVariable,
 												ReplicsToDrawTMP);
 
@@ -679,12 +828,26 @@ for (int32 i = 0; i < DialogParameter.DialogNode.Num(); i++)
 					//else (*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech].ResponseNode[i_Response].IsRepeatOnce_Done = true;
 				}
 
+
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+				//bool isCurrentResponseTest = true;  //  TEST
 				//  ========================   CHECK "Response" CONDITION  ===========================
-				bool isCurrentResponseTest = CheckCondition(DLG_Response[i_Response].node(),
+				bool isCurrentResponseTest = CheckCondition((*DialogParameter).DialogNode[i_Dlg].SpeechNode[i_Speech]
+																							.ResponseNode[i_Response].Variables,
+															DLG_Response[i_Response].node(),
 															"response_condition",
-															LocalVariables,
-															VariableRootNode,
+															//LocalVariables,
+															LVariablesStored,
+															//VariableRootNode,
 															GlobalVariable);
+				
 
 				if (!isCurrentResponseTest) continue;
 				else
@@ -907,7 +1070,7 @@ void ADLG_GlobalActor::OnRepDrawn(FString _Event)
 		DLGReplicDrawn.Broadcast(_Event);
 	}
 }
-  
+   
 //  ==================   ResponseButton.    ChangeVariables  =================== 
 void ADLG_GlobalActor::ChangeVariables(FResponseToDraw& CurrentResponse)
 {
@@ -922,8 +1085,22 @@ void ADLG_GlobalActor::ChangeVariables(FResponseToDraw& CurrentResponse)
 		if (CurrentResponse.VariableToChange_LocalOrGlobal[i] == FString("local"))
 		{
 			int32 LocalVarIndex = FCString::Atoi(*CurrentResponse.VariableToChange_Name[i]);
-			if (LocalVarIndex != -1)
-				LocalVariables[LocalVarIndex] =	FName(*CurrentResponse.VariableToChange_Value[i]);
+			
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				//DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+			//if (LocalVarIndex != -1)
+				//++++++++++++++++++LocalVariables[LocalVarIndex] =	FName(*CurrentResponse.VariableToChange_Value[i]);
 		}
 		else   //  ========  "Global"  =========
 		{

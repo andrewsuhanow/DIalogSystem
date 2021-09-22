@@ -54,9 +54,18 @@ enum class EResponseReturn : uint8
 
 
 
+USTRUCT(BlueprintType, Blueprintable)
+struct FVariables
+{
+	GENERATED_USTRUCT_BODY()
 
+		UPROPERTY()
+		FName Name = "none";   //  name - if global;  index if local
 
-
+		UPROPERTY()
+			FName Value = "none";
+		//	int32 IndexLocalVar;
+};
 
 
 
@@ -67,7 +76,10 @@ struct FRepNode
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY()
-		TArray<int32> IndexLocalVar;
+		TArray<FVariables> Variables;
+	UPROPERTY()
+		TArray<int32> IndexLocalVar;   //// --------77777777777777777777777  XXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
+
 
 };
  
@@ -76,6 +88,10 @@ struct FResponseNode
 {
 	GENERATED_USTRUCT_BODY()
 
+	UPROPERTY()
+		TArray<FVariables> Variables;
+	UPROPERTY()
+		TArray<FVariables> Variables_ToChange;
 	//UPROPERTY()
 	///	TArray<FName> VarIndexOrName;
 		//TArray<int32> IndexLocalVar;   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
@@ -94,7 +110,9 @@ struct FReplicNode
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY()
-		TArray<int32> IndexLocalVar;
+		TArray<FVariables> Variables;
+	UPROPERTY()
+		TArray<int32> IndexLocalVar;   //// --------77777777777777777777777  XXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx
 	//UPROPERTY()
 	//	TArray<FDLGVariable> DLGVariable_Checking;
 
@@ -108,8 +126,10 @@ struct FSpeechNode
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY()
-		TArray<int32> IndexLocalVar;  
-
+		TArray<FVariables> Variables;
+	UPROPERTY()
+		TArray<int32> IndexLocalVar;    //   77777--------------77777777777777777777x xxXXXXXXXXXXXXXXXXXXXXX  
+	
 
 	UPROPERTY()
 		FName Name;

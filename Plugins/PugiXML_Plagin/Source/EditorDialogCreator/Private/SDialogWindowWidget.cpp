@@ -1686,13 +1686,53 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				CurrentPropertyIndex.iRepCondition = -1;
 				CurrentPropertyIndex.iSpeechCondition = i_SpeechCondition;
 
+
+				FVariablesParameter SpeechVariablesParameter;
+				SpeechVariablesParameter.ConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechConditionBlock;
+				SpeechVariablesParameter.TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition]
+					.Condition_Type_Editable;
+				SpeechVariablesParameter.TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition]
+					.ConditionVariable_Name_Editable;
+				SpeechVariablesParameter.TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition]
+					.ConditionVariable_Value_Editable;
+				SpeechVariablesParameter.Type_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].ConditionType;
+				SpeechVariablesParameter.VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].VariableName;
+				SpeechVariablesParameter.VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].VariableValue;
+				SpeechVariablesParameter.AddButtonPropperty = EProppertyToChange::ButtonAddSpeech_Condition;
+				SpeechVariablesParameter.RemoveButtonPropperty = EProppertyToChange::RemoveSpeech_Condition;
+				SpeechVariablesParameter.ConditionTypePropperty = EProppertyToChange::Speech_condition_type;
+				SpeechVariablesParameter.CompareType = EProppertyToChange::Speech_condition_CompareType;
+				SpeechVariablesParameter.VarTypePropperty = EProppertyToChange::Speech_condition_varType;
+				SpeechVariablesParameter.VarNamePropperty = EProppertyToChange::Speech_condition_varName;
+				SpeechVariablesParameter.VarValuePropperty = EProppertyToChange::Speech_condition_varValue;
+
+/*
 				TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechConditionBlock;
-				TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-						.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].Condition_Type_Editable;
-				TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+				TSharedPtr<SEditableTextBox> TextBoxCondition_Type = DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.SpeechCondition[CurrentPropertyIndex.iSpeechCondition]
+						.Condition_Type_Editable;
+
+				TSharedPtr<SEditableTextBox> *TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
 					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].ConditionVariable_Name_Editable;
-				TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].ConditionVariable_Value_Editable;
+
+				TSharedPtr<SEditableTextBox> TextBoxVariable_Value = DialogSection[CurrentPropertyIndex.iDialog]
+					.SpeechSection[CurrentPropertyIndex.iSpeech]
+					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition]
+					.ConditionVariable_Value_Editable;
 				FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
 					.SpeechCondition[CurrentPropertyIndex.iSpeechCondition].ConditionType;
 				FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
@@ -1703,27 +1743,13 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddSpeech_Condition;    
 				EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveSpeech_Condition;
 				EProppertyToChange ConditionTypePropperty = EProppertyToChange::Speech_condition_type;
+				EProppertyToChange CompareType = EProppertyToChange::Speech_condition_CompareType;
 				EProppertyToChange VarTypePropperty = EProppertyToChange::Speech_condition_varType;
 				EProppertyToChange VarNamePropperty = EProppertyToChange::Speech_condition_varName;
 				EProppertyToChange VarValuePropperty = EProppertyToChange::Speech_condition_varValue;
 
-
-				DrawConditionElement(*RepConditionBlock,
-					CurrentPropertyIndex,
-					AddButtonPropperty,
-					RemoveButtonPropperty,
-
-					*TextBoxCondition_Type,
-					*Type_Text,
-					ConditionTypePropperty,
-					*TextBoxVariable_Name,
-					*VariableName_Text,
-					VarNamePropperty,
-					*TextBoxVariable_Value,
-					*VariableValue_Text,
-					VarValuePropperty,
-
-					VarTypePropperty);
+*/
+				DrawConditionElement(CurrentPropertyIndex, SpeechVariablesParameter);
 			}
 			
 			//***************************************************************************************************************************************
@@ -2165,7 +2191,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						.Visibility(this, &SDialogWindowWidget::IsSectionCollapsed, EProppertyToChange::CollapsedReplic_Condition, CurrentPropertyIndex)
 						  
 					]
-
+					  
 					//       ======================     REPLICK  Editable Multiline zone     ========================
 					+ SVerticalBox::Slot()
 						.Padding(GetPadding(90.f, 3.f, 10.f, 1.f))
@@ -2217,54 +2243,97 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						CurrentPropertyIndex.iRepCondition = -1;
 						CurrentPropertyIndex.iReplicCondition = i_ReplicCondition;
 
-						TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-							.ReplicSection[CurrentPropertyIndex.iReplic].ReplicConditionBlock;       
-						TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+
+						FVariablesParameter SpeechVariablesParameter;
+						SpeechVariablesParameter.ConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
+							.ReplicSection[CurrentPropertyIndex.iReplic].ReplicConditionBlock;
+						SpeechVariablesParameter.TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].Condition_Type_Editable;
-						TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						SpeechVariablesParameter.TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].ConditionVariable_Name_Editable;
-						TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						SpeechVariablesParameter.TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].ConditionVariable_Value_Editable;
-						FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						SpeechVariablesParameter.Type_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].ConditionType;
-						FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						SpeechVariablesParameter.VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].VariableName;
-						FName* VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						SpeechVariablesParameter.VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
 							.ReplicCondition[CurrentPropertyIndex.iReplicCondition].VariableValue;
-
-						EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddReplic_Condition;// ButtonAddRep_Condition;
-						EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveReplic_Condition;
-						EProppertyToChange ConditionTypePropperty = EProppertyToChange::Replic_condition_type;// rep_condition_type;
-						EProppertyToChange VarTypePropperty = EProppertyToChange::Replic_condition_varType;// rep_condition_varType;
-						EProppertyToChange VarNamePropperty = EProppertyToChange::Replic_condition_varName;// rep_condition_varName;
-						EProppertyToChange VarValuePropperty = EProppertyToChange::Replic_condition_varValue;// rep_condition_varValue;
-
-
+						SpeechVariablesParameter.AddButtonPropperty = EProppertyToChange::ButtonAddReplic_Condition;
+						SpeechVariablesParameter.RemoveButtonPropperty = EProppertyToChange::RemoveReplic_Condition;
+						SpeechVariablesParameter.ConditionTypePropperty = EProppertyToChange::Replic_condition_type;
+						SpeechVariablesParameter.CompareType = EProppertyToChange::Replic_condition_CompareType;
+						SpeechVariablesParameter.VarTypePropperty = EProppertyToChange::Replic_condition_varType;
+						SpeechVariablesParameter.VarNamePropperty = EProppertyToChange::Replic_condition_varName;
+						SpeechVariablesParameter.VarValuePropperty = EProppertyToChange::Replic_condition_varValue;
 
 
-						DrawConditionElement(*RepConditionBlock,
-							CurrentPropertyIndex,
-							AddButtonPropperty,
-							
-							RemoveButtonPropperty,
+						DrawConditionElement(CurrentPropertyIndex, SpeechVariablesParameter);
 
-							*TextBoxCondition_Type,
-							*Type_Text,
-							ConditionTypePropperty,
-							*TextBoxVariable_Name,
-							*VariableName_Text,
-							VarNamePropperty,
-							*TextBoxVariable_Value,
-							*VariableValue_Text,
-							VarValuePropperty,
 
-							VarTypePropperty);
+						//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic].ReplicConditionBlock;  
+						//TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.ReplicCondition[CurrentPropertyIndex.iReplicCondition].Condition_Type_Editable;
+						//TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.ReplicCondition[CurrentPropertyIndex.iReplicCondition].ConditionVariable_Name_Editable;
+						//TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.ReplicCondition[CurrentPropertyIndex.iReplicCondition].ConditionVariable_Value_Editable;
+						//FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.ReplicCondition[CurrentPropertyIndex.iReplicCondition].ConditionType;
+						//FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.ReplicCondition[CurrentPropertyIndex.iReplicCondition].VariableName;
+						//FName* VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//	.ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.ReplicCondition[CurrentPropertyIndex.iReplicCondition].VariableValue;
+
+						//EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddReplic_Condition;// ButtonAddRep_Condition;
+						//EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveReplic_Condition;
+						//EProppertyToChange ConditionTypePropperty = EProppertyToChange::Replic_condition_type;// rep_condition_type;
+						//EProppertyToChange CompareType = EProppertyToChange::Replic_condition_CompareType;
+						//EProppertyToChange VarTypePropperty = EProppertyToChange::Replic_condition_varType;// rep_condition_varType;
+						//EProppertyToChange VarNamePropperty = EProppertyToChange::Replic_condition_varName;// rep_condition_varName;
+						//EProppertyToChange VarValuePropperty = EProppertyToChange::Replic_condition_varValue;// rep_condition_varValue;
+
+
+
+
+						//DrawConditionElement(*RepConditionBlock,
+						//	CurrentPropertyIndex,
+						//	AddButtonPropperty,
+						//	
+						//	RemoveButtonPropperty,
+
+						//	*TextBoxCondition_Type,
+						//	*Type_Text,
+						//	ConditionTypePropperty,
+						//	//CompareType,
+						//	*TextBoxVariable_Name,
+						//	*VariableName_Text,
+						//	VarNamePropperty,
+						//	*TextBoxVariable_Value,
+						//	*VariableValue_Text,
+						//	VarValuePropperty,
+
+						//	VarTypePropperty);
 
 					}
 
@@ -3242,63 +3311,124 @@ void SDialogWindowWidget::UpdateDialogBlock()
 						CurrentPropertyIndex.iResponseCondition = -1;
 						CurrentPropertyIndex.iRepCondition = i_RepCondition; 
 
-						//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].RepConditionBlock;
-						TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+
+
+						FVariablesParameter SpeechVariablesParameter;
+						SpeechVariablesParameter.ConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech].ReplicSection[CurrentPropertyIndex.iReplic]
+							.RepSection[CurrentPropertyIndex.iRep].RepConditionBlock;
+						SpeechVariablesParameter.TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
 							.ReplicSection[CurrentPropertyIndex.iReplic]
-							.RepSection[CurrentPropertyIndex.iRep].RepConditionBlock;       // i_Rep     XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-						TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-													.ReplicSection[CurrentPropertyIndex.iReplic]
-													.RepSection[CurrentPropertyIndex.iRep]
-													.RepCondition[CurrentPropertyIndex.iRepCondition].Condition_Type_Editable;
-						TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-													.ReplicSection[CurrentPropertyIndex.iReplic]
-													.RepSection[CurrentPropertyIndex.iRep]
-													.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionVariable_Name_Editable;
-						TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-													.ReplicSection[CurrentPropertyIndex.iReplic]
-													.RepSection[CurrentPropertyIndex.iRep]
+							.RepSection[CurrentPropertyIndex.iRep]
+							.RepCondition[CurrentPropertyIndex.iRepCondition]
+							.Condition_Type_Editable;
+						SpeechVariablesParameter.TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
+							.ReplicSection[CurrentPropertyIndex.iReplic]
+							.RepSection[CurrentPropertyIndex.iRep]
+							.RepCondition[CurrentPropertyIndex.iRepCondition]
+							.ConditionVariable_Name_Editable;
+						SpeechVariablesParameter.TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
+							.ReplicSection[CurrentPropertyIndex.iReplic]
+							.RepSection[CurrentPropertyIndex.iRep]
+							.RepCondition[CurrentPropertyIndex.iRepCondition]
+							.ConditionVariable_Value_Editable;
+						SpeechVariablesParameter.Type_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
+							.ReplicSection[CurrentPropertyIndex.iReplic]
+							.RepSection[CurrentPropertyIndex.iRep]
+							.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionType;
+						SpeechVariablesParameter.VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
+							.ReplicSection[CurrentPropertyIndex.iReplic]
+							.RepSection[CurrentPropertyIndex.iRep]
+							.RepCondition[CurrentPropertyIndex.iRepCondition].VariableName;
+						SpeechVariablesParameter.VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+							.SpeechSection[CurrentPropertyIndex.iSpeech]
+							.ReplicSection[CurrentPropertyIndex.iReplic]
+							.RepSection[CurrentPropertyIndex.iRep]
+							.RepCondition[CurrentPropertyIndex.iRepCondition].VariableValue;
+						SpeechVariablesParameter.AddButtonPropperty = EProppertyToChange::ButtonAddRep_Condition;
+						SpeechVariablesParameter.RemoveButtonPropperty = EProppertyToChange::RemoveRep_Condition;
+						SpeechVariablesParameter.ConditionTypePropperty = EProppertyToChange::rep_condition_type;
+						SpeechVariablesParameter.CompareType = EProppertyToChange::rep_condition_CompareType;
+						SpeechVariablesParameter.VarTypePropperty = EProppertyToChange::rep_condition_varType;
+						SpeechVariablesParameter.VarNamePropperty = EProppertyToChange::rep_condition_varName;
+						SpeechVariablesParameter.VarValuePropperty = EProppertyToChange::rep_condition_varValue;
 
-													.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionVariable_Value_Editable;
 
-						FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-													.ReplicSection[CurrentPropertyIndex.iReplic]
-													.RepSection[CurrentPropertyIndex.iRep]
-													.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionType;
-						FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-													.ReplicSection[CurrentPropertyIndex.iReplic]
-													.RepSection[CurrentPropertyIndex.iRep]
-													.RepCondition[CurrentPropertyIndex.iRepCondition].VariableName;
-						FName* VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-													.ReplicSection[CurrentPropertyIndex.iReplic]
-													.RepSection[CurrentPropertyIndex.iRep]
-													.RepCondition[CurrentPropertyIndex.iRepCondition].VariableValue;
+						DrawConditionElement(CurrentPropertyIndex, SpeechVariablesParameter);
 
-						EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddRep_Condition;
-						//EProppertyToChange MoveButtonPropperty = EProppertyToChange::MoveRep_Condition;
-						EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveRep_Condition;
-						EProppertyToChange ConditionTypePropperty = EProppertyToChange::rep_condition_type;
-						EProppertyToChange VarTypePropperty = EProppertyToChange::rep_condition_varType;
-						EProppertyToChange VarNamePropperty = EProppertyToChange::rep_condition_varName;
-						EProppertyToChange VarValuePropperty = EProppertyToChange::rep_condition_varValue;
 
-						DrawConditionElement(*RepConditionBlock,
-												CurrentPropertyIndex,
-												AddButtonPropperty,
-												//MoveButtonPropperty,
-												RemoveButtonPropperty,
+						////TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].RepConditionBlock;
+						//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog]
+						//	.SpeechSection[CurrentPropertyIndex.iSpeech].ReplicSection[CurrentPropertyIndex.iReplic]
+						//	.RepSection[CurrentPropertyIndex.iRep].RepConditionBlock;       // i_Rep     XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+						//
+						//TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog]
+						//							.SpeechSection[CurrentPropertyIndex.iSpeech]
+						//							.ReplicSection[CurrentPropertyIndex.iReplic]
+						//							.RepSection[CurrentPropertyIndex.iRep]
+						//							.RepCondition[CurrentPropertyIndex.iRepCondition].Condition_Type_Editable;
 
-												*TextBoxCondition_Type,
-												*Type_Text,
-												ConditionTypePropperty,
-												*TextBoxVariable_Name,
-												*VariableName_Text,
-												VarNamePropperty,
-												*TextBoxVariable_Value,
-												*VariableValue_Text,
-												VarValuePropperty,
+						//TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog]
+						//							.SpeechSection[CurrentPropertyIndex.iSpeech]
+						//							.ReplicSection[CurrentPropertyIndex.iReplic]
+						//							.RepSection[CurrentPropertyIndex.iRep]
+						//							.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionVariable_Name_Editable;
+						//TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog]
+						//							.SpeechSection[CurrentPropertyIndex.iSpeech]
+						//							.ReplicSection[CurrentPropertyIndex.iReplic]
+						//							.RepSection[CurrentPropertyIndex.iRep]
+						//							.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionVariable_Value_Editable;
+						//FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//							.ReplicSection[CurrentPropertyIndex.iReplic]
+						//							.RepSection[CurrentPropertyIndex.iRep]
+						//							.RepCondition[CurrentPropertyIndex.iRepCondition].ConditionType;
 
-												VarTypePropperty);
+						//FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+						//							.SpeechSection[CurrentPropertyIndex.iSpeech]
+						//							.ReplicSection[CurrentPropertyIndex.iReplic]
+						//							.RepSection[CurrentPropertyIndex.iRep]
+						//							.RepCondition[CurrentPropertyIndex.iRepCondition].VariableName;
+
+
+						//FName* VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+						//							.ReplicSection[CurrentPropertyIndex.iReplic]
+						//							.RepSection[CurrentPropertyIndex.iRep]
+						//							.RepCondition[CurrentPropertyIndex.iRepCondition].VariableValue;
+
+						//EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddRep_Condition;
+						////EProppertyToChange MoveButtonPropperty = EProppertyToChange::MoveRep_Condition;
+						//EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveRep_Condition;
+						//EProppertyToChange ConditionTypePropperty = EProppertyToChange::rep_condition_type;
+						//EProppertyToChange CompareType = EProppertyToChange::rep_condition_CompareType;
+						//EProppertyToChange VarTypePropperty = EProppertyToChange::rep_condition_varType;
+						//EProppertyToChange VarNamePropperty = EProppertyToChange::rep_condition_varName;
+						//EProppertyToChange VarValuePropperty = EProppertyToChange::rep_condition_varValue;
+
+						//DrawConditionElement(*RepConditionBlock,
+						//						CurrentPropertyIndex,
+						//						AddButtonPropperty,
+						//						//MoveButtonPropperty,
+						//						RemoveButtonPropperty,
+
+						//						*TextBoxCondition_Type,
+						//						*Type_Text,
+						//						ConditionTypePropperty,
+						//						//CompareType,
+						//						*TextBoxVariable_Name,
+						//						*VariableName_Text,
+						//						VarNamePropperty,
+						//						*TextBoxVariable_Value,
+						//						*VariableValue_Text,
+						//						VarValuePropperty,
+
+						//						VarTypePropperty);
 					}
+
 				}  // i_Rep
 			}//   i_Replic
 
@@ -4292,7 +4422,7 @@ void SDialogWindowWidget::UpdateDialogBlock()
 				//  =========================================================================================================
 				//  =========================================================================================================
 
-				
+
 				for (int32 i_ResponseCondition = 0; i_ResponseCondition < DialogSection[i_Dlg].SpeechSection[i_Speech]
 					.ResponseSection[i_Response].ResponseCondition.Num(); i_ResponseCondition++)
 				{
@@ -4304,56 +4434,114 @@ void SDialogWindowWidget::UpdateDialogBlock()
 					CurrentPropertyIndex.iRepCondition = -1;
 					CurrentPropertyIndex.iResponseCondition = i_ResponseCondition;
 
-					//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].RepConditionBlock;
-					TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse].ResponseConditionBlock;
-					TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse]
-												.ResponseCondition[CurrentPropertyIndex.iResponseCondition].Condition_Type_Editable;
-					TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse]
-												.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionVariable_Name_Editable;
-					TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse]
-												.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionVariable_Value_Editable;
-					FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse]
-												.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionType;
-					FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse]
-												.ResponseCondition[CurrentPropertyIndex.iResponseCondition].VariableName;
-					FName* VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
-												.ResponseSection[CurrentPropertyIndex.iResponse]
-												.ResponseCondition[CurrentPropertyIndex.iResponseCondition].VariableValue;
-
-					EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddResponse_Condition;   
-					//EProppertyToChange MoveButtonPropperty = EProppertyToChange::MoveResponse_Condition;
-					EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveResponse_Condition;
-					EProppertyToChange ConditionTypePropperty = EProppertyToChange::Response_condition_type;  
-					EProppertyToChange VarTypePropperty = EProppertyToChange::Response_condition_varType;  
-					EProppertyToChange VarNamePropperty = EProppertyToChange::Response_condition_varName;
-					EProppertyToChange VarValuePropperty = EProppertyToChange::Response_condition_varValue;
 
 
+					FVariablesParameter SpeechVariablesParameter;
+					SpeechVariablesParameter.ConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse].ResponseConditionBlock;
+					SpeechVariablesParameter.TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse]
+						.ResponseCondition[CurrentPropertyIndex.iResponseCondition].Condition_Type_Editable;
+					SpeechVariablesParameter.TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse]
+						.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionVariable_Name_Editable;
+					SpeechVariablesParameter.TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse]
+						.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionVariable_Value_Editable;
+					SpeechVariablesParameter.Type_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse]
+						.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionType;
+					SpeechVariablesParameter.VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse]
+						.ResponseCondition[CurrentPropertyIndex.iResponseCondition].VariableName;
+					SpeechVariablesParameter.VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog]
+						.SpeechSection[CurrentPropertyIndex.iSpeech]
+						.ResponseSection[CurrentPropertyIndex.iResponse]
+						.ResponseCondition[CurrentPropertyIndex.iResponseCondition].VariableValue;
+					SpeechVariablesParameter.AddButtonPropperty = EProppertyToChange::ButtonAddResponse_Condition;
+					SpeechVariablesParameter.RemoveButtonPropperty = EProppertyToChange::RemoveResponse_Condition;
+					SpeechVariablesParameter.ConditionTypePropperty = EProppertyToChange::Response_condition_type;
+					SpeechVariablesParameter.CompareType = EProppertyToChange::Response_condition_CompareType;
+					SpeechVariablesParameter.VarTypePropperty = EProppertyToChange::Response_condition_varType;
+					SpeechVariablesParameter.VarNamePropperty = EProppertyToChange::Response_condition_varName;
+					SpeechVariablesParameter.VarValuePropperty = EProppertyToChange::Response_condition_varValue;
 
 
-					DrawConditionElement(*RepConditionBlock,
-											CurrentPropertyIndex,
-											AddButtonPropperty,
-											//MoveButtonPropperty,
-											RemoveButtonPropperty,
+					DrawConditionElement(CurrentPropertyIndex, SpeechVariablesParameter);
 
-											*TextBoxCondition_Type,
-											*Type_Text,
-											ConditionTypePropperty,
-											*TextBoxVariable_Name,
-											*VariableName_Text,
-											VarNamePropperty,
-											*TextBoxVariable_Value,
-											*VariableValue_Text,
-											VarValuePropperty,
 
-											VarTypePropperty);
+
+
+
+					////TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_Replic].RepSection[i_Rep].RepConditionBlock;
+					//TSharedPtr<SVerticalBox>* RepConditionBlock = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse].ResponseConditionBlock;
+
+
+					//TSharedPtr<SEditableTextBox>* TextBoxCondition_Type = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse]
+					//							.ResponseCondition[CurrentPropertyIndex.iResponseCondition].Condition_Type_Editable;
+					//
+
+					//TSharedPtr<SEditableTextBox>* TextBoxVariable_Name = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse]
+					//							.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionVariable_Name_Editable;
+
+
+					//TSharedPtr<SEditableTextBox>* TextBoxVariable_Value = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse]
+					//							.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionVariable_Value_Editable;
+
+
+					//FName* Type_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse]
+					//							.ResponseCondition[CurrentPropertyIndex.iResponseCondition].ConditionType;
+
+
+					//FName* VariableName_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse]
+					//							.ResponseCondition[CurrentPropertyIndex.iResponseCondition].VariableName;
+
+					//FName* VariableValue_Text = &DialogSection[CurrentPropertyIndex.iDialog].SpeechSection[CurrentPropertyIndex.iSpeech]
+					//							.ResponseSection[CurrentPropertyIndex.iResponse]
+					//							.ResponseCondition[CurrentPropertyIndex.iResponseCondition].VariableValue;
+
+					//EProppertyToChange AddButtonPropperty = EProppertyToChange::ButtonAddResponse_Condition;   
+					////EProppertyToChange MoveButtonPropperty = EProppertyToChange::MoveResponse_Condition;
+					//EProppertyToChange RemoveButtonPropperty = EProppertyToChange::RemoveResponse_Condition;
+					//EProppertyToChange ConditionTypePropperty = EProppertyToChange::Response_condition_type;  
+					//EProppertyToChange CompareType = EProppertyToChange::Response_condition_CompareType;
+					//EProppertyToChange VarTypePropperty = EProppertyToChange::Response_condition_varType;  
+					//EProppertyToChange VarNamePropperty = EProppertyToChange::Response_condition_varName;
+					//EProppertyToChange VarValuePropperty = EProppertyToChange::Response_condition_varValue;
+
+
+
+
+					//DrawConditionElement(*RepConditionBlock,
+					//						CurrentPropertyIndex,
+					//						AddButtonPropperty,
+					//						//MoveButtonPropperty,
+					//						RemoveButtonPropperty,
+
+					//						*TextBoxCondition_Type,
+					//						*Type_Text,
+					//						ConditionTypePropperty,
+					//						//CompareType,
+					//						*TextBoxVariable_Name,
+					//						*VariableName_Text,
+					//						VarNamePropperty,
+					//						*TextBoxVariable_Value,
+					//						*VariableValue_Text,
+					//						VarValuePropperty,
+
+					//						VarTypePropperty);
 				}
 				 
 
@@ -4957,26 +5145,30 @@ void SDialogWindowWidget::UpdateDialogBlock()
 
 
 
-void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepConditionBlock,
-												FPropertyIndex& CurrentPropertyIndex,
-												EProppertyToChange AddButtonPropperty,
+/*void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox> &ConditionBlock,
+												FPropertyIndex& CurrentPropertyIndex,+
+												EProppertyToChange AddButtonPropperty,+
 												//EProppertyToChange MoweButtonPropperty,
-												EProppertyToChange RemoveButtonPropperty,
+												EProppertyToChange RemoveButtonPropperty,+
 
-												TSharedPtr<SEditableTextBox>& TextBoxCondition_Type,
-												FName& Type_Text,
-												EProppertyToChange ConditionTypePropperty,
-												TSharedPtr<SEditableTextBox>& TextBoxVariable_Name,
-												FName& VariableName_Text,
-												EProppertyToChange VarNamePropperty,
-												TSharedPtr<SEditableTextBox>& TextBoxVariable_Value,
-												FName& VariableValue_Text,
-												EProppertyToChange VarValuePropperty,
+												TSharedPtr<SEditableTextBox>& TextBoxCondition_Type,+
+												FName& Type_Text,+
+												EProppertyToChange ConditionTypePropperty,+
+												//EProppertyToChange CompareType,  +
 
-												EProppertyToChange VarTypePropperty)
+												TSharedPtr<SEditableTextBox> *TextBoxVariable_Name,+
+
+												FName& VariableName_Text,+
+												EProppertyToChange VarNamePropperty,+
+												TSharedPtr<SEditableTextBox>& TextBoxVariable_Value,+
+												FName& VariableValue_Text,+
+												EProppertyToChange VarValuePropperty,+
+
+												EProppertyToChange VarTypePropperty+)*/
+void SDialogWindowWidget::DrawConditionElement(FPropertyIndex& CurrentPropertyIndex, FVariablesParameter& VarParam)
 {
 
-	RepConditionBlock->AddSlot()
+	(*VarParam.ConditionBlock)->AddSlot()
 	.Padding(GetPadding(150.f, 0.f, 40.f, 0.f))
 	.HAlign(HAlign_Right)
 	.VAlign(VAlign_Fill)
@@ -5008,7 +5200,6 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 			]
 		]
 
-						
 			//------------ALL CONDITION-title----------
 		+ SHorizontalBox::Slot()
 		.Padding(GetPadding(0.f, 1.f, 0.f, 1.f))        // L, Up, R, Dn
@@ -5052,7 +5243,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 							SNew(SButton)
 							.ContentPadding(0)
 							.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))
-							.OnClicked(this, &SDialogWindowWidget::OnButtonClick, AddButtonPropperty, CurrentPropertyIndex)
+							.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarParam.AddButtonPropperty, CurrentPropertyIndex)
 							[
 								SNew(SImage)
 								.Image(ImageAddElement) 
@@ -5078,7 +5269,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 							SNew(SButton)
 							.ContentPadding(0)
 							.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))
-							.OnClicked(this, &SDialogWindowWidget::OnButtonRemoveClick, RemoveButtonPropperty, CurrentPropertyIndex)
+							.OnClicked(this, &SDialogWindowWidget::OnButtonRemoveClick, VarParam.RemoveButtonPropperty, CurrentPropertyIndex)
 							[
 								SNew(SImage)
 								.Image(ImageDeleteElement)
@@ -5177,7 +5368,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 								.HAlign(HAlign_Fill)
 								.VAlign(VAlign_Fill)
 								.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))    
-								.OnClicked(this, &SDialogWindowWidget::OnButtonClick, ConditionTypePropperty, CurrentPropertyIndex)    //ConditionTypePropperty  //EProppertyToChange::rep_condition_type
+								.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarParam.ConditionTypePropperty, CurrentPropertyIndex)    //ConditionTypePropperty  //EProppertyToChange::rep_condition_type
 								[
 									SNew(SOverlay)  
 
@@ -5202,10 +5393,10 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 
 											SNew(STextBlock)
 											//.MinDesiredWidth(10.0f)
-											.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, ConditionTypePropperty, CurrentPropertyIndex)  // ConditionTypePropperty  // EProppertyToChange::rep_condition_type
+											.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, VarParam.ConditionTypePropperty, CurrentPropertyIndex)  // ConditionTypePropperty  // EProppertyToChange::rep_condition_type
 											.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 9 * SizeKoef))
 											.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
-											.Text(this, &SDialogWindowWidget::GetProppertyText, ConditionTypePropperty, CurrentPropertyIndex)  //ConditionTypePropperty // EProppertyToChange::rep_condition_type
+											.Text(this, &SDialogWindowWidget::GetProppertyText, VarParam.ConditionTypePropperty, CurrentPropertyIndex)  //ConditionTypePropperty // EProppertyToChange::rep_condition_type
 										]
 													    
 										+ SHorizontalBox::Slot()
@@ -5219,13 +5410,13 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 											.VAlign(VAlign_Center)
 											[ 
 												//  ===========================  CONDITION-Propprty    EditableText  ================================
-												SAssignNew(TextBoxCondition_Type, SEditableTextBox)
+												SAssignNew((*VarParam.TextBoxCondition_Type), SEditableTextBox)
 												//.BackgroundColor(FLinearColor((0.5f, 0.5f, 0.5f, 1.f))
 												.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 9 * SizeKoef))
-												.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, ConditionTypePropperty, CurrentPropertyIndex)  // ConditionTypePropperty  // EProppertyToChange::rep_condition_type
-												.Text(FText::FromString(Type_Text.ToString()))
+												.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarParam.ConditionTypePropperty, CurrentPropertyIndex)  // ConditionTypePropperty  // EProppertyToChange::rep_condition_type
+												.Text(FText::FromString((*VarParam.Type_Text).ToString()))
 																	
-												.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, ConditionTypePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
+												.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarParam.ConditionTypePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 												.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 											]
 										]
@@ -5327,7 +5518,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 										.HAlign(HAlign_Fill)
 										.VAlign(VAlign_Fill)
 										.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.3f))
-										.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarTypePropperty, CurrentPropertyIndex)  // VarTypePropperty // EProppertyToChange::rep_condition_varType
+										.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarParam.VarTypePropperty, CurrentPropertyIndex)  // VarTypePropperty // EProppertyToChange::rep_condition_varType
 										[
 											SNew(SHorizontalBox)
 
@@ -5341,7 +5532,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 												.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 10 * SizeKoef))
 												.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
 												//.ColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.4f, 1))
-												.Visibility(this, &SDialogWindowWidget::GetVisibility_LocalVarIndicator, VarTypePropperty, CurrentPropertyIndex) // VarTypePropperty  // EProppertyToChange::rep_condition_varType
+												.Visibility(this, &SDialogWindowWidget::GetVisibility_LocalVarIndicator, VarParam.VarTypePropperty, CurrentPropertyIndex) // VarTypePropperty  // EProppertyToChange::rep_condition_varType
 												.Text(FText::FromString("Local"))
 											]
 
@@ -5355,7 +5546,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 												.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 10 * SizeKoef))
 												//.ColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.4f, 1))
 												.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
-												.Visibility(this, &SDialogWindowWidget::GetVisibility_GlobalVarIndicator, VarTypePropperty, CurrentPropertyIndex) // VarTypePropperty // EProppertyToChange::rep_condition_varType
+												.Visibility(this, &SDialogWindowWidget::GetVisibility_GlobalVarIndicator, VarParam.VarTypePropperty, CurrentPropertyIndex) // VarTypePropperty // EProppertyToChange::rep_condition_varType
 												.Text(FText::FromString("GLOBAL"))
 											]
 										]
@@ -5390,7 +5581,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))    
-									.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarNamePropperty, CurrentPropertyIndex)  //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
+									.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarParam.VarNamePropperty, CurrentPropertyIndex)  //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
 									[ 
 										SNew(SOverlay)  
 
@@ -5424,12 +5615,18 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 											//.FillWidth(1)
 											.AutoWidth()
 											[
-															     
-												SNew(STextBlock)
-												.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
-												.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-												.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
-												.Text(this, &SDialogWindowWidget::GetProppertyText, VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
+												SNew(SBox)
+												.MinDesiredWidth(70.f * SizeKoef)
+												.MaxDesiredWidth(300.f * SizeKoef)
+												.HAlign(HAlign_Center)
+												.VAlign(VAlign_Center)
+												[
+													SNew(STextBlock)
+													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, VarParam.VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
+													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
+													.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
+													.Text(this, &SDialogWindowWidget::GetProppertyText, VarParam.VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
+												]
 											] 
 													     
 											+ SHorizontalBox::Slot()
@@ -5438,15 +5635,16 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 											[
 												SNew(SBox)
 												.MinDesiredWidth(70.f * SizeKoef)
-												.HAlign(HAlign_Fill)
-												.VAlign(VAlign_Fill)                 
+												.MaxDesiredWidth(300.f * SizeKoef)
+												.HAlign(HAlign_Center)
+												.VAlign(VAlign_Center)
 												[ 
 													//  ===========================   CONDITION  Vatiable-Name EditableText  ================================
-													SAssignNew(TextBoxVariable_Name, SEditableTextBox)
+													SAssignNew((*VarParam.TextBoxVariable_Name), SEditableTextBox)
 													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
-													.Text(FText::FromString(VariableName_Text.ToString()))
-													.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarNamePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
+													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarParam.VarNamePropperty, CurrentPropertyIndex)   //VarNamePropperty  //  EProppertyToChange::rep_condition_varName
+													.Text(FText::FromString((*VarParam.VariableName_Text).ToString()))
+													.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarParam.VarNamePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 													.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 												]
 											]
@@ -5483,6 +5681,115 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 							]
 						]
 											
+					]
+					
+					//    ======================     CONDITION   "VARIABLE-Compare-Type"        =========================
+
+					+SHorizontalBox::Slot()
+					.HAlign(HAlign_Right)
+					.VAlign(VAlign_Fill)
+					[
+
+						SNew(SHorizontalBox)
+
+						//    -------  CONDITION   "VARIABLE-Compare-Type"  Start   -------------
+						+SHorizontalBox::Slot()
+						.Padding(GetPadding(50.f, 1.f, 0.f, 1.f))        // L, Up, R, Dn
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
+						//+++++++++.VAlign(VAlign_Center)
+						.AutoWidth()
+						[
+							SNew(SBox)
+							//MaxDesiredWidth(FOptionalSize())
+							.Padding(0)
+							.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Fill)
+							.WidthOverride(4.f * SizeKoef)
+							//.HeightOverride(20.f)
+							[
+								SNew(SBorder)
+								.Padding(0)
+								.HAlign(HAlign_Fill)
+								.VAlign(VAlign_Fill)
+								.BorderImage(PropertyResponseStart)                  //  image  Condition-Property   "Variable"  Start
+							]
+						]
+
+						+ SHorizontalBox::Slot()
+						.Padding(GetPadding(0, 1, 0, 1))
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						//.FillWidth(1)
+						.AutoWidth()
+						[
+
+							SNew(SBorder)
+							.Padding(GetPadding(0, 0, 0, 0))
+							.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Fill)
+							.BorderImage(PropertyResponse)      //  image  Condition-Property   "Variable"  
+							[
+
+								SNew(SHorizontalBox)
+
+								+ SHorizontalBox::Slot()
+								.Padding(GetPadding(2, 1, 2, 1))
+								.HAlign(HAlign_Left)
+								.VAlign(VAlign_Center)
+								.AutoWidth()
+								[		
+										//  ------------------------ CONDITION   VARIABLE- " = , != , < , < "    ---------------------------------
+									SNew(SBox)
+									//MaxDesiredWidth(FOptionalSize())
+									.Padding(0)
+									.HAlign(HAlign_Fill)
+									.VAlign(VAlign_Fill)
+									.WidthOverride(35.f * SizeKoef)
+									[
+										SNew(SButton)
+										.ContentPadding(0)
+										.HAlign(HAlign_Center)
+										.VAlign(VAlign_Fill)
+										.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.3f))
+										.OnClicked(this, &SDialogWindowWidget::OnHelperPanelClick, VarParam.CompareType, CurrentPropertyIndex)
+										[
+											
+											SNew(STextBlock)
+											.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 16 * SizeKoef))
+											.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
+											//.ColorAndOpacity(FLinearColor(0.0f, 0.0f, 0.4f, 1))
+											//.Visibility(this, &SDialogWindowWidget::GetVisibility_LocalVarIndicator, VarParam.VarTypePropperty, CurrentPropertyIndex) // VarTypePropperty  // EProppertyToChange::rep_condition_varType
+											.Text(this, &SDialogWindowWidget::GetProppertyText, VarParam.CompareType, CurrentPropertyIndex)
+										]
+									]
+								]
+							]
+						]
+
+						//    -------  CONDITION   "Variable"  End   -------------
+						+SHorizontalBox::Slot()
+						.Padding(GetPadding(0.f, 1.f, 2.f, 1.f))        // L, Up, R, Dn
+						.HAlign(HAlign_Left)
+						.VAlign(VAlign_Fill)
+						//+++++++++.VAlign(VAlign_Center)
+						.AutoWidth()
+						[
+							SNew(SBox)
+							//MaxDesiredWidth(FOptionalSize())
+							.Padding(0)
+							.HAlign(HAlign_Fill)
+							.VAlign(VAlign_Fill)
+							.WidthOverride(4.f * SizeKoef)
+							//.HeightOverride(20.f)
+							[
+								SNew(SBorder)
+								.Padding(0)
+								.HAlign(HAlign_Fill)
+								.VAlign(VAlign_Fill)
+								.BorderImage(PropertyResponseEnd)                  //  image  Condition-Property   "Variable-Name"  End
+							]
+						]
 					]
 
 					//     ======================= CONDITION   "VARIABLE-Value"    =======================
@@ -5562,7 +5869,7 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 									.HAlign(HAlign_Left)
 									.VAlign(VAlign_Center)
 									.ButtonColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.f))    
-									.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
+									.OnClicked(this, &SDialogWindowWidget::OnButtonClick, VarParam.VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
 									[ 
 										SNew(SOverlay)  
 
@@ -5596,13 +5903,19 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 											//.FillWidth(1)
 											.AutoWidth()
 											[
-															     
-												SNew(STextBlock)
-												.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
-												.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-												.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
-												.Text(this, &SDialogWindowWidget::GetProppertyText, VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
-											] 
+												SNew(SBox)
+												.MinDesiredWidth(70.f * SizeKoef)
+												.MaxDesiredWidth(300.f * SizeKoef)
+												.HAlign(HAlign_Center)
+												.VAlign(VAlign_Center)
+												[
+													SNew(STextBlock)
+													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Static, VarParam.VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
+													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
+													.ColorAndOpacity(FLinearColor(0.7f, 0.77f, 1.f, 1))
+													.Text(this, &SDialogWindowWidget::GetProppertyText, VarParam.VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
+												]
+											]
 													     
 											+ SHorizontalBox::Slot()
 											.HAlign(HAlign_Center)
@@ -5610,15 +5923,16 @@ void SDialogWindowWidget::DrawConditionElement(TSharedPtr<SVerticalBox>& RepCond
 											[
 												SNew(SBox)
 												.MinDesiredWidth(70.f * SizeKoef)
-												.HAlign(HAlign_Fill)
-												.VAlign(VAlign_Fill)                 
+												.MaxDesiredWidth(300.f * SizeKoef)
+												.HAlign(HAlign_Center)
+												.VAlign(VAlign_Center)
 												[ 
 													//  ===========================CONDITION   Vatiable-Value EditableText  ================================
-													SAssignNew(TextBoxVariable_Value, SEditableTextBox)
+													SAssignNew((*VarParam.TextBoxVariable_Value), SEditableTextBox)
 													.Font(FSlateFontInfo(FPaths::EngineContentDir() / TEXT("Slate/Fonts/Roboto-Regular.ttf"), 12 * SizeKoef))
-													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
-													.Text(FText::FromString(VariableValue_Text.ToString()))
-													.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarValuePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
+													.Visibility(this, &SDialogWindowWidget::GetVisibilityOfSectionPropperty_Editable, VarParam.VarValuePropperty, CurrentPropertyIndex)  // VarValuePropperty  // EProppertyToChange::rep_condition_varValue
+													.Text(FText::FromString((*VarParam.VariableValue_Text).ToString()))
+													.OnTextCommitted(this, &SDialogWindowWidget::ConfirmEditableTextBox, VarParam.VarValuePropperty, CurrentPropertyIndex)  // PRES_ENTER:   void ConfirmEditableTextBox(const FText& Text, ETextCommit::Type TextType);
 													.OnTextChanged_Raw(this, &SDialogWindowWidget::OnEditableTextChange)  // void OnButtonT(const FText& Text);
 												]
 											]
@@ -7766,11 +8080,11 @@ FText SDialogWindowWidget::GetProppertyText(EProppertyToChange _ProppertyToChang
 	//    -----------------------    Variable     Variable--Block    -----------------------
 	if (_ProppertyToChange == EProppertyToChange::Variable_varName)
 	{
-	return FText::FromString(Variables[PropertyIndex.iVariable].VariableName.ToString());
+		return FText::FromString(Variables[PropertyIndex.iVariable].VariableName.ToString());
 	}
 	else if (_ProppertyToChange == EProppertyToChange::Variable_varValue)
 	{
-	return FText::FromString(Variables[PropertyIndex.iVariable].VariableValue.ToString());
+		return FText::FromString(Variables[PropertyIndex.iVariable].VariableValue.ToString());
 	}
 
 
@@ -7808,82 +8122,99 @@ FText SDialogWindowWidget::GetProppertyText(EProppertyToChange _ProppertyToChang
 	//    -----------------------  Speech-Condition_Section  -----------------------
 	else if (_ProppertyToChange == EProppertyToChange::Speech_condition_varName)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].SpeechCondition[PropertyIndex.iSpeechCondition]
-																																.VariableName.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+								.SpeechCondition[PropertyIndex.iSpeechCondition].VariableName.ToString());
 	}
 	else if (_ProppertyToChange == EProppertyToChange::Speech_condition_varValue)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].SpeechCondition[PropertyIndex.iSpeechCondition]
-																																.VariableValue.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.SpeechCondition[PropertyIndex.iSpeechCondition].VariableValue.ToString());
 	}
 
-	else if (_ProppertyToChange == EProppertyToChange::Speech_condition_type) //&&
-						//PropertyIndex.iSpeech != -1 && PropertyIndex.iDialog != -1 && PropertyIndex.iReplicOrResponse != -1)
+	else if (_ProppertyToChange == EProppertyToChange::Speech_condition_type) 
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].SpeechCondition[PropertyIndex.iSpeechCondition]
-																																.ConditionType.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.SpeechCondition[PropertyIndex.iSpeechCondition].ConditionType.ToString());
+	}
+	else if (_ProppertyToChange == EProppertyToChange::Speech_condition_CompareType) 
+
+	{
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.SpeechCondition[PropertyIndex.iSpeechCondition].VariableCompareType.ToString());
 	}
 
 
 	//    -----------------------  Rep-Condition_Section  -----------------------
 	else if (_ProppertyToChange == EProppertyToChange::rep_condition_varName)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.RepSection[PropertyIndex.iRep].RepCondition[PropertyIndex.iRepCondition].VariableName.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep].RepCondition[PropertyIndex.iRepCondition].VariableName.ToString());
 	}
 	else if (_ProppertyToChange == EProppertyToChange::rep_condition_varValue)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.RepSection[PropertyIndex.iRep].RepCondition[PropertyIndex.iRepCondition].VariableValue.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep].RepCondition[PropertyIndex.iRepCondition].VariableValue.ToString());
 	}
 
-	else if (_ProppertyToChange == EProppertyToChange::rep_condition_type) //&&
-						//PropertyIndex.iSpeech != -1 && PropertyIndex.iDialog != -1 && PropertyIndex.iReplicOrResponse != -1)
+	else if (_ProppertyToChange == EProppertyToChange::rep_condition_type)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.RepSection[PropertyIndex.iRep].RepCondition[PropertyIndex.iRepCondition].ConditionType.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep]
+			.RepCondition[PropertyIndex.iRepCondition].ConditionType.ToString());
 	}
-
+	else if (_ProppertyToChange == EProppertyToChange::rep_condition_CompareType)
+	{
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep]
+			.RepCondition[PropertyIndex.iRepCondition].VariableCompareType.ToString());
+	}
 
 	//    -----------------------  Replic-Condition_Section  -----------------------
 	else if (_ProppertyToChange == EProppertyToChange::Replic_condition_varName)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.ReplicCondition[PropertyIndex.iReplicCondition].VariableName.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition].VariableName.ToString());
 	}
 	else if (_ProppertyToChange == EProppertyToChange::Replic_condition_varValue)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.ReplicCondition[PropertyIndex.iReplicCondition].VariableValue.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition].VariableValue.ToString());
+	}
+	else if (_ProppertyToChange == EProppertyToChange::Replic_condition_type) 
+	{
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition].ConditionType.ToString());
+	}
+	else if (_ProppertyToChange == EProppertyToChange::Replic_condition_CompareType)
+	{
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition].VariableCompareType.ToString());
 	}
 
-	else if (_ProppertyToChange == EProppertyToChange::Replic_condition_type) //&&
-						//PropertyIndex.iSpeech != -1 && PropertyIndex.iDialog != -1 && PropertyIndex.iReplicOrResponse != -1)
-	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ReplicSection[PropertyIndex.iReplic]
-			.ReplicCondition[PropertyIndex.iReplicCondition].ConditionType.ToString());
-	}
 
 	//    -----------------------  Response-Condition_Section  -----------------------
 	else if (_ProppertyToChange == EProppertyToChange::Response_condition_varName)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse]
-			.ResponseCondition[PropertyIndex.iResponseCondition].VariableName.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition].VariableName.ToString());
 	}
 	else if (_ProppertyToChange == EProppertyToChange::Response_condition_varValue)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse]
-			.ResponseCondition[PropertyIndex.iResponseCondition].VariableValue.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition].VariableValue.ToString());
 	}
-
-	else if (_ProppertyToChange == EProppertyToChange::Response_condition_type) //&&
-						//PropertyIndex.iSpeech != -1 && PropertyIndex.iDialog != -1 && PropertyIndex.iReplicOrResponse != -1)
+	else if (_ProppertyToChange == EProppertyToChange::Response_condition_type)
 	{
-		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse]
-			.ResponseCondition[PropertyIndex.iResponseCondition].ConditionType.ToString());
+		return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition].ConditionType.ToString());
+	}
+	else if (_ProppertyToChange == EProppertyToChange::Response_condition_CompareType)
+	{
+	return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+		.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition].VariableCompareType.ToString());
 	}
 
-	//    -----------------------  Response-Condition_Section  -----------------------
+	//    -----------------------  Response_ Variable to change _Section  -----------------------
 	else if (_ProppertyToChange == EProppertyToChange::Response_variable_varName)
 	{
 	return FText::FromString(DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech].ResponseSection[PropertyIndex.iResponse]
@@ -8878,6 +9209,10 @@ void SDialogWindowWidget::SaveDialogToXML()
 								if (DialogSection[i_Dlg].SpeechSection[i_Speech]
 										.SpeechCondition[i_speech_condition].isVariableGlobal == true)		ContentToSave += FString("global\" ");
 								else																		ContentToSave += FString("local\" ");
+								ContentToSave += FString("compare_type=\"");
+								ContentToSave += DialogSection[i_Dlg].SpeechSection[i_Speech]
+									.SpeechCondition[i_speech_condition].VariableCompareType.ToString() +
+									FString("\" ");
 								ContentToSave += FString("var_name=\"") +
 								DialogSection[i_Dlg].SpeechSection[i_Speech].SpeechCondition[i_speech_condition].VariableName.ToString() +
 								FString("\">") +
@@ -8915,6 +9250,11 @@ void SDialogWindowWidget::SaveDialogToXML()
 									if (DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_replic]
 											.ReplicCondition[i_replic_condition].isVariableGlobal == true)		ContentToSave += FString("global\" ");
 									else																		ContentToSave += FString("local\" ");
+									ContentToSave += FString("compare_type=\"");
+									ContentToSave += DialogSection[i_Dlg].SpeechSection[i_Speech]
+										.ReplicSection[i_replic].ReplicCondition[i_replic_condition]
+										.VariableCompareType.ToString() +
+										FString("\" ");
 									ContentToSave += FString("var_name=\"") +
 									DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_replic]
 												.ReplicCondition[i_replic_condition].VariableName.ToString() +
@@ -8959,6 +9299,11 @@ void SDialogWindowWidget::SaveDialogToXML()
 										if (DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_replic].RepSection[i_rep]
 											.RepCondition[i_rep_condition].isVariableGlobal == true)				ContentToSave += FString("global\" ");
 										else																		ContentToSave += FString("local\" ");
+										ContentToSave += FString("compare_type=\"");
+										ContentToSave += DialogSection[i_Dlg].SpeechSection[i_Speech]
+											.ReplicSection[i_replic].RepSection[i_rep]
+											.RepCondition[i_rep_condition].VariableCompareType.ToString() +
+											FString("\" ");
 										ContentToSave += FString("var_name=\"") +
 										DialogSection[i_Dlg].SpeechSection[i_Speech].ReplicSection[i_replic]
 										.RepSection[i_rep].RepCondition[i_rep_condition].VariableName.ToString() +
@@ -9006,6 +9351,11 @@ void SDialogWindowWidget::SaveDialogToXML()
 										if (DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_response]
 											.ResponseCondition[i_response_condition].isVariableGlobal == true)		ContentToSave += FString("global\" ");
 										else																		ContentToSave += FString("local\" ");
+										ContentToSave += FString("compare_type=\"");
+										ContentToSave += DialogSection[i_Dlg].SpeechSection[i_Speech]
+											.ResponseSection[i_response].ResponseCondition[i_response_condition]
+											.VariableCompareType.ToString() +
+											FString("\" ");
 										ContentToSave += FString("var_name=\"") +
 										DialogSection[i_Dlg].SpeechSection[i_Speech].ResponseSection[i_response]
 														.ResponseCondition[i_response_condition].VariableName.ToString() +
@@ -9179,8 +9529,12 @@ void SDialogWindowWidget::LoadDialogFromXML()
 				std::string STD_SpeechVarTypeStr(DLG_SpeechConditionNode[i_SpeechCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 				//std::wstring STD_W_SpeechVarTypeStr = pugi::as_wide(STD_SpeechVarTypeStr.c_str());
 				//FString SpeechVarTypeStr(STD_W_SpeechVarTypeStr.c_str());
-
 				SpeechConditionTmp.isVariableGlobal = (STD_SpeechVarTypeStr == "global") ? true : false;
+
+				std::string STD_SpeechCompareTypeStr(DLG_SpeechConditionNode[i_SpeechCondition].node().attribute("compare_type").as_string());  //   get attribute("compare_type")
+				FString SpeechCompareTypeStr(STD_SpeechCompareTypeStr.c_str());
+
+				SpeechConditionTmp.VariableCompareType = FName(*SpeechCompareTypeStr);
 
 				std::string STD_SpeechVarNameStr(DLG_SpeechConditionNode[i_SpeechCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
 				std::wstring STD_W_SpeechVarNameStr = pugi::as_wide(STD_SpeechVarNameStr.c_str());
@@ -9234,8 +9588,12 @@ void SDialogWindowWidget::LoadDialogFromXML()
 					std::string STD_ReplicVarTypeStr(DLG_ReplicConditionNode[i_ReplicCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 					//std::wstring STD_W_ReplicVarTypeStr = pugi::as_wide(STD_ReplicVarTypeStr.c_str());
 					//FString ReplicVarTypeStr(STD_W_ReplicVarTypeStr.c_str());
-
 					ReplicConditionTmp.isVariableGlobal = (STD_ReplicVarTypeStr == "global") ? true : false;
+
+					std::string STD_ReplicCompareTypeStr(DLG_ReplicConditionNode[i_ReplicCondition].node().attribute("compare_type").as_string());  //   get attribute("compare_type")
+					FString ReplicCompareTypeStr(STD_ReplicCompareTypeStr.c_str());
+
+					ReplicConditionTmp.VariableCompareType = FName(*ReplicCompareTypeStr);
 
 					std::string STD_ReplicVarNameStr(DLG_ReplicConditionNode[i_ReplicCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
 					std::wstring STD_W_ReplicVarNameStr = pugi::as_wide(STD_ReplicVarNameStr.c_str());
@@ -9313,8 +9671,12 @@ void SDialogWindowWidget::LoadDialogFromXML()
 							std::string STD_RepVarTypeStr(DLG_RepConditionNode[i_RepCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 							//std::wstring STD_W_RepVarTypeStr = pugi::as_wide(STD_RepVarTypeStr.c_str());
 							//FString RepVarTypeStr(STD_W_RepVarTypeStr.c_str());
-
 						RepConditionTmp.isVariableGlobal = (STD_RepVarTypeStr == "global") ? true : false;
+
+						std::string STD_RepCompareTypeStr(DLG_RepConditionNode[i_RepCondition].node().attribute("compare_type").as_string());  //   get attribute("compare_type")
+						FString RepCompareTypeStr(STD_RepCompareTypeStr.c_str());
+
+						RepConditionTmp.VariableCompareType = FName(*RepCompareTypeStr);
 
 							std::string STD_RepVarNameStr(DLG_RepConditionNode[i_RepCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
 							std::wstring STD_W_RepVarNameStr = pugi::as_wide(STD_RepVarNameStr.c_str());
@@ -9334,7 +9696,7 @@ void SDialogWindowWidget::LoadDialogFromXML()
 
 					ReplicTmp.RepSection.Add(RepTmp);
 				}
-
+				 
 				SpeechTmp.ReplicSection.Add(ReplicTmp);
 			}
 
@@ -9391,8 +9753,12 @@ void SDialogWindowWidget::LoadDialogFromXML()
 					std::string STD_ResponseVarTypeStr(DLG_ResponseConditionNode[i_ResponseCondition].node().attribute("var_type").as_string());  //   get attribute("var_type")
 					//std::wstring STD_W_ResponseVarTypeStr = pugi::as_wide(STD_ResponseVarTypeStr.c_str());
 					//FString ResponseVarTypeStr(STD_W_ResponseVarTypeStr.c_str());
-
 					ResponseConditionTmp.isVariableGlobal = (STD_ResponseVarTypeStr == "global") ? true : false;
+
+					std::string STD_ResponseCompareTypeStr(DLG_ResponseConditionNode[i_ResponseCondition].node().attribute("compare_type").as_string());  //   get attribute("compare_type")
+					FString ResponseCompareTypeStr(STD_ResponseCompareTypeStr.c_str());
+
+					ResponseConditionTmp.VariableCompareType = FName(*ResponseCompareTypeStr);
 
 					std::string STD_ResponseVarNameStr(DLG_ResponseConditionNode[i_ResponseCondition].node().attribute("var_name").as_string());  //   get attribute("var_name")
 					std::wstring STD_W_ResponseVarNameStr = pugi::as_wide(STD_ResponseVarNameStr.c_str());
@@ -11402,7 +11768,6 @@ FReply SDialogWindowWidget::OnHelperPanelClick(EProppertyToChange ProppertyToCha
 		HelperPanel_FastFindingListIndexes.Add(1);
 
 	}
-
 	else if (ProppertyToChange == EProppertyToChange::DialogLink)
 	{
 		OnHelperPanel_FindingEditableText->SetVisibility(EVisibility::Visible);
@@ -11422,6 +11787,7 @@ FReply SDialogWindowWidget::OnHelperPanelClick(EProppertyToChange ProppertyToCha
 	}
 	else if (ProppertyToChange == EProppertyToChange::SpeechLink)
 	{
+	
 		OnHelperPanel_FindingEditableText->SetVisibility(EVisibility::Visible);
 
 
@@ -11484,7 +11850,25 @@ FReply SDialogWindowWidget::OnHelperPanelClick(EProppertyToChange ProppertyToCha
 
 		}		
 	}
-
+	else if (ProppertyToChange == EProppertyToChange::Speech_condition_CompareType ||
+			ProppertyToChange == EProppertyToChange::Replic_condition_CompareType ||
+			ProppertyToChange == EProppertyToChange::rep_condition_CompareType ||
+			ProppertyToChange == EProppertyToChange::Response_condition_CompareType)
+	{
+			OnHelperPanel_FindingEditableText->SetVisibility(EVisibility::Collapsed);
+			ListElementTmp.Add(FString("="));
+			HelperPanel_FastFindingListIndexes.Add(0);
+			ListElementTmp.Add(FString("!="));
+			HelperPanel_FastFindingListIndexes.Add(1);
+			ListElementTmp.Add(FString(">"));
+			HelperPanel_FastFindingListIndexes.Add(2);
+			ListElementTmp.Add(FString(">="));
+			HelperPanel_FastFindingListIndexes.Add(3);
+			ListElementTmp.Add(FString("<"));
+			HelperPanel_FastFindingListIndexes.Add(4);
+			ListElementTmp.Add(FString("<="));
+			HelperPanel_FastFindingListIndexes.Add(5);
+	}
 	else if (ProppertyToChange == EProppertyToChange::MoveDialog ||
 			ProppertyToChange == EProppertyToChange::MoveSpeech ||
 			ProppertyToChange == EProppertyToChange::MoveReplic ||
@@ -11617,6 +12001,32 @@ FReply SDialogWindowWidget::OnHelperPanelElementClick(EProppertyToChange Propper
 			.ResponseSection[PropertyIndex.iResponse].SpeechLink = FName(*ListElementTmp[index]);
 	}
 
+	//  Condition type (=. !=, <, >, >=, <=)
+	else if (ProppertyToChange == EProppertyToChange::Speech_condition_CompareType)
+	{
+		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.SpeechCondition[PropertyIndex.iSpeechCondition].VariableCompareType = FName(*ListElementTmp[index]);
+	}
+	else if (ProppertyToChange == EProppertyToChange::Replic_condition_CompareType)
+	{
+		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].ReplicCondition[PropertyIndex.iReplicCondition]
+			.VariableCompareType = FName(*ListElementTmp[index]);
+	}
+	else if (ProppertyToChange == EProppertyToChange::rep_condition_CompareType)
+	{
+		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ReplicSection[PropertyIndex.iReplic].RepSection[PropertyIndex.iRep]
+			.RepCondition[PropertyIndex.iRepCondition].VariableCompareType = FName(*ListElementTmp[index]);
+	}
+	else if (ProppertyToChange == EProppertyToChange::Response_condition_CompareType)
+	{
+		DialogSection[PropertyIndex.iDialog].SpeechSection[PropertyIndex.iSpeech]
+			.ResponseSection[PropertyIndex.iResponse].ResponseCondition[PropertyIndex.iResponseCondition]
+			.VariableCompareType = FName(*ListElementTmp[index]);
+	}
+
+		
 	//    =========================================================================================
 	//    =======                         Copy or move Section                             ========
 	//    =========================================================================================
@@ -11635,7 +12045,7 @@ FReply SDialogWindowWidget::OnHelperPanelElementClick(EProppertyToChange Propper
 			iSectionToMove = PropertyIndex;
 
 			if (index == 0) isCurrSectionToMove_Cut = false;  // ------   Copy Section  ---------	
-			//if (index == 1)
+			//------  if (index == 1)  ---------
 			else isCurrSectionToMove_Cut = true;			  // ------   Cut  Section   ---------
 
 			//  =================  if it's condition =>> save it   =================
@@ -11670,7 +12080,7 @@ FReply SDialogWindowWidget::OnHelperPanelElementClick(EProppertyToChange Propper
 				}
 			}
 		}
-		else //if (index == 2)  // ================   Paste Section   ====================
+		else //----if (index == 2)  // ================   Paste Section   ====================
 		{
 			//    -----------------------   Dialog Section   -----------------------
 

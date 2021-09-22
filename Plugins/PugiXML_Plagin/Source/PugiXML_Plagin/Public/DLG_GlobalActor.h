@@ -106,11 +106,13 @@ public:
 
 	UPROPERTY()
 		class UAudioComponent* ReserveAudioComponent;          
-	
+	 
 	UFUNCTION()
 		void DLG_InitLocalVariables();
 	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
-		TArray<FName> LocalVariables;
+		TArray<FVariables> LVariablesStored;
+	UPROPERTY(VisibleAnyWhere, BlueprintReadOnly, Category = "DialogSystem")
+		TArray<FName> LocalVariables;  //--------  777777777777777777777777777777777XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	//UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "DialogSystem")
 		//TMap<FName, FName*> GlobalVariable;
 		TMap<FName, FName> *GlobalVariable;
@@ -124,7 +126,7 @@ public:
 	//	void OnVariableSet(FName& key, FName& value);
 		//void OnVariableSet(UPARAM(ref) FName& key, UPARAM(ref) FName& value);
 		//void OnVariableSet_Implementation(UPARAM(ref) bool& Show, UPARAM(ref) FString& s);
-
+	 
 	UPROPERTY()
 		class UWDisplayDialog* DisplayDialog;
 	UFUNCTION()

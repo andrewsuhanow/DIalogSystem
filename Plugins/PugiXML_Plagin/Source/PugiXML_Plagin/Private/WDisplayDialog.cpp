@@ -253,27 +253,39 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 
 			if ((*ReplicToDraw)[0].Time == FString("sound_length"))
 			{
-				float time = MySoundWave->GetDuration();
+				float time;
+				//if ((*ReplicToDraw)[0].SoundPath == FString("none"))
+				//{
+				//	time = (*ReplicToDraw)[0].ReplicTextStr.Len() * SoundingSymbolLanght + 1.f;  //   if no sound
+				//}
+				//else
+				//{
+					time = MySoundWave->GetDuration();
+				//}
 				ReplicDelayTime = time + (*ReplicToDraw)[0].Delay;
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, time, false);
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, ReplicDelayTime, false);
 			}
 			else if ((*ReplicToDraw)[0].Time != FString("while_press"))
 			{
-				//  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 				float time = FCString::Atof(*(*ReplicToDraw)[0].Time);
 				ReplicDelayTime = time + (*ReplicToDraw)[0].Delay;
-				GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, time, false);
+				// ------- if has number of lenght but == 0  -------
+				if (ReplicDelayTime == 0) ReplicDelayTime = (*ReplicToDraw)[0].ReplicTextStr.Len() * SoundingSymbolLanght + 1.f;
+				GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, ReplicDelayTime, false);
 			}
 
 		}
 		else
 		{
-			
-			//PhraseTimeWait_PerLetr = XXXXXXXXXXXXXXXXX
 
+			 
 			float time = FCString::Atof(*(*ReplicToDraw)[0].Time);
 			ReplicDelayTime = time + (*ReplicToDraw)[0].Delay;
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, time, false);
+
+			//  ---------------  dont have saund      OR    seted sound length   ----------------
+			if (ReplicDelayTime == 0 || (*ReplicToDraw)[0].SoundPath == FString("none"))
+				ReplicDelayTime = (*ReplicToDraw)[0].ReplicTextStr.Len() * SoundingSymbolLanght + 1.f;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle_ReplicDelay, this, &UWDisplayDialog::ReplicDelay, ReplicDelayTime, false);
 		}
 	
 
@@ -288,7 +300,7 @@ void UWDisplayDialog::DrawDialog(TArray<FReplicToDraw>& _ReplicToDraw,
 
 
 
-	 
+	  
 
 
 	//  Draw Response Panel
