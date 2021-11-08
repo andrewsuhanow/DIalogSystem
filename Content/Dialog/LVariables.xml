@@ -1,5 +1,19 @@
 <local_variables>
+	<variable name="main_Menu" value="1"/>
+	<variable name="go_through_default" value="0"/>
+	<variable name="changin_response" value="1"/>
+	<variable name="olredy_give_one_item" value="false"/>
+	<variable name="picking_item_done" value="false"/>
+	<variable name="IncrDecrTesting1" value="aa01"/>
+	<variable name="IncrDecrTesting2" value="ccc_c-10"/>
 	<variable name="a" value="aa"/>
 	<variable name="a10" value="a10"/>
 	<variable name="a-10" value="a-10"/>
+	<variable name="a1" value="10"/>
+	<variable name="a2" value="aa10"/>
+	<variable name="a3" value="aa05"/>
+	<variable name="a4" value="aa5"/>
+	<variable name="a5" value="aa-3"/>
+	<variable name="a6" value="111aa222"/>
+	<variable name="a7" value="aa"/>
 </local_variables>

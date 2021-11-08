@@ -1,0 +1,15 @@
+<name name="Test_Dialog_2" redy="ok">
+	<dialog dialog_name="DEFAULT">
+		<speech speech_name="DEFAULT">
+			<replic repeat="always">
+				 Commentary about all replic content. It's newer seen in game.
+ 				<rep speker="none" sound="none" event="RETURN_EVENT" time="sound_length" delay="0">
+					 it's other dialog with other NPC
+ 				</rep>
+			</replic>
+			<response repeat="always" dialog_link="DEFAULT" speech_link="DEFAULT" return_type="EXT (exit)">
+				 Exit
+ 			</response>
+		</speech>
+	</dialog>
+</name>
